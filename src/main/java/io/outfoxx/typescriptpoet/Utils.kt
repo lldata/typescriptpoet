@@ -100,7 +100,7 @@ internal fun characterLiteralWithoutDoubleQuotes(c: Char) = when {
   c == '\\' -> "\\\\"
 
   // \u005c: backslash (\)
-  isISOControl(c) -> String.format("\\u%04x", c.toInt())
+  isISOControl(c) -> String.format("\\u%04x", c.code)
 
   else -> c.toString()
 }

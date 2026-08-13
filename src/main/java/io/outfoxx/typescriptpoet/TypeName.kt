@@ -27,6 +27,7 @@ sealed class TypeName {
 
   internal abstract fun emit(codeWriter: CodeWriter)
 
+  @ConsistentCopyVisibility
   data class Standard
   internal constructor(val base: SymbolSpec) : TypeName() {
 
@@ -67,6 +68,7 @@ sealed class TypeName {
     override fun toString() = buildCodeString { emit(this) }
   }
 
+  @ConsistentCopyVisibility
   data class Parameterized
   internal constructor(val rawType: Standard, val typeArgs: List<TypeName>) : TypeName() {
 
@@ -84,6 +86,7 @@ sealed class TypeName {
     }
   }
 
+  @ConsistentCopyVisibility
   data class TypeVariable
   internal constructor(val name: String, val bounds: List<Bound>) : TypeName() {
 
@@ -108,6 +111,7 @@ sealed class TypeName {
     override fun toString() = buildCodeString { emit(this) }
   }
 
+  @ConsistentCopyVisibility
   data class Anonymous
   internal constructor(val members: List<Member>) : TypeName() {
 
@@ -133,6 +137,7 @@ sealed class TypeName {
     override fun toString() = buildCodeString { emit(this) }
   }
 
+  @ConsistentCopyVisibility
   data class Tuple
   internal constructor(val memberTypes: List<TypeName>) : TypeName() {
 
@@ -151,6 +156,7 @@ sealed class TypeName {
     override fun toString() = buildCodeString { emit(this) }
   }
 
+  @ConsistentCopyVisibility
   data class Intersection
   internal constructor(val typeRequirements: List<TypeName>) : TypeName() {
 
@@ -167,6 +173,7 @@ sealed class TypeName {
     override fun toString() = buildCodeString { emit(this) }
   }
 
+  @ConsistentCopyVisibility
   data class Union
   internal constructor(val typeChoices: List<TypeName>) : TypeName() {
 
@@ -183,6 +190,7 @@ sealed class TypeName {
     override fun toString() = buildCodeString { emit(this) }
   }
 
+  @ConsistentCopyVisibility
   data class Lambda
   internal constructor(
     private val parameters: Map<String, TypeName> = emptyMap(),

@@ -166,7 +166,10 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
     if (imports.isNotEmpty()) {
       imports
-        .filter { it !is SymbolSpec.Augmented || it !is SymbolSpec.SideEffect }
+        // Augments are emitted next to the symbol they augment, and side-effect imports are
+        // emitted separately below, so both are excluded here. This read `||`, which is
+        // always true -- a symbol cannot be both -- so the filter did nothing.
+        .filter { it !is SymbolSpec.Augmented && it !is SymbolSpec.SideEffect }
         .groupBy { FileModules.importPath(directory, modulePath, it.source) }
         .toSortedMap()
         .forEach { (sourceImportPath, imports) ->

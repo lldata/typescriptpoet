@@ -174,6 +174,7 @@ sealed class SymbolSpec(open val value: String) {
   /**
    * Non-imported symbol
    */
+  @ConsistentCopyVisibility
   data class Implicit
   internal constructor(override val value: String) : SymbolSpec(value) {
 
@@ -193,6 +194,7 @@ sealed class SymbolSpec(open val value: String) {
    *
    * e.g. `import { Engine } from 'templates';`
    */
+  @ConsistentCopyVisibility
   data class ImportsName
   internal constructor(override val value: String, override val source: String) :
     Imported(value, source) {
@@ -208,6 +210,7 @@ sealed class SymbolSpec(open val value: String) {
    *
    * e.g. `import * as Engine from 'templates';`
    */
+  @ConsistentCopyVisibility
   data class ImportsAll
   internal constructor(override val value: String, override val source: String) :
     Imported(value, source) {
@@ -223,6 +226,7 @@ sealed class SymbolSpec(open val value: String) {
    *
    * e.g. `import 'rxjs/add/operator/flatMap'`
    */
+  @ConsistentCopyVisibility
   data class Augmented
   internal constructor(
     override val value: String,
@@ -241,6 +245,7 @@ sealed class SymbolSpec(open val value: String) {
    *
    * e.g. `import 'mocha'`
    */
+  @ConsistentCopyVisibility
   data class SideEffect
   internal constructor(override val value: String, override val source: String) :
     Imported(value, source) {
