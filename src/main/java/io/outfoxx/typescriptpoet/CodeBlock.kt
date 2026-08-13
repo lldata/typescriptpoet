@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 /**
@@ -50,10 +49,7 @@ package io.outfoxx.typescriptpoet
  *  * `%]` ends a statement.
  */
 class CodeBlock
-private constructor(
-  internal val formatParts: List<String>,
-  internal val args: List<Any?>,
-) {
+private constructor(internal val formatParts: List<String>, internal val args: List<Any?>) {
 
   /** A heterogeneous list containing string literals and value placeholders.  */
 
@@ -281,7 +277,7 @@ private constructor(
 
         require(index >= 0 && index < args.size) {
           "index ${index + 1} for '${
-          format.substring(indexStart - 1, indexEnd + 1)
+            format.substring(indexStart - 1, indexEnd + 1)
           }' not in range (received ${args.size} arguments)"
         }
         require(!hasIndexed || !hasRelative) { "cannot mix indexed and positional parameters" }
@@ -396,7 +392,8 @@ private constructor(
     }
 
     fun build() = CodeBlock(
-      formatParts.toImmutableList(), args.toImmutableList(),
+      formatParts.toImmutableList(),
+      args.toImmutableList(),
     )
   }
 
@@ -423,7 +420,7 @@ private constructor(
     fun Collection<CodeBlock>.joinToCode(
       separator: CharSequence = ", ",
       prefix: CharSequence = "",
-      suffix: CharSequence = ""
+      suffix: CharSequence = "",
     ): CodeBlock {
       val formatParts = mutableListOf<String>()
 

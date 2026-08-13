@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 /** A generated property declaration. */
 class PropertySpec
-private constructor(
-  builder: Builder
-) : Taggable(builder.tags.toImmutableMap()) {
+private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) {
 
   val name = builder.name
   val type = builder.type
@@ -44,7 +41,7 @@ private constructor(
       CodeBlock.of(
         "%L${if (optional && compactOptionalAllowed) "?" else ""}: %T${if (optional && !compactOptionalAllowed) " | undefined" else ""}",
         name,
-        type
+        type,
       ),
     )
     if (withInitializer && initializer != null) {
@@ -71,7 +68,7 @@ private constructor(
   class Builder internal constructor(
     internal val name: String,
     internal val type: TypeName,
-    internal var optional: Boolean
+    internal var optional: Boolean,
   ) : Taggable.Builder<Builder>() {
 
     internal val tsDoc = CodeBlock.builder()
@@ -104,7 +101,7 @@ private constructor(
     }
 
     fun initializer(format: String, vararg args: Any?) = initializer(
-      CodeBlock.of(format, *args)
+      CodeBlock.of(format, *args),
     )
 
     fun initializer(codeBlock: CodeBlock) = apply {
@@ -118,8 +115,7 @@ private constructor(
   companion object {
 
     @JvmStatic
-    fun builder(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier): Builder {
-      return Builder(name, type, optional).addModifiers(*modifiers)
-    }
+    fun builder(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier): Builder =
+      Builder(name, type, optional).addModifiers(*modifiers)
   }
 }

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet.test
 
 import io.outfoxx.typescriptpoet.FunctionSpec
@@ -30,7 +29,9 @@ class CodeWriterTests {
   fun `test long line wrapping`() {
     val testFunc = FunctionSpec.builder("test")
       .returns(STRING)
-      .addStatement("return X(aaaaa,%Wbbbbb,%Wccccc,%Wddddd,%Weeeee,%Wfffff,%Wggggg,%Whhhhh,%Wiiiii,%Wjjjjj,%Wkkkkk,%Wlllll,%Wmmmmm,%Wnnnnn,%Wooooo,%Wppppp,%Wqqqqq)")
+      .addStatement(
+        "return X(aaaaa,%Wbbbbb,%Wccccc,%Wddddd,%Weeeee,%Wfffff,%Wggggg,%Whhhhh,%Wiiiii,%Wjjjjj,%Wkkkkk,%Wlllll,%Wmmmmm,%Wnnnnn,%Wooooo,%Wppppp,%Wqqqqq)",
+      )
       .build()
 
     MatcherAssert.assertThat(
@@ -42,8 +43,8 @@ class CodeWriterTests {
                   mmmmm, nnnnn, ooooo, ppppp, qqqqq);
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 }

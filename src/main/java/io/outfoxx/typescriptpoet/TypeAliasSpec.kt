@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 /** A generated typealias declaration */
 class TypeAliasSpec
-private constructor(
-  builder: Builder
-) : TypeSpec<TypeAliasSpec, TypeAliasSpec.Builder>(builder) {
+private constructor(builder: Builder) : TypeSpec<TypeAliasSpec, TypeAliasSpec.Builder>(builder) {
 
   override val name = builder.name
   val type = builder.type
@@ -56,10 +53,8 @@ private constructor(
     return builder
   }
 
-  class Builder internal constructor(
-    name: String,
-    internal val type: TypeName
-  ) : TypeSpec.Builder<TypeAliasSpec, Builder>(name) {
+  class Builder internal constructor(name: String, internal val type: TypeName) :
+    TypeSpec.Builder<TypeAliasSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()
     internal val modifiers = mutableSetOf<Modifier>()
@@ -103,7 +98,8 @@ private constructor(
 
     @JvmStatic
     fun builder(name: String, type: TypeName) = Builder(
-      name, type
+      name,
+      type,
     )
   }
 }

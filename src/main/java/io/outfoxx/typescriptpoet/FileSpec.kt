@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 import java.io.File
@@ -34,9 +33,7 @@ import java.nio.file.Paths
  * - Members
  */
 class FileSpec
-private constructor(
-  builder: Builder
-) : Taggable(builder.tags.toImmutableMap()) {
+private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) {
 
   val modulePath = builder.modulePath
   val comment = builder.comment.build()
@@ -53,16 +50,19 @@ private constructor(
 
     val importedSymbols =
       importsCollector.referencedSymbols<SymbolSpec.Imported>()
-        .filter { // Include only imports from other files
+        .filter {
+          // Include only imports from other files
           when {
             it.source.startsWith("./") -> {
               val absImportPath = absPath.resolve(it.source).toAbsolutePath().normalize()
               absImportPath != absPath
             }
+
             it.source.startsWith("!") -> {
               val absImportPath = directory.resolve(it.source.removePrefix("!")).toAbsolutePath().normalize()
               absImportPath != absPath
             }
+
             else -> true
           }
         }
@@ -116,8 +116,11 @@ private constructor(
   @Throws(IOException::class)
   fun writeTo(directory: File) = writeTo(directory.toPath())
 
-  private fun emit(codeWriter: CodeWriter, directory: Path = Paths.get("/"), imports: Set<SymbolSpec.Imported> = emptySet()) {
-
+  private fun emit(
+    codeWriter: CodeWriter,
+    directory: Path = Paths.get("/"),
+    imports: Set<SymbolSpec.Imported> = emptySet(),
+  ) {
     if (comment.isNotEmpty()) {
       codeWriter.emitComment(comment)
     }
@@ -153,7 +156,6 @@ private constructor(
   }
 
   private fun emitImports(codeWriter: CodeWriter, directory: Path, imports: Set<SymbolSpec.Imported>) {
-
     val augmentImports = imports
       .filterIsInstance<SymbolSpec.Augmented>()
       .groupBy { it.augmented }
@@ -210,13 +212,9 @@ private constructor(
     }
   }
 
-  fun isEmpty(): Boolean {
-    return members.isEmpty()
-  }
+  fun isEmpty(): Boolean = members.isEmpty()
 
-  fun isNotEmpty(): Boolean {
-    return !isEmpty()
-  }
+  fun isNotEmpty(): Boolean = !isEmpty()
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
@@ -237,9 +235,7 @@ private constructor(
     return builder
   }
 
-  class Builder internal constructor(
-    internal val modulePath: String
-  ) : Taggable.Builder<Builder>() {
+  class Builder internal constructor(internal val modulePath: String) : Taggable.Builder<Builder>() {
 
     init {
       require(!modulePath.endsWith(".ts")) { "File's modulePath should not include typescript extension" }
@@ -261,7 +257,7 @@ private constructor(
         Modifier.STATIC,
         Modifier.CONST,
         Modifier.LET,
-        Modifier.VAR
+        Modifier.VAR,
       )
     }
 
@@ -306,9 +302,10 @@ private constructor(
 
     fun addProperty(propertySpec: PropertySpec) = apply {
       requireExactlyOneOf(
-        propertySpec.modifiers, Modifier.CONST,
+        propertySpec.modifiers,
+        Modifier.CONST,
         Modifier.LET,
-        Modifier.VAR
+        Modifier.VAR,
       )
       require(propertySpec.decorators.isEmpty()) { "decorators on file properties are not allowed" }
       checkMemberModifiers(propertySpec.modifiers)
@@ -327,13 +324,9 @@ private constructor(
       this.indent = indent
     }
 
-    fun isEmpty(): Boolean {
-      return members.isEmpty()
-    }
+    fun isEmpty(): Boolean = members.isEmpty()
 
-    fun isNotEmpty(): Boolean {
-      return !isEmpty()
-    }
+    fun isNotEmpty(): Boolean = !isEmpty()
 
     fun build() = FileSpec(this)
   }
@@ -344,13 +337,13 @@ private constructor(
     fun builder(modulePath: String) = Builder(modulePath)
 
     @JvmStatic
-    fun get(moduleSpec: ModuleSpec, modulePath: String = moduleSpec.name.replace('.', '/').toLowerCase()): FileSpec =
+    fun get(moduleSpec: ModuleSpec, modulePath: String = moduleSpec.name.replace('.', '/').lowercase()): FileSpec =
       builder(modulePath)
         .apply { members.addAll(moduleSpec.members.toMutableList()) }
         .build()
 
     @JvmStatic
-    fun get(typeSpec: AnyTypeSpec, modulePath: String = typeSpec.name.replace('.', '/').toLowerCase()): FileSpec =
+    fun get(typeSpec: AnyTypeSpec, modulePath: String = typeSpec.name.replace('.', '/').lowercase()): FileSpec =
       builder(modulePath)
         .addType(typeSpec)
         .build()

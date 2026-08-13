@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 /**
@@ -21,9 +20,7 @@ package io.outfoxx.typescriptpoet
  *
  * @param value Value of the symbol
  */
-sealed class SymbolSpec(
-  open val value: String
-) {
+sealed class SymbolSpec(open val value: String) {
 
   abstract fun nested(name: String): SymbolSpec
   abstract fun enclosing(): SymbolSpec?
@@ -96,12 +93,19 @@ sealed class SymbolSpec(
         val targetName = matched.groups[4]?.value
         return when (type) {
           "*" -> importsAll(symbolName, modulePath)
+
           "@" -> importsName(symbolName, modulePath)
-          "+" -> if (targetName == null) sideEffect(symbolName, modulePath) else augmented(
-            symbolName,
-            modulePath,
-            targetName
-          )
+
+          "+" -> if (targetName == null) {
+            sideEffect(symbolName, modulePath)
+          } else {
+            augmented(
+              symbolName,
+              modulePath,
+              targetName,
+            )
+          }
+
           else -> throw IllegalArgumentException("Invalid type character")
         }
       }
@@ -119,9 +123,7 @@ sealed class SymbolSpec(
      * @param from The module the symbol is exported from
      */
     @JvmStatic
-    fun importsName(exportedName: String, from: String): SymbolSpec {
-      return ImportsName(exportedName, from)
-    }
+    fun importsName(exportedName: String, from: String): SymbolSpec = ImportsName(exportedName, from)
 
     /**
      * Creates an import of all the modules exported symbols as a single
@@ -133,9 +135,7 @@ sealed class SymbolSpec(
      * @param from The module to import the symbols from
      */
     @JvmStatic
-    fun importsAll(localName: String, from: String): SymbolSpec {
-      return ImportsAll(localName, from)
-    }
+    fun importsAll(localName: String, from: String): SymbolSpec = ImportsAll(localName, from)
 
     /**
      * Creates a symbol that is brought in by a whole module import
@@ -148,9 +148,7 @@ sealed class SymbolSpec(
      * @param target The symbol that is augmented
      */
     @JvmStatic
-    fun augmented(symbolName: String, from: String, target: String): SymbolSpec {
-      return Augmented(symbolName, from, target)
-    }
+    fun augmented(symbolName: String, from: String, target: String): SymbolSpec = Augmented(symbolName, from, target)
 
     /**
      * Creates a symbol that is brought in as a side effect of
@@ -162,9 +160,7 @@ sealed class SymbolSpec(
      * @param from The entire import that does the augmentation
      */
     @JvmStatic
-    fun sideEffect(symbolName: String, from: String): SymbolSpec {
-      return SideEffect(symbolName, from)
-    }
+    fun sideEffect(symbolName: String, from: String): SymbolSpec = SideEffect(symbolName, from)
 
     /**
      * An implied symbol that does no tracking of imports
@@ -172,18 +168,14 @@ sealed class SymbolSpec(
      * @param name The implicit symbol name
      */
     @JvmStatic
-    fun implicit(name: String): SymbolSpec {
-      return Implicit(name)
-    }
+    fun implicit(name: String): SymbolSpec = Implicit(name)
   }
 
   /**
    * Non-imported symbol
    */
   data class Implicit
-  internal constructor(
-    override val value: String
-  ) : SymbolSpec(value) {
+  internal constructor(override val value: String) : SymbolSpec(value) {
 
     override fun nested(name: String) = Implicit("$value.$name")
     override fun enclosing() = value.parentSegment()?.let { Implicit(it) }
@@ -193,10 +185,7 @@ sealed class SymbolSpec(
   /**
    * Common base class for imported symbols
    */
-  abstract class Imported(
-    override val value: String,
-    open val source: String
-  ) : SymbolSpec(value)
+  abstract class Imported(override val value: String, open val source: String) : SymbolSpec(value)
 
   /**
    * Imports a single named symbol from the module's exported
@@ -205,10 +194,8 @@ sealed class SymbolSpec(
    * e.g. `import { Engine } from 'templates';`
    */
   data class ImportsName
-  internal constructor(
-    override val value: String,
-    override val source: String
-  ) : Imported(value, source) {
+  internal constructor(override val value: String, override val source: String) :
+    Imported(value, source) {
 
     override fun nested(name: String) = ImportsName("$value.$name", source)
     override fun enclosing() = value.parentSegment()?.let { ImportsName(it, source) }
@@ -222,10 +209,8 @@ sealed class SymbolSpec(
    * e.g. `import * as Engine from 'templates';`
    */
   data class ImportsAll
-  internal constructor(
-    override val value: String,
-    override val source: String
-  ) : Imported(value, source) {
+  internal constructor(override val value: String, override val source: String) :
+    Imported(value, source) {
 
     override fun nested(name: String) = ImportsAll("$value.$name", source)
     override fun enclosing() = value.parentSegment()?.let { ImportsAll(it, source) }
@@ -242,7 +227,7 @@ sealed class SymbolSpec(
   internal constructor(
     override val value: String,
     override val source: String,
-    val augmented: String
+    val augmented: String,
   ) : Imported(value, source) {
 
     override fun nested(name: String) = Augmented("$value.$name", source, augmented)
@@ -257,10 +242,8 @@ sealed class SymbolSpec(
    * e.g. `import 'mocha'`
    */
   data class SideEffect
-  internal constructor(
-    override val value: String,
-    override val source: String
-  ) : Imported(value, source) {
+  internal constructor(override val value: String, override val source: String) :
+    Imported(value, source) {
 
     override fun nested(name: String) = SideEffect("$value.$name", source)
     override fun enclosing() = value.parentSegment()?.let { SideEffect(it, source) }

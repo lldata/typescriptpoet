@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 import io.outfoxx.typescriptpoet.CodeBlock.Companion.joinToCode
 
 /** A generated `interface` declaration. */
 class InterfaceSpec
-private constructor(
-  builder: Builder
-) : TypeSpec<InterfaceSpec, InterfaceSpec.Builder>(builder) {
+private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Builder>(builder) {
 
   override val name = builder.name
   val tsDoc = builder.tsDoc.build()
@@ -35,7 +32,6 @@ private constructor(
   val callable = builder.callable
 
   override fun emit(codeWriter: CodeWriter) {
-
     codeWriter.emitTSDoc(tsDoc)
     codeWriter.emitModifiers(modifiers, setOf())
     codeWriter.emit("interface")
@@ -106,9 +102,7 @@ private constructor(
     return builder
   }
 
-  class Builder(
-    name: String
-  ) : TypeSpec.Builder<InterfaceSpec, Builder>(name) {
+  class Builder(name: String) : TypeSpec.Builder<InterfaceSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()
     internal val modifiers = mutableListOf<Modifier>()
@@ -187,9 +181,7 @@ private constructor(
       this.callable = callable
     }
 
-    override fun build(): InterfaceSpec {
-      return InterfaceSpec(this)
-    }
+    override fun build(): InterfaceSpec = InterfaceSpec(this)
   }
 
   companion object {

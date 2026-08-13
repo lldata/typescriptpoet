@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 import java.lang.Character.isISOControl
@@ -35,9 +34,7 @@ internal fun String.parentSegment(separator: String = "."): String? {
   return if (parent.isEmpty()) null else parent
 }
 
-internal fun String.topLevelSegment(separator: String = "."): String {
-  return split(separator).first()
-}
+internal fun String.topLevelSegment(separator: String = "."): String = split(separator).first()
 
 internal fun <K, V> Map<K, V>.toImmutableMap(): Map<K, V> = Collections.unmodifiableMap(LinkedHashMap(this))
 
@@ -82,20 +79,35 @@ internal fun <T> T.isOneOf(t1: T, t2: T, t3: T? = null, t4: T? = null, t5: T? = 
 
 // see https://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6
 internal fun characterLiteralWithoutDoubleQuotes(c: Char) = when {
-  c == '\b' -> "\\b" // \u0008: backspace (BS)
-  c == '\t' -> "\\t" // \u0009: horizontal tab (HT)
-  c == '\n' -> "\\n" // \u000a: linefeed (LF)
-  c == '\r' -> "\\r" // \u000d: carriage return (CR)
-  c == '\"' -> "\\\"" // \u0022: double quote (")
-  c == '\'' -> "'" // \u0027: single quote (')
-  c == '\\' -> "\\\\" // \u005c: backslash (\)
+  c == '\b' -> "\\b"
+
+  // \u0008: backspace (BS)
+  c == '\t' -> "\\t"
+
+  // \u0009: horizontal tab (HT)
+  c == '\n' -> "\\n"
+
+  // \u000a: linefeed (LF)
+  c == '\r' -> "\\r"
+
+  // \u000d: carriage return (CR)
+  c == '\"' -> "\\\""
+
+  // \u0022: double quote (")
+  c == '\'' -> "'"
+
+  // \u0027: single quote (')
+  c == '\\' -> "\\\\"
+
+  // \u005c: backslash (\)
   isISOControl(c) -> String.format("\\u%04x", c.toInt())
+
   else -> c.toString()
 }
 
 /** Returns the string literal representing `value`, including wrapping double quotes.  */
-internal fun stringLiteralWithQuotes(value: String, multiLineIndent: String): String {
-  return value.split("\n").joinToString(" +\n$multiLineIndent") { line ->
+internal fun stringLiteralWithQuotes(value: String, multiLineIndent: String): String =
+  value.split("\n").joinToString(" +\n$multiLineIndent") { line ->
     val result = StringBuilder(line.length + 32)
     result.append('\'')
     for (c in line) {
@@ -121,11 +133,10 @@ internal fun stringLiteralWithQuotes(value: String, multiLineIndent: String): St
 
     result.toString()
   }
-}
 
 /** Returns the string template literal representing `value`, including wrapping backticks.  */
-internal fun stringTemplateLiteralWithBackticks(value: String, multiLineIndent: String): String {
-  return value.split("\n").joinToString("\n$multiLineIndent", prefix = "`", postfix = "`") { line ->
+internal fun stringTemplateLiteralWithBackticks(value: String, multiLineIndent: String): String =
+  value.split("\n").joinToString("\n$multiLineIndent", prefix = "`", postfix = "`") { line ->
     val result = StringBuilder(line.length + 32)
     for (c in line) {
       // Trivial case: single quote must not be escaped.
@@ -149,7 +160,6 @@ internal fun stringTemplateLiteralWithBackticks(value: String, multiLineIndent: 
 
     result.toString()
   }
-}
 
 internal val String.isKeyword get() = KEYWORDS.contains(this)
 
@@ -184,5 +194,5 @@ private val KEYWORDS = setOf(
   "do",
   "when",
   "interface",
-  "typeof"
+  "typeof",
 )

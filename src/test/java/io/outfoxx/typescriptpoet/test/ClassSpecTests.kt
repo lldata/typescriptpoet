@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet.test
 
 import io.outfoxx.typescriptpoet.ClassSpec
@@ -70,8 +69,8 @@ class ClassSpecTests {
             class Test {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -83,7 +82,7 @@ class ClassSpecTests {
         DecoratorSpec.builder("decorate")
           .addParameter(null, "true")
           .addParameter("targetType", "Test2")
-          .build()
+          .build(),
       )
       .build()
     val out = StringWriter()
@@ -97,8 +96,8 @@ class ClassSpecTests {
             class Test {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -119,8 +118,8 @@ class ClassSpecTests {
             export abstract class Test {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -129,13 +128,21 @@ class ClassSpecTests {
   fun testGenTypeVars() {
     val testClass = ClassSpec.builder("Test")
       .addTypeVariable(
-        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2")))
+        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2"))),
       )
       .addTypeVariable(
-        TypeName.typeVariable("Y", TypeName.bound(TypeName.implicit("Test3")), TypeName.intersectBound(TypeName.implicit("Test4")))
+        TypeName.typeVariable(
+          "Y",
+          TypeName.bound(TypeName.implicit("Test3")),
+          TypeName.intersectBound(TypeName.implicit("Test4")),
+        ),
       )
       .addTypeVariable(
-        TypeName.typeVariable("Z", TypeName.bound(TypeName.implicit("Test5")), TypeName.unionBound(TypeName.implicit("Test6"), true))
+        TypeName.typeVariable(
+          "Z",
+          TypeName.bound(TypeName.implicit("Test5")),
+          TypeName.unionBound(TypeName.implicit("Test6"), true),
+        ),
       )
       .build()
 
@@ -149,8 +156,8 @@ class ClassSpecTests {
             class Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -171,8 +178,8 @@ class ClassSpecTests {
             class Test extends Test2 {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -194,8 +201,8 @@ class ClassSpecTests {
             class Test implements Test2, Test3 {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -218,8 +225,8 @@ class ClassSpecTests {
             class Test extends Test2 implements Test3, Test4 {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -228,7 +235,11 @@ class ClassSpecTests {
   fun testGenTypeVarsAndSuperClassAndMixinsFormatted() {
     val testClass = ClassSpec.builder("Test")
       .addTypeVariable(
-        TypeName.typeVariable("Y", TypeName.bound(TypeName.implicit("Test3")), TypeName.intersectBound(TypeName.implicit("Test4")))
+        TypeName.typeVariable(
+          "Y",
+          TypeName.bound(TypeName.implicit("Test3")),
+          TypeName.intersectBound(TypeName.implicit("Test4")),
+        ),
       )
       .superClass(TypeName.implicit("Test2"))
       .addMixin(TypeName.implicit("Test3"))
@@ -245,8 +256,8 @@ class ClassSpecTests {
             class Test<Y extends Test3 & Test4> extends Test2 implements Test3, Test4 {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -257,7 +268,7 @@ class ClassSpecTests {
       .constructor(
         FunctionSpec.constructorBuilder()
           .addParameter("value", TypeName.NUMBER)
-          .build()
+          .build(),
       )
       .build()
 
@@ -275,8 +286,8 @@ class ClassSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -288,7 +299,7 @@ class ClassSpecTests {
         FunctionSpec.constructorBuilder()
           .addParameter("value", TypeName.NUMBER)
           .restParameter("all", TypeName.arrayType(TypeName.STRING))
-          .build()
+          .build(),
       )
       .build()
 
@@ -306,8 +317,8 @@ class ClassSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -316,10 +327,10 @@ class ClassSpecTests {
   fun testGenConstructorShorthandProperties() {
     val testClass = ClassSpec.builder("Test")
       .addProperty(
-        PropertySpec.builder("value", TypeName.NUMBER, false, Modifier.PRIVATE).initializer("value").build()
+        PropertySpec.builder("value", TypeName.NUMBER, false, Modifier.PRIVATE).initializer("value").build(),
       )
       .addProperty(
-        PropertySpec.builder("value2", TypeName.STRING, false, Modifier.PUBLIC).initializer("value2").build()
+        PropertySpec.builder("value2", TypeName.STRING, false, Modifier.PUBLIC).initializer("value2").build(),
       )
       .addProperty("value3", TypeName.BOOLEAN, true, Modifier.PUBLIC)
       .constructor(
@@ -332,9 +343,9 @@ class ClassSpecTests {
               .addStatement("val testing = 'need other code'")
               .addStatement("anotherTestStatement()")
               .addStatement("this.value3 = value3 || testing == ''")
-              .build()
+              .build(),
           )
-          .build()
+          .build(),
       )
       .build()
 
@@ -357,8 +368,8 @@ class ClassSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -376,9 +387,9 @@ class ClassSpecTests {
               .addDecorator(
                 DecoratorSpec.builder("MyDec")
                   .addParameter("value", "%S", "test-value")
-                  .build()
+                  .build(),
               )
-              .build()
+              .build(),
           )
           .addParameter("value2", TypeName.STRING)
           .addParameter(
@@ -386,9 +397,9 @@ class ClassSpecTests {
               .addDecorator(
                 DecoratorSpec.builder("MyDec")
                   .addParameter(null, "%S", "test-value")
-                  .build()
+                  .build(),
               )
-              .build()
+              .build(),
           )
           .addCode(
             CodeBlock.builder()
@@ -396,9 +407,9 @@ class ClassSpecTests {
               .addStatement("anotherTestStatement()")
               .addStatement("this.value2 = value2")
               .addStatement("this.value3 = value3 || testing == ''")
-              .build()
+              .build(),
           )
-          .build()
+          .build(),
       )
       .build()
 
@@ -430,8 +441,8 @@ class ClassSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -444,15 +455,15 @@ class ClassSpecTests {
           .addDecorator(
             DecoratorSpec.builder("MyDec")
               .addParameter("value", "%S", "test-value")
-              .build()
+              .build(),
           )
           .initializer("value")
-          .build()
+          .build(),
       )
       .addProperty(
         PropertySpec.builder("value2", TypeName.STRING, false, Modifier.PUBLIC)
           .initializer("value2")
-          .build()
+          .build(),
       )
       .addProperty("value3", TypeName.BOOLEAN, true, Modifier.PUBLIC)
       .constructor(
@@ -465,9 +476,9 @@ class ClassSpecTests {
               .addStatement("val testing = 'need other code'")
               .addStatement("anotherTestStatement()")
               .addStatement("this.value3 = value3 || testing == ''")
-              .build()
+              .build(),
           )
-          .build()
+          .build(),
       )
       .build()
 
@@ -495,8 +506,8 @@ class ClassSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -509,7 +520,7 @@ class ClassSpecTests {
       .addProperty(
         PropertySpec.builder("value3", TypeName.BOOLEAN, false, Modifier.PUBLIC)
           .initializer("true")
-          .build()
+          .build(),
       )
       .addProperty(
         PropertySpec.builder("value4", TypeName.NUMBER, false, Modifier.PUBLIC)
@@ -517,26 +528,26 @@ class ClassSpecTests {
             DecoratorSpec.builder("limited")
               .addParameter("min", "5")
               .addParameter("max", "100")
-              .build()
+              .build(),
           )
-          .build()
+          .build(),
       )
       .addProperty(
         PropertySpec.builder("value5", TypeName.NUMBER, false, Modifier.PUBLIC)
           .addDecorator(
             DecoratorSpec.builder("dynamic")
-              .build()
+              .build(),
           )
-          .build()
+          .build(),
       )
       .addProperty(
         PropertySpec.builder("value5", TypeName.NUMBER, false, Modifier.PUBLIC)
           .addDecorator(
             DecoratorSpec.builder("logged")
               .asFactory()
-              .build()
+              .build(),
           )
-          .build()
+          .build(),
       )
       .build()
 
@@ -566,8 +577,8 @@ class ClassSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -578,7 +589,7 @@ class ClassSpecTests {
       .addFunction(
         FunctionSpec.builder("test1")
           .addCode("")
-          .build()
+          .build(),
       )
       .addFunction(
         FunctionSpec.builder("test2")
@@ -586,10 +597,10 @@ class ClassSpecTests {
             DecoratorSpec.builder("validated")
               .addParameter("strict", "true")
               .addParameter("name", "test2")
-              .build()
+              .build(),
           )
           .addCode("")
-          .build()
+          .build(),
       )
       .build()
 
@@ -611,8 +622,8 @@ class ClassSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -625,25 +636,25 @@ class ClassSpecTests {
         DecoratorSpec.builder("decorate")
           .addParameter(null, "true")
           .addParameter("targetType", "Test2")
-          .build()
+          .build(),
       )
       .addModifiers(Modifier.ABSTRACT, Modifier.EXPORT)
       .addTypeVariable(
-        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2")))
+        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2"))),
       )
       .superClass(TypeName.implicit("Test2"))
       .addMixin(TypeName.implicit("Test3"))
       .constructor(
         FunctionSpec.constructorBuilder()
           .addParameter("value", TypeName.NUMBER)
-          .build()
+          .build(),
       )
       .addProperty("value", TypeName.NUMBER, false, Modifier.PRIVATE)
       .addProperty("value2", TypeName.STRING, false, Modifier.PUBLIC)
       .addFunction(
         FunctionSpec.builder("test1")
           .addCode("")
-          .build()
+          .build(),
       )
       .build()
       .toBuilder()
@@ -657,14 +668,14 @@ class ClassSpecTests {
     assertThat(
       testClassBlder.superClass,
       equalTo<TypeName>(
-        TypeName.implicit("Test2")
-      )
+        TypeName.implicit("Test2"),
+      ),
     )
     assertThat(
       testClassBlder.mixins,
       hasItems(
-        TypeName.implicit("Test3")
-      )
+        TypeName.implicit("Test3"),
+      ),
     )
     assertThat(testClassBlder.propertySpecs.map { it.name }, hasItems("value", "value2"))
     assertThat(testClassBlder.constructor, notNullValue())

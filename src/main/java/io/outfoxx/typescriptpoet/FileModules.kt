@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 import java.nio.file.Path
 
 object FileModules {
 
-  fun importPath(directory: Path, importer: String, import: String): String {
-    return if (import.startsWith("!")) {
-      // Ensure two generated files use proper relative import path
-      val importerPath = directory.resolve(importer).toAbsolutePath().normalize()
-      val importerDir = importerPath.parent ?: importerPath
-      val importPath = directory.resolve(import.drop(1)).toAbsolutePath().normalize()
-      val importedPath = importerDir.relativize(importPath).normalize().toString()
-      if (importedPath.startsWith("."))
-        importedPath
-      else
-        "./$importedPath"
+  fun importPath(directory: Path, importer: String, import: String): String = if (import.startsWith("!")) {
+    // Ensure two generated files use proper relative import path
+    val importerPath = directory.resolve(importer).toAbsolutePath().normalize()
+    val importerDir = importerPath.parent ?: importerPath
+    val importPath = directory.resolve(import.drop(1)).toAbsolutePath().normalize()
+    val importedPath = importerDir.relativize(importPath).normalize().toString()
+    if (importedPath.startsWith(".")) {
+      importedPath
     } else {
-      import
+      "./$importedPath"
     }
+  } else {
+    import
   }
 }

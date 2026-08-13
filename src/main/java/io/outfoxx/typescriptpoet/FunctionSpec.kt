@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 /** A generated function declaration. */
 class FunctionSpec
-private constructor(
-  builder: Builder
-) : Taggable(builder.tags.toImmutableMap()) {
+private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) {
 
   val name = builder.name
   val tsDoc = builder.tsDoc.build()
@@ -38,21 +35,15 @@ private constructor(
     }
   }
 
-  fun abstract(): FunctionSpec {
-    return builder(name)
-      .addModifiers(Modifier.ABSTRACT)
-      .addTypeVariables(typeVariables)
-      .addParameters(parameters)
-      .build()
-  }
+  fun abstract(): FunctionSpec = builder(name)
+    .addModifiers(Modifier.ABSTRACT)
+    .addTypeVariables(typeVariables)
+    .addParameters(parameters)
+    .build()
 
   internal fun parameter(name: String) = parameters.firstOrNull { it.name == name }
 
-  internal fun emit(
-    codeWriter: CodeWriter,
-    enclosingName: String?,
-    implicitModifiers: Set<Modifier>,
-  ) {
+  internal fun emit(codeWriter: CodeWriter, enclosingName: String?, implicitModifiers: Set<Modifier>) {
     codeWriter.emitTSDoc(tsDoc)
     codeWriter.emitDecorators(decorators, false)
     codeWriter.emitModifiers(modifiers, implicitModifiers)
@@ -72,14 +63,14 @@ private constructor(
     codeWriter.emit("}\n")
   }
 
-  private fun emitSignature(
-    codeWriter: CodeWriter,
-    enclosingName: String?,
-  ) {
+  private fun emitSignature(codeWriter: CodeWriter, enclosingName: String?) {
     when {
       isConstructor -> codeWriter.emitCode("constructor")
+
       isCallable -> codeWriter.emitCode("")
+
       isIndexable -> codeWriter.emitCode("[")
+
       else -> {
         if (enclosingName == null) {
           codeWriter.emit("function ")
@@ -137,9 +128,7 @@ private constructor(
     return builder
   }
 
-  class Builder internal constructor(
-    internal val name: String
-  ) : Taggable.Builder<Builder>() {
+  class Builder internal constructor(internal val name: String) : Taggable.Builder<Builder>() {
 
     internal val tsDoc = CodeBlock.builder()
     internal val decorators = mutableListOf<DecoratorSpec>()
@@ -208,12 +197,14 @@ private constructor(
       type: TypeName,
       optional: Boolean = false,
       defaultValue: CodeBlock,
-      vararg modifiers: Modifier
+      vararg modifiers: Modifier,
     ) = addParameter(
       ParameterSpec.builder(
-        name, type, optional,
-        *modifiers
-      ).defaultValue(defaultValue).build()
+        name,
+        type,
+        optional,
+        *modifiers,
+      ).defaultValue(defaultValue).build(),
     )
 
     fun addParameter(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier) =
@@ -290,17 +281,17 @@ private constructor(
 
     @JvmStatic
     fun constructorBuilder() = Builder(
-      CONSTRUCTOR
+      CONSTRUCTOR,
     )
 
     @JvmStatic
     fun callableBuilder() = Builder(
-      CALLABLE
+      CALLABLE,
     )
 
     @JvmStatic
     fun indexableBuilder() = Builder(
-      INDEXABLE
+      INDEXABLE,
     )
   }
 }

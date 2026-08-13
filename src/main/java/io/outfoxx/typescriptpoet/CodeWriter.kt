@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 import java.io.Closeable
@@ -27,7 +26,7 @@ import java.util.Stack
 internal class CodeWriter constructor(
   out: Appendable,
   private val indent: String = "  ",
-  val renamedSymbols: Map<SymbolSpec, String> = emptyMap()
+  val renamedSymbols: Map<SymbolSpec, String> = emptyMap(),
 ) : Closeable {
 
   private val out = LineWrapper(out, indent, 100)
@@ -102,10 +101,7 @@ internal class CodeWriter constructor(
    * Emits `modifiers` in the standard order. Modifiers in `implicitModifiers` will not
    * be emitted.
    */
-  fun emitModifiers(
-    modifiers: Set<Modifier>,
-    implicitModifiers: Set<Modifier> = emptySet()
-  ) {
+  fun emitModifiers(modifiers: Set<Modifier>, implicitModifiers: Set<Modifier> = emptySet()) {
     if (modifiers.isEmpty()) return
     for (modifier in EnumSet.copyOf(modifiers)) {
       if (implicitModifiers.contains(modifier)) continue
@@ -140,8 +136,8 @@ internal class CodeWriter constructor(
               append(parts.joinToString(" "))
             }
           },
-          *typeVariable.bounds.map { it.type }.toTypedArray()
-        )
+          *typeVariable.bounds.map { it.type }.toTypedArray(),
+        ),
       )
     }
     emit(">")
@@ -163,7 +159,6 @@ internal class CodeWriter constructor(
   fun emitCode(s: String) = emitCode(CodeBlock.of(s))
 
   fun emitCode(codeBlock: CodeBlock) = apply {
-
     var a = 0
     val partIterator = codeBlock.formatParts.listIterator()
     while (partIterator.hasNext()) {
@@ -227,20 +222,22 @@ internal class CodeWriter constructor(
   private fun emitString(string: String?) {
     // Emit null as a literal null: no quotes.
     emit(
-      if (string != null)
+      if (string != null) {
         stringLiteralWithQuotes(string, (0 until (indentLevel + 1)).joinToString("") { indent })
-      else
+      } else {
         "null"
+      },
     )
   }
 
   private fun emitStringTemplate(string: String?) {
     // Emit null as a literal null: no quotes.
     emit(
-      if (string != null)
+      if (string != null) {
         stringTemplateLiteralWithBackticks(string, (0 until (indentLevel + 1)).joinToString("") { indent })
-      else
+      } else {
         "null"
+      },
     )
   }
 

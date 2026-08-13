@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 /** A generated `enum` declaration. */
 class EnumSpec
-private constructor(
-  builder: Builder
-) : TypeSpec<EnumSpec, EnumSpec.Builder>(builder) {
+private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(builder) {
 
   override val name = builder.name
   val tsDoc = builder.tsDoc.build()
@@ -28,7 +25,6 @@ private constructor(
   val constants = builder.constants.toImmutableMap()
 
   override fun emit(codeWriter: CodeWriter) {
-
     codeWriter.emitTSDoc(tsDoc)
     codeWriter.emitModifiers(modifiers, setOf())
     codeWriter.emitCode(CodeBlock.of("enum %L {\n", name))
@@ -65,10 +61,8 @@ private constructor(
   }
 
   class Builder
-  internal constructor(
-    name: String,
-    val constants: MutableMap<String, CodeBlock?> = mutableMapOf()
-  ) : TypeSpec.Builder<EnumSpec, Builder>(name) {
+  internal constructor(name: String, val constants: MutableMap<String, CodeBlock?> = mutableMapOf()) :
+    TypeSpec.Builder<EnumSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()
     internal val modifiers = mutableListOf<Modifier>()
@@ -94,9 +88,7 @@ private constructor(
       constants.put(name, initializer)
     }
 
-    override fun build(): EnumSpec {
-      return EnumSpec(this)
-    }
+    override fun build(): EnumSpec = EnumSpec(this)
   }
 
   companion object {

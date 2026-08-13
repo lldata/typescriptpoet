@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet.test
 
 import io.outfoxx.typescriptpoet.CodeBlock
@@ -67,8 +66,8 @@ class FunctionSpecTests {
             function test() {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -80,7 +79,7 @@ class FunctionSpecTests {
         DecoratorSpec.builder("decorate")
           .addParameter(null, "true")
           .addParameter("targetType", "Test2")
-          .build()
+          .build(),
       )
       .build()
 
@@ -95,8 +94,8 @@ class FunctionSpecTests {
             function test() {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -118,8 +117,8 @@ class FunctionSpecTests {
             export private get function test() {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -139,8 +138,8 @@ class FunctionSpecTests {
         """
             private abstract function test();
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -149,13 +148,21 @@ class FunctionSpecTests {
   fun testGenTypeVars() {
     val testClass = FunctionSpec.builder("test")
       .addTypeVariable(
-        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2")))
+        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2"))),
       )
       .addTypeVariable(
-        TypeName.typeVariable("Y", TypeName.bound(TypeName.implicit("Test3")), TypeName.intersectBound(TypeName.implicit("Test4")))
+        TypeName.typeVariable(
+          "Y",
+          TypeName.bound(TypeName.implicit("Test3")),
+          TypeName.intersectBound(TypeName.implicit("Test4")),
+        ),
       )
       .addTypeVariable(
-        TypeName.typeVariable("Z", TypeName.bound(TypeName.implicit("Test5")), TypeName.unionBound(TypeName.implicit("Test6"), true))
+        TypeName.typeVariable(
+          "Z",
+          TypeName.bound(TypeName.implicit("Test5")),
+          TypeName.unionBound(TypeName.implicit("Test6"), true),
+        ),
       )
       .build()
 
@@ -169,8 +176,8 @@ class FunctionSpecTests {
             function test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6>() {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -191,8 +198,8 @@ class FunctionSpecTests {
             function test(): Value {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -213,8 +220,8 @@ class FunctionSpecTests {
             function test() {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -234,8 +241,8 @@ class FunctionSpecTests {
             function test() {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -256,8 +263,8 @@ class FunctionSpecTests {
             function test(b: string) {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -279,8 +286,8 @@ class FunctionSpecTests {
             function test(b: string, ... c: Array<string>) {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -301,8 +308,8 @@ class FunctionSpecTests {
             function test(a: number = 10) {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -314,20 +321,20 @@ class FunctionSpecTests {
         ParameterSpec.builder("a", TypeName.NUMBER)
           .addDecorator(
             DecoratorSpec.builder("required")
-              .build()
+              .build(),
           )
           .addDecorator(
             DecoratorSpec.builder("size")
               .addParameter("min", "10")
               .addParameter("max", "100")
-              .build()
+              .build(),
           )
           .addDecorator(
             DecoratorSpec.builder("logged")
               .asFactory()
-              .build()
+              .build(),
           )
-          .build()
+          .build(),
       )
       .build()
 
@@ -343,8 +350,8 @@ class FunctionSpecTests {
             ) {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -357,11 +364,11 @@ class FunctionSpecTests {
         DecoratorSpec.builder("decorate")
           .addParameter(null, "true")
           .addParameter("targetType", "Test2")
-          .build()
+          .build(),
       )
       .addModifiers(Modifier.EXPORT)
       .addTypeVariable(
-        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2")))
+        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2"))),
       )
       .addCode("val;\n")
       .build()

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet.test
 
 import io.outfoxx.typescriptpoet.CodeWriter
@@ -61,8 +60,8 @@ class EnumSpecTests {
             enum Test {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -83,8 +82,8 @@ class EnumSpecTests {
             export enum Test {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -110,8 +109,8 @@ class EnumSpecTests {
               C = 30
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 

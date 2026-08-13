@@ -13,25 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 /** A generated function or class decorator declaration. */
 class DecoratorSpec
-internal constructor(
-  builder: Builder
-) : Taggable(builder.tags.toImmutableMap()) {
+internal constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) {
 
   val name = builder.name
   val parameters = builder.parameters
   val factory = builder.factory
 
   internal fun emit(codeWriter: CodeWriter) {
-
     codeWriter.emitCode(CodeBlock.of("@%Q", name))
 
     if (parameters.isNotEmpty()) {
-
       codeWriter.emitCode("(")
 
       parameters.forEachIndexed { index, (first, second) ->
@@ -60,9 +55,7 @@ internal constructor(
   }
 
   class Builder
-  internal constructor(
-    val name: SymbolSpec
-  ) : Taggable.Builder<Builder>() {
+  internal constructor(val name: SymbolSpec) : Taggable.Builder<Builder>() {
 
     internal val parameters = mutableListOf<Pair<String?, CodeBlock>>()
     internal var factory: Boolean? = null
@@ -79,21 +72,15 @@ internal constructor(
       parameters += name to codeBlock
     }
 
-    fun build(): DecoratorSpec {
-      return DecoratorSpec(this)
-    }
+    fun build(): DecoratorSpec = DecoratorSpec(this)
   }
 
   companion object {
 
     @JvmStatic
-    fun builder(name: String): Builder {
-      return Builder(SymbolSpec.from(name))
-    }
+    fun builder(name: String): Builder = Builder(SymbolSpec.from(name))
 
     @JvmStatic
-    fun builder(name: SymbolSpec): Builder {
-      return Builder(name)
-    }
+    fun builder(name: SymbolSpec): Builder = Builder(name)
   }
 }

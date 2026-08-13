@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet.test
 
 import io.outfoxx.typescriptpoet.FileModules.importPath
@@ -29,7 +28,6 @@ class FileModuleTests {
   @Test
   @DisplayName("Generates correct import path for relative paths")
   fun testRelativeImportPathGeneration() {
-
     val import = "!generated/src/main/api/Api"
     val importer = "generated/src/main/impl/Impl"
 
@@ -40,7 +38,6 @@ class FileModuleTests {
   @Test
   @DisplayName("Generates correct import path for relative paths referencing the same dir")
   fun testRelativeImportPathGenerationSameDir() {
-
     val import = "!generated/src/main/api/Api"
     val importer = "generated/src/main/api/Api2"
 
@@ -51,7 +48,6 @@ class FileModuleTests {
   @Test
   @DisplayName("Generates correct import path for sibling paths with no parent")
   fun testRelativeImportPathGenerationSiblingsNoParent() {
-
     val import = "!Api"
     val importer = "Api2"
 
@@ -62,7 +58,6 @@ class FileModuleTests {
   @Test
   @DisplayName("Generates correct import path for implied modules")
   fun testImpliedImportPathGeneration() {
-
     val import = "rxjs/Observable"
     val importer = "generated/src/main/impl/Impl"
 

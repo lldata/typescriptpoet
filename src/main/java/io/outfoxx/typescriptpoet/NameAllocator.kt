@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 import java.util.UUID
@@ -74,7 +73,7 @@ import java.util.UUID
  */
 class NameAllocator private constructor(
   private val allocatedNames: MutableSet<String>,
-  private val tagToName: MutableMap<Any, String>
+  private val tagToName: MutableMap<Any, String>,
 ) {
   constructor() : this(mutableSetOf(), mutableMapOf())
 
@@ -83,10 +82,7 @@ class NameAllocator private constructor(
    * names. The returned value can be queried multiple times by passing `tag` to
    * [NameAllocator.get].
    */
-  @JvmOverloads fun newName(
-    suggestion: String,
-    tag: Any = UUID.randomUUID().toString()
-  ): String {
+  @JvmOverloads fun newName(suggestion: String, tag: Any = UUID.randomUUID().toString()): String {
     var result = toTypeScriptIdentifier(suggestion)
     while (result.isKeyword || !allocatedNames.add(result)) {
       result += "_"
@@ -111,9 +107,7 @@ class NameAllocator private constructor(
    *
    * @return A deep copy of this NameAllocator.
    */
-  fun copy(): NameAllocator {
-    return NameAllocator(allocatedNames.toMutableSet(), tagToName.toMutableMap())
-  }
+  fun copy(): NameAllocator = NameAllocator(allocatedNames.toMutableSet(), tagToName.toMutableMap())
 
   fun tagsToNames() = tagToName.toImmutableMap()
 }

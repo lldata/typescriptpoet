@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 import io.outfoxx.typescriptpoet.TypeName.TypeVariable.Bound
@@ -29,9 +28,7 @@ sealed class TypeName {
   internal abstract fun emit(codeWriter: CodeWriter)
 
   data class Standard
-  internal constructor(
-    val base: SymbolSpec,
-  ) : TypeName() {
+  internal constructor(val base: SymbolSpec) : TypeName() {
 
     fun nested(name: String) = Standard(base.nested(name))
 
@@ -71,10 +68,7 @@ sealed class TypeName {
   }
 
   data class Parameterized
-  internal constructor(
-    val rawType: Standard,
-    val typeArgs: List<TypeName>
-  ) : TypeName() {
+  internal constructor(val rawType: Standard, val typeArgs: List<TypeName>) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {
       rawType.emit(codeWriter)
@@ -91,30 +85,19 @@ sealed class TypeName {
   }
 
   data class TypeVariable
-  internal constructor(
-    val name: String,
-    val bounds: List<Bound>
-  ) : TypeName() {
+  internal constructor(val name: String, val bounds: List<Bound>) : TypeName() {
 
-    data class Bound(
-      val type: TypeName,
-      val combiner: Combiner = UNION,
-      val modifier: Modifier?
-    ) {
+    data class Bound(val type: TypeName, val combiner: Combiner = UNION, val modifier: Modifier?) {
 
-      enum class Combiner(
-        val symbol: String
-      ) {
+      enum class Combiner(val symbol: String) {
 
         UNION("|"),
-        INTERSECT("&")
+        INTERSECT("&"),
       }
 
-      enum class Modifier(
-        val keyword: String
-      ) {
+      enum class Modifier(val keyword: String) {
 
-        KEY_OF("keyof")
+        KEY_OF("keyof"),
       }
     }
 
@@ -126,15 +109,9 @@ sealed class TypeName {
   }
 
   data class Anonymous
-  internal constructor(
-    val members: List<Member>
-  ) : TypeName() {
+  internal constructor(val members: List<Member>) : TypeName() {
 
-    data class Member(
-      val name: String,
-      val type: TypeName,
-      val optional: Boolean
-    )
+    data class Member(val name: String, val type: TypeName, val optional: Boolean)
 
     override fun emit(codeWriter: CodeWriter) {
       codeWriter.emit("{ ")
@@ -157,9 +134,7 @@ sealed class TypeName {
   }
 
   data class Tuple
-  internal constructor(
-    val memberTypes: List<TypeName>
-  ) : TypeName() {
+  internal constructor(val memberTypes: List<TypeName>) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {
       codeWriter.emit("[")
@@ -177,9 +152,7 @@ sealed class TypeName {
   }
 
   data class Intersection
-  internal constructor(
-    val typeRequirements: List<TypeName>
-  ) : TypeName() {
+  internal constructor(val typeRequirements: List<TypeName>) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {
       typeRequirements.forEachIndexed { idx, typeRequirement ->
@@ -195,9 +168,7 @@ sealed class TypeName {
   }
 
   data class Union
-  internal constructor(
-    val typeChoices: List<TypeName>
-  ) : TypeName() {
+  internal constructor(val typeChoices: List<TypeName>) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {
       typeChoices.forEachIndexed { idx, typeChoice ->
@@ -215,7 +186,7 @@ sealed class TypeName {
   data class Lambda
   internal constructor(
     private val parameters: Map<String, TypeName> = emptyMap(),
-    private val returnType: TypeName = VOID
+    private val returnType: TypeName = VOID,
   ) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {
@@ -300,9 +271,7 @@ sealed class TypeName {
      * @param from The module the that `exportedName` is exported from
      */
     @JvmStatic
-    fun namedImport(exportedName: String, from: String): Standard {
-      return Standard(SymbolSpec.importsName(exportedName, from))
-    }
+    fun namedImport(exportedName: String, from: String): Standard = Standard(SymbolSpec.importsName(exportedName, from))
 
     /**
      * Any class/enum/primitive/etc type name
@@ -310,9 +279,7 @@ sealed class TypeName {
      * @param name Name for the implicit type, will be symbolized
      */
     @JvmStatic
-    fun implicit(name: String): Standard {
-      return Standard(SymbolSpec.implicit(name))
-    }
+    fun implicit(name: String): Standard = Standard(SymbolSpec.implicit(name))
 
     /**
      * Any class/enum/primitive/etc type name
@@ -320,9 +287,7 @@ sealed class TypeName {
      * @param symbolSpec Serialized symbol spec
      */
     @JvmStatic
-    fun standard(symbolSpec: String): Standard {
-      return Standard(SymbolSpec.from(symbolSpec))
-    }
+    fun standard(symbolSpec: String): Standard = Standard(SymbolSpec.from(symbolSpec))
 
     /**
      * Any class/enum/primitive/etc type name
@@ -330,9 +295,7 @@ sealed class TypeName {
      * @param symbolSpec Symbol spec
      */
     @JvmStatic
-    fun standard(symbolSpec: SymbolSpec): Standard {
-      return Standard(symbolSpec)
-    }
+    fun standard(symbolSpec: SymbolSpec): Standard = Standard(symbolSpec)
 
     /**
      * Type name for the generic Array type
@@ -341,11 +304,10 @@ sealed class TypeName {
      * @return Type name of the new array type
      */
     @JvmStatic
-    fun arrayType(elementType: TypeName): TypeName {
-      return parameterizedType(
-        ARRAY, elementType
-      )
-    }
+    fun arrayType(elementType: TypeName): TypeName = parameterizedType(
+      ARRAY,
+      elementType,
+    )
 
     /**
      * Type name for the generic Set type
@@ -354,11 +316,10 @@ sealed class TypeName {
      * @return Type name of the new set type
      */
     @JvmStatic
-    fun setType(elementType: TypeName): TypeName {
-      return parameterizedType(
-        SET, elementType
-      )
-    }
+    fun setType(elementType: TypeName): TypeName = parameterizedType(
+      SET,
+      elementType,
+    )
 
     /**
      * Type name for the generic Map type
@@ -368,11 +329,11 @@ sealed class TypeName {
      * @return Type name of the new map type
      */
     @JvmStatic
-    fun mapType(keyType: TypeName, valueType: TypeName): TypeName {
-      return parameterizedType(
-        MAP, keyType, valueType
-      )
-    }
+    fun mapType(keyType: TypeName, valueType: TypeName): TypeName = parameterizedType(
+      MAP,
+      keyType,
+      valueType,
+    )
 
     /**
      * Parameterized type that represents a concrete
@@ -383,9 +344,8 @@ sealed class TypeName {
      * @return Type name of the new parameterized type
      */
     @JvmStatic
-    fun parameterizedType(rawType: Standard, vararg typeArgs: TypeName): Parameterized {
-      return Parameterized(rawType, typeArgs.toList())
-    }
+    fun parameterizedType(rawType: Standard, vararg typeArgs: TypeName): Parameterized =
+      Parameterized(rawType, typeArgs.toList())
 
     /**
      * Type variable represents a single variable type in a
@@ -396,37 +356,28 @@ sealed class TypeName {
      * @return Type name of the new type variable
      */
     @JvmStatic
-    fun typeVariable(name: String, vararg bounds: Bound): TypeVariable {
-      return TypeVariable(name, bounds.toList())
-    }
+    fun typeVariable(name: String, vararg bounds: Bound): TypeVariable = TypeVariable(name, bounds.toList())
 
     /**
      * Factory for type variable bounds
      */
     @JvmStatic
-    fun bound(
-      type: TypeName,
-      combiner: Combiner = UNION,
-      modifier: Bound.Modifier? = null
-    ): Bound {
-      return Bound(type, combiner, modifier)
-    }
+    fun bound(type: TypeName, combiner: Combiner = UNION, modifier: Bound.Modifier? = null): Bound =
+      Bound(type, combiner, modifier)
 
     /**
      * Factory for type variable bounds
      */
     @JvmStatic
-    fun unionBound(type: TypeName, keyOf: Boolean = false): Bound {
-      return bound(type, UNION, if (keyOf) Bound.Modifier.KEY_OF else null)
-    }
+    fun unionBound(type: TypeName, keyOf: Boolean = false): Bound =
+      bound(type, UNION, if (keyOf) Bound.Modifier.KEY_OF else null)
 
     /**
      * Factory for type variable bounds
      */
     @JvmStatic
-    fun intersectBound(type: TypeName, keyOf: Boolean = false): Bound {
-      return bound(type, Combiner.INTERSECT, if (keyOf) Bound.Modifier.KEY_OF else null)
-    }
+    fun intersectBound(type: TypeName, keyOf: Boolean = false): Bound =
+      bound(type, Combiner.INTERSECT, if (keyOf) Bound.Modifier.KEY_OF else null)
 
     /**
      * Anonymous type name (e.g. `{ length: number, name: string }`)
@@ -435,9 +386,7 @@ sealed class TypeName {
      * @return Type name representing the anonymous type
      */
     @JvmStatic
-    fun anonymousType(members: List<Anonymous.Member>): Anonymous {
-      return Anonymous(members)
-    }
+    fun anonymousType(members: List<Anonymous.Member>): Anonymous = Anonymous(members)
 
     /**
      * Anonymous type name (e.g. `{ length?: number, name: string }`)
@@ -446,9 +395,8 @@ sealed class TypeName {
      * @return Type name representing the anonymous type
      */
     @JvmStatic
-    fun anonymousType(vararg members: Pair<String, TypeName>): Anonymous {
-      return anonymousType(members.map { Anonymous.Member(it.first, it.second, false) })
-    }
+    fun anonymousType(vararg members: Pair<String, TypeName>): Anonymous =
+      anonymousType(members.map { Anonymous.Member(it.first, it.second, false) })
 
     /**
      * Tuple type name (e.g. `[number, boolean, string]`}
@@ -457,9 +405,7 @@ sealed class TypeName {
      * @return Type name representing the tuple type
      */
     @JvmStatic
-    fun tupleType(vararg memberTypes: TypeName): Tuple {
-      return Tuple(memberTypes.toList())
-    }
+    fun tupleType(vararg memberTypes: TypeName): Tuple = Tuple(memberTypes.toList())
 
     /**
      * Intersection type name (e.g. `Person & Serializable & Loggable`)
@@ -468,9 +414,7 @@ sealed class TypeName {
      * @return Type name representing the intersection type
      */
     @JvmStatic
-    fun intersectionType(vararg typeRequirements: TypeName): Intersection {
-      return Intersection(typeRequirements.toList())
-    }
+    fun intersectionType(vararg typeRequirements: TypeName): Intersection = Intersection(typeRequirements.toList())
 
     /**
      * Union type name (e.g. `int | number | any`)
@@ -479,14 +423,11 @@ sealed class TypeName {
      * @return Type name representing the union type
      */
     @JvmStatic
-    fun unionType(vararg typeChoices: TypeName): Union {
-      return Union(typeChoices.toList())
-    }
+    fun unionType(vararg typeChoices: TypeName): Union = Union(typeChoices.toList())
 
     /** Returns a lambda type with `returnType` and parameters of listed in `parameters`. */
     @JvmStatic
-    fun lambda(parameters: Map<String, TypeName> = emptyMap(), returnType: TypeName) =
-      Lambda(parameters, returnType)
+    fun lambda(parameters: Map<String, TypeName> = emptyMap(), returnType: TypeName) = Lambda(parameters, returnType)
 
     /** Returns a lambda type with `returnType` and parameters of listed in `parameters`. */
     @JvmStatic

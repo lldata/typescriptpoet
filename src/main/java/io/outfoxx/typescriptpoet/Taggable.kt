@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.outfoxx.typescriptpoet
 
 import kotlin.reflect.KClass
@@ -21,7 +20,7 @@ import kotlin.reflect.KClass
 /** A type that can be tagged with extra metadata of the user's choice. */
 abstract class Taggable(
   /** all tags. */
-  val tags: Map<KClass<*>, Any>
+  val tags: Map<KClass<*>, Any>,
 ) {
 
   /** Returns the tag attached with [type] as a key, or null if no tag is attached with that key. */
@@ -77,8 +76,9 @@ inline fun <reified T : Any> Taggable.tag(): T? = tag(T::class)
  * other APIs or callbacks.
  */
 
-inline fun <reified TAG : Any, T : TypeSpec<T, B>, B : TypeSpec.Builder<T, B>> TypeSpec.Builder<T, B>.tag(tag: TAG?): B =
-  tag(TAG::class, tag)
+inline fun <reified TAG : Any, T : TypeSpec<T, B>, B : TypeSpec.Builder<T, B>> TypeSpec.Builder<T, B>.tag(
+  tag: TAG?,
+): B = tag(TAG::class, tag)
 
 /**
  * Attaches [tag] to the request using [T] as a key. Tags can be read from a
@@ -89,8 +89,7 @@ inline fun <reified TAG : Any, T : TypeSpec<T, B>, B : TypeSpec.Builder<T, B>> T
  * other APIs or callbacks.
  */
 
-inline fun <reified T : Any> DecoratorSpec.Builder.tag(tag: T?): DecoratorSpec.Builder =
-  tag(T::class, tag)
+inline fun <reified T : Any> DecoratorSpec.Builder.tag(tag: T?): DecoratorSpec.Builder = tag(T::class, tag)
 
 /**
  * Attaches [tag] to the request using [T] as a key. Tags can be read from a
@@ -100,8 +99,7 @@ inline fun <reified T : Any> DecoratorSpec.Builder.tag(tag: T?): DecoratorSpec.B
  * Use this API to attach debugging or other application data to a spec so that you may read it in
  * other APIs or callbacks.
  */
-inline fun <reified T : Any> FileSpec.Builder.tag(tag: T?): FileSpec.Builder =
-  tag(T::class, tag)
+inline fun <reified T : Any> FileSpec.Builder.tag(tag: T?): FileSpec.Builder = tag(T::class, tag)
 
 /**
  * Attaches [tag] to the request using [T] as a key. Tags can be read from a
@@ -111,8 +109,7 @@ inline fun <reified T : Any> FileSpec.Builder.tag(tag: T?): FileSpec.Builder =
  * Use this API to attach debugging or other application data to a spec so that you may read it in
  * other APIs or callbacks.
  */
-inline fun <reified T : Any> FunctionSpec.Builder.tag(tag: T?): FunctionSpec.Builder =
-  tag(T::class, tag)
+inline fun <reified T : Any> FunctionSpec.Builder.tag(tag: T?): FunctionSpec.Builder = tag(T::class, tag)
 
 /**
  * Attaches [tag] to the request using [T] as a key. Tags can be read from a
@@ -123,8 +120,7 @@ inline fun <reified T : Any> FunctionSpec.Builder.tag(tag: T?): FunctionSpec.Bui
  * other APIs or callbacks.
  */
 
-inline fun <reified T : Any> ModuleSpec.Builder.tag(tag: T?): ModuleSpec.Builder =
-  tag(T::class, tag)
+inline fun <reified T : Any> ModuleSpec.Builder.tag(tag: T?): ModuleSpec.Builder = tag(T::class, tag)
 
 /**
  * Attaches [tag] to the request using [T] as a key. Tags can be read from a
@@ -134,8 +130,7 @@ inline fun <reified T : Any> ModuleSpec.Builder.tag(tag: T?): ModuleSpec.Builder
  * Use this API to attach debugging or other application data to a spec so that you may read it in
  * other APIs or callbacks.
  */
-inline fun <reified T : Any> ParameterSpec.Builder.tag(tag: T?): ParameterSpec.Builder =
-  tag(T::class, tag)
+inline fun <reified T : Any> ParameterSpec.Builder.tag(tag: T?): ParameterSpec.Builder = tag(T::class, tag)
 
 /**
  * Attaches [tag] to the request using [T] as a key. Tags can be read from a
@@ -145,5 +140,4 @@ inline fun <reified T : Any> ParameterSpec.Builder.tag(tag: T?): ParameterSpec.B
  * Use this API to attach debugging or other application data to a spec so that you may read it in
  * other APIs or callbacks.
  */
-inline fun <reified T : Any> PropertySpec.Builder.tag(tag: T?): PropertySpec.Builder =
-  tag(T::class, tag)
+inline fun <reified T : Any> PropertySpec.Builder.tag(tag: T?): PropertySpec.Builder = tag(T::class, tag)
