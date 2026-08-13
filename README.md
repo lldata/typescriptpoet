@@ -1,10 +1,8 @@
-
 TypeScriptPoet
 ==========
 
 [![CI](https://github.com/outfoxx/typescriptpoet/actions/workflows/ci.yml/badge.svg)](https://github.com/outfoxx/typescriptpoet/actions/workflows/ci.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/io.outfoxx/typescriptpoet.svg)][dl]
-[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/io.outfoxx/typescriptpoet.svg)][snap]
 [![codebeat badge](https://codebeat.co/badges/70f7939d-185e-42d7-b7a8-ea240840a121)](https://codebeat.co/projects/github-com-outfoxx-typescriptpoet-master)
 
 `TypeScriptPoet` is a Kotlin and Java API for generating `.ts` source files.
@@ -16,22 +14,20 @@ the need to write boilerplate while also keeping a single source of truth for th
 
 ### Example
 
-Here's a `HelloWorld` file:
+Here's a `Greeter` file:
 
 ```typescript
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/from';
 
 
-class Greeter {
-
-  private name: string;
+export class Greeter {
 
   constructor(private name: string) {
   }
 
   greet(): Observable<string> {
-    return Observable.from(`Hello $name`)}
+    return Observable.of(`Hello ${this.name}`);
+  }
 
 }
 ```
@@ -39,32 +35,60 @@ class Greeter {
 And this is the code to generate it with TypeScriptPoet:
 
 ```kotlin
-val observableTypeName = TypeName.importedType("@rxjs/Observable")
+val observable = TypeName.standard("@rxjs/Observable")
 
-val testClass = ClassSpec.builder("Greeter")
-   .addProperty("name", TypeName.STRING, false, Modifier.PRIVATE)
-   .constructor(
-      FunctionSpec.constructorBuilder()
-         .addParameter("name", TypeName.STRING, false, Modifier.PRIVATE)
-         .build()
-   )
-   .addFunction(
-      FunctionSpec.builder("greet")
-         .returns(TypeName.parameterizedType(observableTypeName, TypeName.STRING))
-         .addCode("return %T.%N(`Hello \$name`)", observableTypeName, SymbolSpec.from("+rxjs/add/observable/from#Observable"))
-         .build()
-   )
-   .build()
+val greeter = ClassSpec.builder("Greeter")
+  .addModifiers(Modifier.EXPORT)
+  .constructor(
+    FunctionSpec.constructorBuilder()
+      .addParameter("name", TypeName.STRING, false, Modifier.PRIVATE)
+      .build()
+  )
+  .addFunction(
+    FunctionSpec.builder("greet")
+      .returns(TypeName.parameterizedType(observable, TypeName.STRING))
+      .addStatement("return %T.of(`Hello \${this.name}`)", observable)
+      .build()
+  )
+  .build()
 
 val file = FileSpec.builder("Greeter")
-   .addClass(testClass)
-   .build()
+  .addClass(greeter)
+  .build()
 
 val out = StringWriter()
 file.writeTo(out)
 ```
 
 The [KDoc][kdoc] catalogs the complete TypeScriptPoet API, which is inspired by [JavaPoet][javapoet].
+
+
+TypeScript support
+------------------
+
+TypeScriptPoet covers the TypeScript 5.x surface. A generated file exercising every construct
+below is type-checked with the real `tsc` as part of the test suite.
+
+**Types** — unions, intersections, tuples (including labelled, optional and rest elements),
+object literal types, `keyof`, `typeof`, indexed access (`T[K]`), the array shorthand (`T[]`),
+`readonly` arrays and tuples, conditional types with `infer`, mapped types with `as` remapping
+and `+`/`-` modifiers, template literal types, generic function types, construct signatures
+including `abstract new`, `unique symbol`, variance annotations (`in`/`out`) and `const` type
+parameters.
+
+Operand precedence is handled: a union used under `keyof` or the array shorthand is
+parenthesised, so `keyof (A | B)` and `(A | B)[]` mean what you asked for rather than
+re-associating.
+
+**Declarations** — classes, interfaces, enums (including `const enum`), type aliases, modules
+and namespaces, decorators, `async`, generator functions and methods, arrow functions,
+overload groups, `this` parameters, type predicates (`x is Y`) and assertion signatures
+(`asserts x is Y`), `override`, `accessor`, `#private` members, static initializer blocks,
+index signatures, definite assignment (`!`), and destructuring parameters.
+
+**Modules** — named, namespace, default and side-effect imports, `import type` and
+`export type`, re-exports (`export * from`, `export * as ns from`, `export { a, b as c } from`),
+standalone export lists, `export default`, and `export =`.
 
 
 Download
@@ -76,17 +100,30 @@ Download [the latest .jar][dl] or depend via Maven:
 <dependency>
   <groupId>io.outfoxx</groupId>
   <artifactId>typescriptpoet</artifactId>
-  <version>1.1.2</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 or Gradle:
 
-```groovy
-compile 'io.outfoxx:typescriptpoet:1.1.2'
+```kotlin
+implementation("io.outfoxx:typescriptpoet:2.0.0")
 ```
 
-Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
+The library has no runtime dependencies beyond the Kotlin standard library. It targets Java 8
+bytecode and Kotlin 2.0 metadata, so it is usable from JDK 8+ and any Kotlin 2.0+ toolchain.
+
+Upgrading from 1.x? See [MIGRATING.md](MIGRATING.md).
+
+
+Building
+--------
+
+```bash
+./gradlew build
+```
+
+Requires JDK 17, which the Gradle toolchain provisions automatically.
 
 
 License
@@ -107,7 +144,6 @@ License
     limitations under the License.
 
 
- [dl]: https://search.maven.org/remote_content?g=io.outfoxx&a=typescriptpoet&v=LATEST
- [snap]: https://oss.sonatype.org/content/repositories/snapshots/io/outfoxx/typescriptpoet/
- [kdoc]: https://outfoxx.github.io/typescriptpoet/1.1.2/index.html
+ [dl]: https://central.sonatype.com/artifact/io.outfoxx/typescriptpoet
+ [kdoc]: https://outfoxx.github.io/typescriptpoet/2.0.0/index.html
  [javapoet]: https://github.com/square/javapoet/
