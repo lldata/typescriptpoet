@@ -36,6 +36,14 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
   val useConstructorPropertiesAutomatically = builder.useConstructorPropertiesAutomatically
 
   override fun emit(codeWriter: CodeWriter) {
+    // Prettier strips blank lines next to the braces but keeps them between members, so
+    // separate members rather than prefixing each one.
+    var wroteMember = false
+    fun separate() {
+      if (wroteMember) codeWriter.emit("\n")
+      wroteMember = true
+    }
+
     val constructorProperties: Map<String, PropertySpec> =
       if (useConstructorPropertiesAutomatically) {
         constructorProperties()
@@ -68,7 +76,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
       if (constructorProperties.containsKey(propertySpec.name) && !propertySpec.modifiers.contains(Modifier.STATIC)) {
         continue
       }
-      codeWriter.emit("\n")
+      separate()
       propertySpec.emit(
         codeWriter,
         setOf(Modifier.PUBLIC),
@@ -79,15 +87,16 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
 
     // Index signatures.
     for (funSpec in indexableSpecs) {
-      codeWriter.emit("\n")
+      separate()
       funSpec.emit(codeWriter, null, setOf(Modifier.PUBLIC))
     }
 
+    if (constructor != null) separate()
     emitConstructor(codeWriter, constructorProperties)
 
     // Static initializer blocks.
     for (block in staticBlocks) {
-      codeWriter.emit("\n")
+      separate()
       codeWriter.emit("static {\n")
       codeWriter.indent()
       codeWriter.emitCode(block)
@@ -98,22 +107,18 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     // Constructors.
     for (funSpec in functionSpecs) {
       if (!funSpec.isConstructor) continue
-      codeWriter.emit("\n")
+      separate()
       funSpec.emit(codeWriter, name, setOf(Modifier.PUBLIC))
     }
 
     // Functions (static and non-static).
     for (funSpec in functionSpecs) {
       if (funSpec.isConstructor) continue
-      codeWriter.emit("\n")
+      separate()
       funSpec.emit(codeWriter, name, setOf(Modifier.PUBLIC))
     }
 
     codeWriter.unindent()
-
-    if (!hasNoBody) {
-      codeWriter.emit("\n")
-    }
     codeWriter.emit("}\n")
   }
 
@@ -123,8 +128,6 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
    */
   private fun emitConstructor(codeWriter: CodeWriter, constructorProperties: Map<String, PropertySpec>) {
     val constructor = constructor ?: return
-
-    codeWriter.emit("\n")
 
     if (constructor.decorators.isNotEmpty()) {
       codeWriter.emit(" ")

@@ -112,11 +112,11 @@ internal fun characterLiteralWithoutDoubleQuotes(c: Char) = when {
 internal fun stringLiteralWithQuotes(value: String, multiLineIndent: String): String =
   value.split("\n").joinToString(" +\n$multiLineIndent") { line ->
     val result = StringBuilder(line.length + 32)
-    result.append('\'')
+    result.append('"')
     for (c in line) {
-      // Trivial case: single quote must be escaped.
-      if (c == '\'') {
-        result.append("\\\'")
+      // Trivial case: double quote must be escaped.
+      if (c == '"') {
+        result.append("\\\"")
         continue
       }
       // Trivial case: dollar sign must be escaped.
@@ -124,15 +124,15 @@ internal fun stringLiteralWithQuotes(value: String, multiLineIndent: String): St
         result.append("\\$")
         continue
       }
-      // Trivial case: double quotes must not be escaped.
-      if (c == '\"') {
-        result.append('"')
+      // Trivial case: single quotes must not be escaped.
+      if (c == '\'') {
+        result.append("'")
         continue
       }
       // Default case: just let character literal do its work.
       result.append(characterLiteralWithoutDoubleQuotes(c))
     }
-    result.append('\'')
+    result.append('"')
 
     result.toString()
   }

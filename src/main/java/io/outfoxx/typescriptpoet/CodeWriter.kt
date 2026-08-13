@@ -22,13 +22,15 @@ import java.util.Stack
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
  * imports, indentation, and deferred variable names.
  */
+private const val PRINT_WIDTH = 80
+
 internal class CodeWriter(
   out: Appendable,
   private val indent: String = "  ",
   val renamedSymbols: Map<SymbolSpec, String> = emptyMap(),
 ) : Closeable {
 
-  private val out = LineWrapper(out, indent, 100)
+  private val out = LineWrapper(out, indent, PRINT_WIDTH)
   private var indentLevel = 0
 
   private var tsDoc = false

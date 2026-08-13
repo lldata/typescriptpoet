@@ -32,6 +32,12 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
   val callable = builder.callable
 
   override fun emit(codeWriter: CodeWriter) {
+    var wroteMember = false
+    fun separate() {
+      if (wroteMember) codeWriter.emit("\n")
+      wroteMember = true
+    }
+
     codeWriter.emitTSDoc(tsDoc)
     codeWriter.emitModifiers(modifiers, setOf())
     codeWriter.emit("interface")
@@ -48,13 +54,13 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
 
     // Callable
     callable?.let {
-      codeWriter.emitCode("\n")
+      separate()
       it.emit(codeWriter, null, setOf(Modifier.ABSTRACT))
     }
 
     // Properties.
     for (propertySpec in propertySpecs) {
-      codeWriter.emit("\n")
+      separate()
       propertySpec.emit(
         codeWriter,
         setOf(Modifier.PUBLIC),
@@ -65,22 +71,18 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
 
     // Indexables
     for (funSpec in indexableSpecs) {
-      codeWriter.emit("\n")
+      separate()
       funSpec.emit(codeWriter, null, setOf(Modifier.PUBLIC, Modifier.ABSTRACT))
     }
 
     // Functions.
     for (funSpec in functionSpecs) {
       if (funSpec.isConstructor) continue
-      codeWriter.emit("\n")
+      separate()
       funSpec.emit(codeWriter, name, setOf(Modifier.PUBLIC, Modifier.ABSTRACT))
     }
 
     codeWriter.unindent()
-
-    if (!hasNoBody) {
-      codeWriter.emit("\n")
-    }
     codeWriter.emit("}\n")
   }
 

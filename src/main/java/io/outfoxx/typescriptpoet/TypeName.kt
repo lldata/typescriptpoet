@@ -344,7 +344,7 @@ sealed class TypeName {
         member.type.emit(codeWriter)
 
         if (idx != members.size - 1) {
-          codeWriter.emit(", ")
+          codeWriter.emit("; ")
         }
       }
       codeWriter.emit(" }")

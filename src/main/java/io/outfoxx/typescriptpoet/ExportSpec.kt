@@ -54,21 +54,21 @@ internal constructor(
   internal fun emit(codeWriter: CodeWriter) {
     when (kind) {
       Kind.ALL ->
-        codeWriter.emitCode(CodeBlock.of("%[export ${typePrefix()}* from '%L';\n%]", source))
+        codeWriter.emitCode(CodeBlock.of("%[export ${typePrefix()}* from \"%L\";\n%]", source))
 
       Kind.ALL_AS ->
         codeWriter.emitCode(
-          CodeBlock.of("%[export ${typePrefix()}* as %L from '%L';\n%]", namespaceAlias, source),
+          CodeBlock.of("%[export ${typePrefix()}* as %L from \"%L\";\n%]", namespaceAlias, source),
         )
 
       Kind.NAMED -> {
         val list = names.joinToString(", ")
         if (source != null) {
           codeWriter.emitCode(
-            CodeBlock.of("%[export ${typePrefix()}{%L} from '%L';\n%]", list, source),
+            CodeBlock.of("%[export ${typePrefix()}{ %L } from \"%L\";\n%]", list, source),
           )
         } else {
-          codeWriter.emitCode(CodeBlock.of("%[export ${typePrefix()}{%L};\n%]", list))
+          codeWriter.emitCode(CodeBlock.of("%[export ${typePrefix()}{ %L };\n%]", list))
         }
       }
 
