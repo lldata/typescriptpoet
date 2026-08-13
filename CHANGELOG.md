@@ -1,0 +1,96 @@
+Changelog
+=========
+
+All notable changes to this project are documented here. This project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+
+## [Unreleased] — 2.0.0
+
+The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade path.
+
+### Added
+
+**Type system**
+- `keyof`, `typeof` and the `readonly` type operator, composable anywhere a type is accepted.
+  `keyof` previously existed only as a type-parameter bound modifier.
+- Indexed access types (`T[K]`) and the array shorthand (`T[]`), the latter distinct from
+  `arrayType()`'s `Array<T>` because only the shorthand can carry `readonly`.
+- Conditional types with `infer`, mapped types with `as` key remapping and `+`/`-`
+  `readonly`/`?` modifiers, and template literal types.
+- Labelled, optional and rest tuple elements.
+- Generic function types, construct signatures including `abstract new`, and `unique symbol`.
+- Variance annotations (`in`/`out`) and `const` type parameters.
+- Operand precedence: a union or intersection used under `keyof`, `[]` or `[K]` is
+  parenthesised, so the emitted type means what was asked for.
+
+**Declarations**
+- `async`, generator functions and methods, and arrow functions.
+- Overload groups: N signatures plus one implementation, validated to share a name.
+- `this` parameters, type predicates (`x is Y`) and assertion signatures (`asserts x is Y`).
+- `override` and `accessor` modifiers, `#private` members, class static initializer blocks,
+  and class index signatures.
+- `const enum`, definite assignment (`!`), and destructuring parameters.
+
+**Modules**
+- Default imports, with `=` as their sigil in the symbol mini-DSL.
+- `import type` and `export type`, using the inline `type` form so value and type imports
+  from one module stay on a single statement.
+- Re-exports (`export * from`, `export * as ns from`, `export { a, b as c } from`),
+  standalone export lists, `export default`, and `export =`.
+
+**Project**
+- A golden-file integration test covering every construct once, type-checked with the real
+  `tsc`.
+- Binary compatibility validation, a coverage floor, and ktlint plus license-header checks,
+  all wired into `check`.
+
+### Fixed
+
+- `FileSpec.addProperty` threw for every input: it required exactly one of `CONST`/`LET`/`VAR`
+  and then ran a check forbidding all three. Top-level properties were unreachable.
+- `FileSpec.addEnum` rejected `CONST`, so `const enum` could not be added to a file.
+- Types referenced only inside a nested `CodeBlock` were not imported, because passing a
+  `CodeBlock` as a `%L` argument flattened it to a string and discarded its format parts.
+  ([outfoxx/typescriptpoet#27](https://github.com/outfoxx/typescriptpoet/pull/27))
+- `returns(TypeName.VOID)` was silently discarded, so an explicit `: void` could not be
+  emitted. ([outfoxx/typescriptpoet#24](https://github.com/outfoxx/typescriptpoet/issues/24))
+- The reserved-word list was Kotlin's, not TypeScript's, so `NameAllocator` could emit a
+  bare `function` or `const` as an identifier.
+  ([outfoxx/typescriptpoet#23](https://github.com/outfoxx/typescriptpoet/issues/23))
+- Modifiers were emitted in `Modifier` enum declaration order, producing `readonly static`
+  and `readonly abstract`; `tsc` rejects both.
+  ([outfoxx/typescriptpoet#16](https://github.com/outfoxx/typescriptpoet/pull/16))
+- `FileSpec.emitImports` filtered with `!is Augmented || !is SideEffect`, which is always
+  true, so the filter did nothing.
+- `isName` split on `"\\."` using the literal-delimiter overload, so it never split and its
+  per-part check silently degraded to a whole-string one.
+- Class index signatures were emitted with a body: `[key: string]: any { }`.
+- Rest parameters emitted `... args` with a stray space.
+- Block-shaped property initializers picked up the statement wrapper's hanging indent.
+
+### Changed
+
+- **Breaking.** Targets Java 8 bytecode and Kotlin 2.0 metadata, with a `kotlin-stdlib` floor
+  of 2.0.21. Consumers need JDK 8+ and a Kotlin 2.0+ compiler.
+- **Breaking.** `TypeName.Tuple.memberTypes` is now `members`, holding `Tuple.Member`.
+  `memberTypes` remains as a derived property.
+- **Breaking.** `TypeName` and `SymbolSpec` gained subclasses; exhaustive `when` expressions
+  over them need updating.
+- **Breaking.** `copy()` on `TypeName` and `SymbolSpec` subclasses is no longer public,
+  matching their non-public constructors.
+- `@JvmField` on the `TypeName` constants, so Java callers write `TypeName.STRING`.
+  ([outfoxx/typescriptpoet#19](https://github.com/outfoxx/typescriptpoet/pull/19))
+- Builds on Gradle 9.7 with Kotlin 2.4.10 and a JDK 17 toolchain.
+
+### Removed
+
+- The Guava dependency, which was declared but never imported, and `kotlin-reflect`, which
+  was never needed — `KClass` lives in `kotlin-stdlib`. The library now has no runtime
+  dependencies beyond the Kotlin standard library.
+  ([outfoxx/typescriptpoet#29](https://github.com/outfoxx/typescriptpoet/pull/29))
+
+
+## 1.1.2 and earlier
+
+See the [releases page](https://github.com/outfoxx/typescriptpoet/releases).

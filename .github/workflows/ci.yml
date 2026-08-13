@@ -36,6 +36,25 @@ jobs:
     - name: Build & Test
       run: ./gradlew build
 
+    - name: Coverage summary
+      if: always() && matrix.java == '17'
+      run: |
+        python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+        import xml.etree.ElementTree as ET, pathlib
+        report = pathlib.Path('build/reports/jacoco/test/jacocoTestReport.xml')
+        if not report.exists():
+            print('No coverage report was produced.')
+            raise SystemExit
+        root = ET.parse(report).getroot()
+        print('### Coverage\n')
+        print('| Counter | Covered | Total | % |')
+        print('| --- | ---: | ---: | ---: |')
+        for counter in root.findall('counter'):
+            missed, covered = int(counter.get('missed')), int(counter.get('covered'))
+            total = missed + covered
+            print(f"| {counter.get('type').title()} | {covered} | {total} | {100 * covered / total:.1f}% |")
+        PY
+
     - name: Upload Reports
       if: always()
       uses: actions/upload-artifact@v4

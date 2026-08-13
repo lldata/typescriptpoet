@@ -11,6 +11,7 @@ plugins {
   id("org.jetbrains.dokka") version "2.2.0"
 
   id("com.diffplug.spotless") version "8.9.0"
+  id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
 }
 
 
@@ -121,6 +122,35 @@ tasks {
     System.getProperty("kitchensink.write")?.let { systemProperty("kitchensink.write", it) }
 
     finalizedBy(jacocoTestReport)
+  }
+
+  jacocoTestCoverageVerification {
+    dependsOn(test)
+    violationRules {
+      rule {
+        // A floor, not a target. Set just under the current numbers so a real regression
+        // fails the build while ordinary movement does not.
+        limit {
+          counter = "LINE"
+          value = "COVEREDRATIO"
+          minimum = "0.78".toBigDecimal()
+        }
+        limit {
+          counter = "BRANCH"
+          value = "COVEREDRATIO"
+          minimum = "0.61".toBigDecimal()
+        }
+        limit {
+          counter = "INSTRUCTION"
+          value = "COVEREDRATIO"
+          minimum = "0.70".toBigDecimal()
+        }
+      }
+    }
+  }
+
+  check {
+    dependsOn(jacocoTestCoverageVerification)
   }
 
   jacocoTestReport {
