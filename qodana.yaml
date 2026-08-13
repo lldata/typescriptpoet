@@ -1,5 +1,5 @@
-# IntelliJ inspections — the analyser behind the warnings the IDE shows, which neither the
-# Kotlin CLI compiler nor detekt reports. Run in CI so those are visible outside an editor.
+# IntelliJ inspections -- the analyser behind the warnings the IDE shows, which neither the
+# Kotlin CLI compiler nor detekt reports.
 version: "1.0"
 linter: jetbrains/qodana-jvm-community:2026.2
 
@@ -13,3 +13,16 @@ exclude:
     paths:
       - build
       - .gradle
+
+  # This is a library: almost its entire public API is unused *within* the repository and
+  # called only by consumers. UnusedSymbol reported 67 findings, among them TypeName.STRING_CLASS,
+  # FileSpec.writeTo and most of the builder methods -- all of them API we ship on purpose.
+  # Acting on it would mean deleting the library. Dead *private* code is still caught, by
+  # detekt's UnusedPrivateProperty, which is how EnumSpec.hasNoBody was found.
+  - name: UnusedSymbol
+
+  # The regexes in SymbolSpec are built by interpolating named sub-patterns into each other,
+  # where the non-capturing groups keep the composition unambiguous rather than being noise.
+  - name: RegExpUnnecessaryNonCapturingGroup
+    paths:
+      - src/main/java/io/outfoxx/typescriptpoet/SymbolSpec.kt

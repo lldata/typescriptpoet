@@ -40,7 +40,9 @@ internal constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap())
       }
 
       codeWriter.emitCode(")")
-    } else if (factory ?: parameters.isNotEmpty()) {
+    } else if (factory == true) {
+      // This branch is the empty-parameter case, so the elvis fallback that used to be here
+      // -- `factory ?: parameters.isNotEmpty()` -- could only ever evaluate to false.
       codeWriter.emit("()")
     }
   }
