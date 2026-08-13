@@ -207,6 +207,115 @@ sealed class TypeName {
     override fun toString() = buildCodeString { emit(this) }
   }
 
+  /**
+   * A conditional type: `T extends U ? X : Y`.
+   *
+   * `infer` variables are placed inside [extendsType], via [TypeName.infer].
+   */
+  @ConsistentCopyVisibility
+  data class Conditional
+  internal constructor(
+    val checkType: TypeName,
+    val extendsType: TypeName,
+    val trueType: TypeName,
+    val falseType: TypeName,
+  ) : TypeName() {
+
+    override val bindsLoosely: Boolean get() = true
+
+    override fun emit(codeWriter: CodeWriter) {
+      checkType.emitAsOperand(codeWriter)
+      codeWriter.emit(" extends ")
+      extendsType.emitAsOperand(codeWriter)
+      codeWriter.emit(" ? ")
+      trueType.emit(codeWriter)
+      codeWriter.emit(" : ")
+      // The false branch is the standard place to chain, and `A ? B : C ? D : E` already
+      // associates to the right, so no parentheses are needed here.
+      falseType.emit(codeWriter)
+    }
+
+    override fun toString() = buildCodeString { emit(this) }
+  }
+
+  /**
+   * A mapped type: `{ [K in Keys]: T }`, with optional `as` key remapping and `+`/`-`
+   * `readonly` and `?` modifiers.
+   */
+  @ConsistentCopyVisibility
+  data class Mapped
+  internal constructor(
+    val keyName: String,
+    val constraint: TypeName,
+    val valueType: TypeName,
+    val asClause: TypeName? = null,
+    val readonly: Change? = null,
+    val optional: Change? = null,
+  ) : TypeName() {
+
+    /**
+     * Whether a mapped type adds, removes, or simply states a `readonly`/`?` modifier.
+     *
+     * [KEEP] emits the bare modifier, which for a homomorphic mapped type means "leave as
+     * found"; [ADD] and [REMOVE] emit `+` and `-`. Absent (null) emits nothing at all, which
+     * is different from [KEEP].
+     */
+    enum class Change(val prefix: String) {
+
+      KEEP(""),
+      ADD("+"),
+      REMOVE("-"),
+    }
+
+    override fun emit(codeWriter: CodeWriter) {
+      codeWriter.emit("{ ")
+      readonly?.let { codeWriter.emit("${it.prefix}readonly ") }
+      codeWriter.emit("[")
+      codeWriter.emit(keyName)
+      codeWriter.emit(" in ")
+      constraint.emit(codeWriter)
+      asClause?.let {
+        codeWriter.emit(" as ")
+        it.emit(codeWriter)
+      }
+      codeWriter.emit("]")
+      optional?.let { codeWriter.emit("${it.prefix}?") }
+      codeWriter.emit(": ")
+      valueType.emit(codeWriter)
+      codeWriter.emit(" }")
+    }
+
+    override fun toString() = buildCodeString { emit(this) }
+  }
+
+  /**
+   * A template literal type: `` `on${Capitalize<T>}` ``.
+   *
+   * [parts] alternates freely between [String] literals and [TypeName] interpolations.
+   */
+  @ConsistentCopyVisibility
+  data class TemplateLiteral
+  internal constructor(val parts: List<Any>) : TypeName() {
+
+    override fun emit(codeWriter: CodeWriter) {
+      codeWriter.emit("`")
+      parts.forEach { part ->
+        when (part) {
+          is TypeName -> {
+            codeWriter.emit("\${")
+            part.emit(codeWriter)
+            codeWriter.emit("}")
+          }
+
+          else -> codeWriter.emit(part.toString())
+        }
+      }
+      codeWriter.emit("`")
+    }
+
+    override fun toString() = buildCodeString { emit(this) }
+  }
+
   @ConsistentCopyVisibility
   data class Anonymous
   internal constructor(val members: List<Member>) : TypeName() {
@@ -763,5 +872,56 @@ sealed class TypeName {
     /** `unique symbol`, as used for well-known symbol declarations. */
     @JvmField
     val UNIQUE_SYMBOL: Operator = Operator(Operator.Kind.UNIQUE, SYMBOL)
+
+    /**
+     * A conditional type (e.g. `T extends string ? A : B`)
+     *
+     * @param checkType Type being tested
+     * @param extendsType Type it is tested against; may contain [infer] variables
+     * @param trueType Result when the test holds
+     * @param falseType Result when it does not
+     */
+    @JvmStatic
+    fun conditionalType(
+      checkType: TypeName,
+      extendsType: TypeName,
+      trueType: TypeName,
+      falseType: TypeName,
+    ): Conditional = Conditional(checkType, extendsType, trueType, falseType)
+
+    /**
+     * A mapped type (e.g. `{ readonly [K in keyof T]?: T[K] }`)
+     *
+     * @param keyName Name of the key variable (the `K` in `[K in Keys]`)
+     * @param constraint Type the key ranges over
+     * @param valueType Type each key maps to
+     * @param asClause Optional key remapping (the `as` in `[K in Keys as ...]`)
+     * @param readonly Whether to add, remove or state `readonly`; null emits nothing
+     * @param optional Whether to add, remove or state `?`; null emits nothing
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun mappedType(
+      keyName: String,
+      constraint: TypeName,
+      valueType: TypeName,
+      asClause: TypeName? = null,
+      readonly: Mapped.Change? = null,
+      optional: Mapped.Change? = null,
+    ): Mapped = Mapped(keyName, constraint, valueType, asClause, readonly, optional)
+
+    /**
+     * A template literal type (e.g. `` `get${Capitalize<K>}` ``)
+     *
+     * @param parts Alternating [String] literals and [TypeName] interpolations
+     */
+    @JvmStatic
+    fun templateLiteralType(vararg parts: Any): TemplateLiteral {
+      val invalid = parts.filterNot { it is String || it is TypeName }
+      require(invalid.isEmpty()) {
+        "template literal parts must be String or TypeName, but found $invalid"
+      }
+      return TemplateLiteral(parts.toList())
+    }
   }
 }
