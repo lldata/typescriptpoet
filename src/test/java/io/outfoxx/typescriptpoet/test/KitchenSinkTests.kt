@@ -99,6 +99,29 @@ class KitchenSinkTests {
     )
   }
 
+  @Test
+  @DisplayName("Prettier accepts the golden file unchanged")
+  fun testGoldenFileIsPrettierClean() {
+    assumeTrue(npxAvailable(), "npx is not available; skipping the Prettier check")
+
+    val source = KitchenSink.emit()
+    val file = dir2().resolve("kitchen-sink.ts")
+    file.writeText(source)
+
+    val result = run(
+      listOf("npx", "-y", "prettier@3", "--check", file.toString()),
+      timeoutSeconds = 300,
+    )
+
+    assertThat(
+      "Prettier would reformat the generated source:\n\n$source\n\n${result.second}",
+      result.first,
+      equalTo(0),
+    )
+  }
+
+  private fun dir2(): Path = kotlin.io.path.createTempDirectory("prettier-check")
+
   /**
    * Collapses runs of whitespace so the comparison is about the code, not the layout.
    *

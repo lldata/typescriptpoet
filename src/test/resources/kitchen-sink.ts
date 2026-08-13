@@ -70,7 +70,9 @@ type Unwrap<T> = T extends (infer U)[] ? U : never;
 
 type Mutable<T> = { -readonly [K in keyof T]+?: T[K] };
 
-type Getters<T> = { [K in keyof T as `get${Capitalize<Extract<K, string>>}`]: T[K] };
+type Getters<T> = {
+  [K in keyof T as `get${Capitalize<Extract<K, string>>}`]: T[K];
+};
 
 type TypeOfEngine = typeof Engine;
 

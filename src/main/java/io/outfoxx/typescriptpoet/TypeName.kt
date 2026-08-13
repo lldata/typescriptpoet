@@ -279,7 +279,27 @@ sealed class TypeName {
     }
 
     override fun emit(codeWriter: CodeWriter) {
-      codeWriter.emit("{ ")
+      // Measure, then break: Prettier keeps a mapped type on one line only if it fits, and
+      // otherwise puts the single member on its own line between the braces.
+      val body = buildCodeString { emitBody(this) }
+      val fitsOnOneLine = codeWriter.currentColumn + body.length + 5 <= codeWriter.printWidth
+
+      if (fitsOnOneLine) {
+        codeWriter.emit("{ ")
+        emitBody(codeWriter)
+        codeWriter.emit(" }")
+      } else {
+        codeWriter.emit("{\n")
+        codeWriter.indent()
+        emitBody(codeWriter)
+        codeWriter.emit(";\n")
+        codeWriter.unindent()
+        codeWriter.emit("}")
+      }
+    }
+
+    /** The `[K in Keys]: V` between the braces, without them or any layout around it. */
+    private fun emitBody(codeWriter: CodeWriter) {
       readonly?.let { codeWriter.emit("${it.prefix}readonly ") }
       codeWriter.emit("[")
       codeWriter.emit(keyName)
@@ -293,7 +313,6 @@ sealed class TypeName {
       optional?.let { codeWriter.emit("${it.prefix}?") }
       codeWriter.emit(": ")
       valueType.emit(codeWriter)
-      codeWriter.emit(" }")
     }
 
     override fun toString() = buildCodeString { emit(this) }
