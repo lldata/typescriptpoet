@@ -413,7 +413,7 @@ private constructor(internal val formatParts: List<String>, internal val args: L
 
   companion object {
 
-    private val NAMED_ARGUMENT = Regex("%([\\w_]+):([\\w]).*")
+    private val NAMED_ARGUMENT = Regex("%([\\w_]+):(\\w).*")
     private val LOWERCASE = Regex("[a-z]+[\\w_]*")
     private const val ARG_NAME = 1
     private const val TYPE_NAME = 2

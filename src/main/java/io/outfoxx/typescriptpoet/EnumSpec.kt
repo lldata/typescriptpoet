@@ -93,7 +93,7 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
     /** Adds a constant: `Up` or `Up = 1 << 2`. */
     fun addConstant(name: String, initializer: CodeBlock?) = apply {
       require(name.isName) { "not a valid enum constant: $name" }
-      constants.put(name, initializer)
+      constants[name] = initializer
     }
 
     override fun build(): EnumSpec = EnumSpec(this)

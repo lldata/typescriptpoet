@@ -32,7 +32,7 @@ internal object NullAppendable : Appendable {
 internal fun String.parentSegment(separator: String = "."): String? {
   val parts = split(separator)
   val parent = parts.dropLast(1).joinToString(separator)
-  return if (parent.isEmpty()) null else parent
+  return parent.takeIf { it.isNotEmpty() }
 }
 
 internal fun String.topLevelSegment(separator: String = "."): String = split(separator).first()

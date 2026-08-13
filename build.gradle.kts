@@ -111,7 +111,7 @@ tasks.compileTestKotlin {
     languageVersion = KotlinVersion.DEFAULT
     apiVersion = KotlinVersion.DEFAULT
     jvmTarget = JvmTarget.JVM_17
-    freeCompilerArgs.set(emptyList<String>())
+    freeCompilerArgs.set(emptyList())
   }
 }
 

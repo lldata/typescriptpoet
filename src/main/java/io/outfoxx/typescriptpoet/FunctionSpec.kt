@@ -403,7 +403,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
     /** Adds a line comment to the body: `// unreachable`. */
     fun addComment(format: String, vararg args: Any) = apply {
-      body.add("// " + format + "\n", *args)
+      body.add("// $format\n", *args)
     }
 
     /**

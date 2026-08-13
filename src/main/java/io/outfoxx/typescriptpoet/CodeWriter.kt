@@ -22,7 +22,7 @@ import java.util.Stack
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
  * imports, indentation, and deferred variable names.
  */
-internal class CodeWriter constructor(
+internal class CodeWriter(
   out: Appendable,
   private val indent: String = "  ",
   val renamedSymbols: Map<SymbolSpec, String> = emptyMap(),
