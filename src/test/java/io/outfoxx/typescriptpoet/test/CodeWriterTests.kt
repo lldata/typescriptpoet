@@ -74,7 +74,7 @@ class CodeWriterTests {
       out.toString(),
       emits(
         """
-            import { X } from \"x\";
+            import { X } from "x";
 
 
             function test(): string {

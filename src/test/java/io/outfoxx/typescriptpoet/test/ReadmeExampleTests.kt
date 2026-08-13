@@ -67,7 +67,7 @@ class ReadmeExampleTests {
       out.toString(),
       emits(
         """
-            import { Observable } from \"rxjs/Observable\";
+            import { Observable } from "rxjs/Observable";
 
 
             export class Greeter {

@@ -122,13 +122,13 @@ class ModuleExportTests {
       emits(
         """
 
-            export * from \"./alpha\";
+            export * from "./alpha";
 
-            export * as beta from \"./beta\";
+            export * as beta from "./beta";
 
-            export { Gamma, Delta as Renamed } from \"./gamma\";
+            export { Gamma, Delta as Renamed } from "./gamma";
 
-            export type {Epsilon} from \"./eps\";
+            export type {Epsilon} from "./eps";
 
         """.trimIndent(),
       ),
