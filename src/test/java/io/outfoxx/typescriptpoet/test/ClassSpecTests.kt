@@ -312,7 +312,7 @@ class ClassSpecTests {
         """
             class Test {
 
-              constructor(value: number, ... all: Array<string>) {
+              constructor(value: number, ...all: Array<string>) {
               }
 
             }

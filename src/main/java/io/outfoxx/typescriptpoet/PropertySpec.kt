@@ -56,7 +56,15 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     )
     if (withInitializer && initializer != null) {
       codeWriter.emit(" = ")
-      codeWriter.emitCode(CodeBlock.of("%[%L%]", initializer))
+      // The statement wrapper gives long expressions a hanging indent on continuation lines,
+      // which is wrong for a block-shaped value such as an arrow function or object literal:
+      // it would push the body and closing brace out by two extra levels. Those bring their
+      // own indentation, so emit them unwrapped.
+      if (initializer.toString().contains("\n")) {
+        codeWriter.emitCode(CodeBlock.of("%L", initializer))
+      } else {
+        codeWriter.emitCode(CodeBlock.of("%[%L%]", initializer))
+      }
     }
     if (asStatement) {
       codeWriter.emit(";\n")

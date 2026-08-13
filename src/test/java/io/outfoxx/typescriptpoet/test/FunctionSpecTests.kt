@@ -305,7 +305,7 @@ class FunctionSpecTests {
       out.toString(),
       equalTo(
         """
-            function test(b: string, ... c: Array<string>) {
+            function test(b: string, ...c: Array<string>) {
             }
 
         """.trimIndent(),

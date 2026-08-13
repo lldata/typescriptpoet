@@ -252,6 +252,7 @@ internal class CodeWriter constructor(
       is InterfaceSpec -> o.emit(this)
       is EnumSpec -> o.emit(this)
       is DecoratorSpec -> o.emit(this)
+      is FunctionSpec -> o.emit(this, null, emptySet())
       is CodeBlock -> emitCode(o)
       else -> emit(o.toString())
     }

@@ -17,9 +17,30 @@ package io.outfoxx.typescriptpoet
 
 import kotlin.math.min
 
+/**
+ * A destructuring parameter pattern: `{ a, b: renamed }` or `[first, second]`.
+ */
+data class Destructure
+internal constructor(val kind: Kind, val bindings: List<Binding>) {
+
+  enum class Kind(val open: String, val close: String) {
+
+    OBJECT("{ ", " }"),
+    ARRAY("[", "]"),
+  }
+
+  /** One bound name, optionally renamed (`b: renamed`, object patterns only). */
+  data class Binding(val name: String, val alias: String? = null)
+
+  override fun toString(): String = bindings.joinToString(", ", prefix = kind.open, postfix = kind.close) { binding ->
+    if (binding.alias != null) "${binding.name}: ${binding.alias}" else binding.name
+  }
+}
+
 class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) {
 
   val name = builder.name
+  val destructure = builder.destructure
   val optional = builder.optional
   val decorators = builder.decorators.toImmutableList()
   val modifiers = builder.modifiers.toImmutableSet()
@@ -35,9 +56,10 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
     codeWriter.emitDecorators(decorators, true)
     codeWriter.emitModifiers(modifiers)
     if (isRest) {
-      codeWriter.emitCode("... ")
+      codeWriter.emitCode("...")
     }
-    codeWriter.emitCode(CodeBlock.of("%L", name))
+    // A destructuring pattern stands in for the name; `name` is then only bookkeeping.
+    codeWriter.emitCode(CodeBlock.of("%L", destructure?.toString() ?: name))
     if (includeType) {
       if (optional && optionalAllowed) {
         codeWriter.emitCode("?")
@@ -84,6 +106,7 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
     internal val decorators = mutableListOf<DecoratorSpec>()
     internal val modifiers = mutableListOf<Modifier>()
     internal var defaultValue: CodeBlock? = null
+    internal var destructure: Destructure? = null
 
     fun addDecorators(decoratorSpecs: Iterable<DecoratorSpec>) = apply {
       decorators += decoratorSpecs
@@ -118,6 +141,16 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
       this.defaultValue = codeBlock
     }
 
+    /**
+     * Replaces the parameter name with a destructuring pattern
+     * (e.g. `{ a, b }: Options`).
+     *
+     * The builder's `name` is kept for lookup by [FunctionSpec.parameter] but is not emitted.
+     */
+    fun destructure(destructure: Destructure) = apply {
+      this.destructure = destructure
+    }
+
     fun build() = ParameterSpec(this)
   }
 
@@ -135,6 +168,21 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
      * Bypasses the name check, since `this` is a reserved word everywhere else.
      */
     internal fun thisParameter(type: TypeName): ParameterSpec = Builder("this", type, false).build()
+
+    /** An object destructuring pattern (e.g. `{ a, b: renamed }`). */
+    @JvmStatic
+    fun objectPattern(vararg bindings: Destructure.Binding): Destructure =
+      Destructure(Destructure.Kind.OBJECT, bindings.toList())
+
+    /** An array destructuring pattern (e.g. `[first, second]`). */
+    @JvmStatic
+    fun arrayPattern(vararg names: String): Destructure =
+      Destructure(Destructure.Kind.ARRAY, names.map { Destructure.Binding(it) })
+
+    /** One binding in an object pattern, optionally renamed. */
+    @JvmStatic
+    @JvmOverloads
+    fun binding(name: String, alias: String? = null): Destructure.Binding = Destructure.Binding(name, alias)
   }
 }
 

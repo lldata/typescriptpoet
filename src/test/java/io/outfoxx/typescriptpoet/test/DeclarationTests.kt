@@ -20,6 +20,7 @@ import io.outfoxx.typescriptpoet.CodeWriter
 import io.outfoxx.typescriptpoet.EnumSpec
 import io.outfoxx.typescriptpoet.FunctionSpec
 import io.outfoxx.typescriptpoet.Modifier
+import io.outfoxx.typescriptpoet.ParameterSpec
 import io.outfoxx.typescriptpoet.PropertySpec
 import io.outfoxx.typescriptpoet.TypeName
 import org.hamcrest.CoreMatchers.equalTo
@@ -281,5 +282,92 @@ class DeclarationTests {
     }.exceptionOrNull()
 
     assertThat(error is IllegalArgumentException, equalTo(true))
+  }
+
+  @Test
+  @DisplayName("Generates a destructured object parameter")
+  fun testObjectDestructuring() {
+    val fn = FunctionSpec.builder("configure")
+      .addParameter(
+        ParameterSpec.builder("options", TypeName.implicit("Options"))
+          .destructure(
+            ParameterSpec.objectPattern(
+              ParameterSpec.binding("host"),
+              ParameterSpec.binding("port", "listenPort"),
+            ),
+          )
+          .build(),
+      )
+      .build()
+
+    assertThat(
+      emit(fn),
+      equalTo("function configure({ host, port: listenPort }: Options) {\n}\n"),
+    )
+  }
+
+  @Test
+  @DisplayName("Generates a destructured array parameter")
+  fun testArrayDestructuring() {
+    val fn = FunctionSpec.builder("swap")
+      .addParameter(
+        ParameterSpec.builder("pair", TypeName.tupleType(TypeName.STRING, TypeName.STRING))
+          .destructure(ParameterSpec.arrayPattern("first", "second"))
+          .build(),
+      )
+      .build()
+
+    assertThat(
+      emit(fn),
+      equalTo("function swap([first, second]: [string, string]) {\n}\n"),
+    )
+  }
+
+  @Test
+  @DisplayName("Generates a rest parameter without a space after the ellipsis")
+  fun testRestParameterSpacing() {
+    val fn = FunctionSpec.builder("log")
+      .restParameter("args", TypeName.arrayShorthandType(TypeName.ANY))
+      .build()
+
+    assertThat(emit(fn), equalTo("function log(...args: any[]) {\n}\n"))
+  }
+
+  @Test
+  @DisplayName("Generates an arrow function as a property initializer")
+  fun testArrowFunction() {
+    val arrow = FunctionSpec.builder("handler")
+      .arrow()
+      .addParameter("event", TypeName.implicit("Event"))
+      .returns(TypeName.VOID)
+      .addStatement("console.log(event)")
+      .build()
+
+    val testClass = ClassSpec.builder("Test")
+      .addProperty(
+        PropertySpec.builder(
+          "handler",
+          TypeName.lambda("event" to TypeName.implicit("Event"), returnType = TypeName.VOID),
+        )
+          .initializer("%L", arrow)
+          .build(),
+      )
+      .build()
+
+    assertThat(
+      emit(testClass),
+      equalTo(
+        """
+            class Test {
+
+              handler: (event: Event) => void = (event: Event): void => {
+                console.log(event);
+              };
+
+            }
+
+        """.trimIndent(),
+      ),
+    )
   }
 }

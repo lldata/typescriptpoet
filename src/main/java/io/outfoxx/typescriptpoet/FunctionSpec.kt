@@ -40,6 +40,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
   val restParameter = builder.restParameter
   val isGenerator = builder.isGenerator
   val isSignatureOnly = builder.isSignatureOnly
+  val isArrow = builder.isArrow
   val body = builder.body.build()
 
   init {
@@ -75,6 +76,17 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       return
     }
 
+    if (isArrow) {
+      // An arrow function is an expression, so it neither starts on its own line nor ends
+      // with one; the surrounding statement owns the terminator.
+      codeWriter.emit(" => {\n")
+      codeWriter.indent()
+      codeWriter.emitCode(body)
+      codeWriter.unindent()
+      codeWriter.emit("}")
+      return
+    }
+
     codeWriter.emit(" {\n")
     codeWriter.indent()
     codeWriter.emitCode(body)
@@ -89,6 +101,8 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       isCallable -> codeWriter.emitCode("")
 
       isIndexable -> codeWriter.emitCode("[")
+
+      isArrow -> codeWriter.emitCode("")
 
       else -> {
         if (enclosingName == null) {
@@ -168,6 +182,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     builder.restParameter = restParameter
     builder.isGenerator = isGenerator
     builder.isSignatureOnly = isSignatureOnly
+    builder.isArrow = isArrow
     builder.body.add(body)
     return builder
   }
@@ -185,6 +200,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     internal var restParameter: ParameterSpec? = null
     internal var isGenerator = false
     internal var isSignatureOnly = false
+    internal var isArrow = false
     internal val body = CodeBlock.builder()
 
     init {
@@ -225,6 +241,17 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     @JvmOverloads
     fun generator(value: Boolean = true) = apply {
       this.isGenerator = value
+    }
+
+    /**
+     * Emits this as an arrow function expression (e.g. `(x: number): string => { ... }`).
+     *
+     * Arrow functions are expressions, so the result is used as an initializer or a code
+     * block argument rather than declared on its own; the name is kept only for lookup.
+     */
+    @JvmOverloads
+    fun arrow(value: Boolean = true) = apply {
+      this.isArrow = value
     }
 
     /**
