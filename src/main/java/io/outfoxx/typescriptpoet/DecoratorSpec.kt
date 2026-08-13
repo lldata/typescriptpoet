@@ -47,6 +47,7 @@ internal constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap())
 
   override fun toString() = buildCodeString { emit(this) }
 
+  /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val builder = Builder(name)
     builder.parameters += parameters
@@ -60,28 +61,34 @@ internal constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap())
     internal val parameters = mutableListOf<Pair<String?, CodeBlock>>()
     internal var factory: Boolean? = null
 
+    /** Emits empty parentheses when there are no parameters: `@sealed()` rather than `@sealed`. */
     fun asFactory() = apply {
       this.factory = true
     }
 
+    /** Adds an argument: `@inject(Engine)`. A [name] is emitted as an inline block comment before it. */
     @JvmOverloads
     fun addParameter(name: String? = null, format: String, vararg args: Any?) = apply {
       parameters += name to CodeBlock.of(format, *args)
     }
 
+    /** Adds an argument: `@inject(Engine)`. */
     @JvmOverloads
     fun addParameter(name: String? = null, codeBlock: CodeBlock) = apply {
       parameters += name to codeBlock
     }
 
+    /** Builds the decorator. */
     fun build(): DecoratorSpec = DecoratorSpec(this)
   }
 
   companion object {
 
+    /** A decorator: `@sealed`. The name is parsed as a symbol spec, so it can carry an import. */
     @JvmStatic
     fun builder(name: String): Builder = Builder(SymbolSpec.from(name))
 
+    /** A decorator: `@sealed`, imported from [name]'s module. */
     @JvmStatic
     fun builder(name: SymbolSpec): Builder = Builder(name)
   }

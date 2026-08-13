@@ -191,6 +191,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
         staticBlocks.isEmpty()
     }
 
+  /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val builder = Builder(name)
     builder.tsDoc.add(tsDoc)
@@ -222,47 +223,58 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     internal val staticBlocks = mutableListOf<CodeBlock>()
     internal var useConstructorPropertiesAutomatically = true
 
+    /** Adds TSDoc above the class. */
     fun addTSDoc(format: String, vararg args: Any) = apply {
       tsDoc.add(format, *args)
     }
 
+    /** Adds TSDoc above the class. */
     fun addTSDoc(block: CodeBlock) = apply {
       tsDoc.add(block)
     }
 
+    /** Adds decorators above the class: `@sealed`. */
     fun addDecorators(decoratorSpecs: Iterable<DecoratorSpec>) = apply {
       decorators += decoratorSpecs
     }
 
+    /** Adds a decorator above the class: `@sealed`. */
     fun addDecorator(decoratorSpec: DecoratorSpec) = apply {
       decorators += decoratorSpec
     }
 
+    /** Adds modifiers: `export abstract class Widget { }`. */
     fun addModifiers(vararg modifiers: Modifier) = apply {
       this.modifiers += modifiers
     }
 
+    /** Adds type parameters: `class Widget<T> { }`. */
     fun addTypeVariables(typeVariables: Iterable<TypeName.TypeVariable>) = apply {
       this.typeVariables += typeVariables
     }
 
+    /** Adds a type parameter: `class Widget<T> { }`. */
     fun addTypeVariable(typeVariable: TypeName.TypeVariable) = apply {
       typeVariables += typeVariable
     }
 
+    /** Sets the superclass: `class Widget extends Base { }`. May be set only once. */
     fun superClass(superClass: TypeName) = apply {
       check(this.superClass == null) { "superclass already set to ${this.superClass}" }
       this.superClass = superClass
     }
 
+    /** Adds implemented interfaces: `class Widget implements A, B { }`. */
     fun addMixins(mixins: Iterable<TypeName>) = apply {
       this.mixins += mixins
     }
 
+    /** Adds an implemented interface: `class Widget implements Serializable { }`. */
     fun addMixin(mixin: TypeName) = apply {
       mixins += mixin
     }
 
+    /** Sets the constructor: `constructor(name: string) { }`. */
     fun constructor(constructor: FunctionSpec?) = apply {
       if (constructor != null) {
         require(constructor.isConstructor) {
@@ -272,27 +284,33 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
       this.constructor = constructor
     }
 
+    /** Adds properties: `name: string;`. */
     fun addProperties(propertySpecs: Iterable<PropertySpec>) = apply {
       this.propertySpecs += propertySpecs
     }
 
+    /** Adds a property: `name: string;`. */
     fun addProperty(propertySpec: PropertySpec) = apply {
       propertySpecs += propertySpec
     }
 
+    /** Adds a property: `private readonly name?: string;`. */
     @JvmOverloads
     fun addProperty(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier) =
       addProperty(PropertySpec.builder(name, type, optional, *modifiers).build())
 
+    /** Adds methods. Pass a [FunctionSpec.overloads] group to add an overload set. */
     fun addFunctions(functionSpecs: Iterable<FunctionSpec>) = apply {
       functionSpecs.forEach { addFunction(it) }
     }
 
+    /** Adds a method: `greet(): string { }`. */
     fun addFunction(functionSpec: FunctionSpec) = apply {
       require(!functionSpec.isConstructor) { "Use the 'constructor' method for the constructor" }
       this.functionSpecs += functionSpec
     }
 
+    /** Adds index signatures: `[key: string]: unknown;`. */
     fun addIndexables(indexableSpecs: Iterable<FunctionSpec>) = apply {
       indexableSpecs.forEach { addIndexable(it) }
     }
@@ -341,9 +359,11 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
 
   companion object {
 
+    /** A class: `class Widget { }`. */
     @JvmStatic
     fun builder(name: String) = Builder(name)
 
+    /** A class: `class Widget { }`. */
     @JvmStatic
     fun builder(name: TypeName) = Builder("$name")
   }

@@ -80,6 +80,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
   override fun toString() = buildCodeString { emit(this, emptySet()) }
 
+  /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val bldr = Builder(name, type, optional)
       .addTSDoc(tsDoc)
@@ -103,34 +104,42 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     internal var initializer: CodeBlock? = null
     internal var definiteAssignment: Boolean = false
 
+    /** Adds TSDoc above the property. */
     fun addTSDoc(format: String, vararg args: Any) = apply {
       tsDoc.add(format, *args)
     }
 
+    /** Adds TSDoc above the property. */
     fun addTSDoc(block: CodeBlock) = apply {
       tsDoc.add(block)
     }
 
+    /** Adds decorators above the property: `@observable`. */
     fun addDecorators(decoratorSpecs: Iterable<DecoratorSpec>) = apply {
       decorators += decoratorSpecs
     }
 
+    /** Adds a decorator above the property: `@observable`. */
     fun addDecorator(decoratorSpec: DecoratorSpec) = apply {
       decorators += decoratorSpec
     }
 
+    /** Adds modifiers: `private static readonly name: string;`. */
     fun addModifiers(vararg modifiers: Modifier) = apply {
       this.modifiers += modifiers
     }
 
+    /** Marks the property optional: `name?: string;`. */
     fun optional(optional: Boolean) = apply {
       this.optional = optional
     }
 
+    /** Sets the initializer: `name: string = 'world';`. */
     fun initializer(format: String, vararg args: Any?) = initializer(
       CodeBlock.of(format, *args),
     )
 
+    /** Sets the initializer: `name: string = 'world';`. May be set only once. */
     fun initializer(codeBlock: CodeBlock) = apply {
       check(this.initializer == null) { "initializer was already set" }
       this.initializer = codeBlock
@@ -151,6 +160,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
   companion object {
 
+    /** A property or top-level variable: `name: string;`. */
     @JvmStatic
     @JvmOverloads
     fun builder(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier): Builder =

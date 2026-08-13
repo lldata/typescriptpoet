@@ -89,6 +89,7 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
 
   override fun toString() = buildCodeString { emit(this) }
 
+  /** A builder pre-populated with this spec, optionally renamed or retyped. */
   @JvmOverloads
   fun toBuilder(name: String = this.name, type: TypeName = this.type): Builder {
     val builder = Builder(name, type, optional)
@@ -109,34 +110,42 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
     internal var defaultValue: CodeBlock? = null
     internal var destructure: Destructure? = null
 
+    /** Adds parameter decorators: `greet(@inject name: string)`. */
     fun addDecorators(decoratorSpecs: Iterable<DecoratorSpec>) = apply {
       decorators += decoratorSpecs
     }
 
+    /** Adds a parameter decorator: `greet(@inject name: string)`. */
     fun addDecorator(decoratorSpec: DecoratorSpec) = apply {
       decorators += decoratorSpec
     }
 
+    /** Adds a parameter decorator by symbol: `greet(@inject name: string)`. */
     fun addDecorator(decorator: SymbolSpec) = apply {
       decorators += DecoratorSpec.builder(decorator).build()
     }
 
+    /** Adds modifiers, making it a constructor property: `constructor(private name: string)`. */
     fun addModifiers(vararg modifiers: Modifier) = apply {
       this.modifiers += modifiers
     }
 
+    /** Adds modifiers, making it a constructor property: `constructor(private name: string)`. */
     fun addModifiers(modifiers: Iterable<Modifier>) = apply {
       this.modifiers += modifiers
     }
 
+    /** Marks the parameter optional: `greet(name?: string)`. */
     fun optional(optional: Boolean) = apply {
       this.optional = optional
     }
 
+    /** Sets the default value: `greet(name: string = 'world')`. */
     fun defaultValue(format: String, vararg args: Any?) = defaultValue(
       CodeBlock.of(format, *args),
     )
 
+    /** Sets the default value: `greet(name: string = 'world')`. May be set only once. */
     fun defaultValue(codeBlock: CodeBlock) = apply {
       check(this.defaultValue == null) { "initializer was already set" }
       this.defaultValue = codeBlock
@@ -157,6 +166,7 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
 
   companion object {
 
+    /** A parameter: `name: string`. */
     @JvmStatic
     @JvmOverloads
     fun builder(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier): Builder {

@@ -52,6 +52,7 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
   private val hasNoBody: Boolean
     get() = constants.isEmpty()
 
+  /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val builder = Builder(name)
     builder.tsDoc.add(tsDoc)
@@ -67,14 +68,17 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
     internal val tsDoc = CodeBlock.builder()
     internal val modifiers = mutableListOf<Modifier>()
 
+    /** Adds TSDoc above the enum. */
     fun addTSDoc(format: String, vararg args: Any) = apply {
       tsDoc.add(format, *args)
     }
 
+    /** Adds TSDoc above the enum. */
     fun addTSDoc(block: CodeBlock) = apply {
       tsDoc.add(block)
     }
 
+    /** Adds modifiers: `export const enum Direction { }`. Only EXPORT, DECLARE and CONST. */
     fun addModifiers(vararg modifiers: Modifier) = apply {
       modifiers.forEach {
         require(it == Modifier.EXPORT || it == Modifier.DECLARE || it == Modifier.CONST) {
@@ -84,10 +88,12 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
       this.modifiers += modifiers
     }
 
+    /** Adds a constant: `Up` or `Up = 'UP'`. */
     @JvmOverloads
     fun addConstant(name: String, initializer: String? = null) =
       addConstant(name, initializer?.let { CodeBlock.of(it) })
 
+    /** Adds a constant: `Up` or `Up = 1 << 2`. */
     fun addConstant(name: String, initializer: CodeBlock?) = apply {
       require(name.isName) { "not a valid enum constant: $name" }
       constants.put(name, initializer)
@@ -98,9 +104,11 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
 
   companion object {
 
+    /** An enum: `enum Direction { }`. */
     @JvmStatic
     fun builder(name: String) = Builder(name)
 
+    /** An enum: `enum Direction { }`. */
     @JvmStatic
     fun builder(name: TypeName) = Builder("$name")
   }

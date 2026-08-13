@@ -89,6 +89,7 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
       return propertySpecs.isEmpty() && functionSpecs.isEmpty() && indexableSpecs.isEmpty() && callable == null
     }
 
+  /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val builder = Builder(name)
     builder.tsDoc.add(tsDoc)
@@ -113,48 +114,59 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
     internal val indexableSpecs = mutableListOf<FunctionSpec>()
     internal var callable: FunctionSpec? = null
 
+    /** Adds TSDoc above the interface. */
     fun addTSDoc(format: String, vararg args: Any) = apply {
       tsDoc.add(format, *args)
     }
 
+    /** Adds TSDoc above the interface. */
     fun addTSDoc(block: CodeBlock) = apply {
       tsDoc.add(block)
     }
 
+    /** Adds modifiers: `export interface Person { }`. */
     fun addModifiers(vararg modifiers: Modifier) = apply {
       this.modifiers += modifiers
     }
 
+    /** Adds type parameters: `interface Box<T> { }`. */
     fun addTypeVariables(typeVariables: Iterable<TypeName.TypeVariable>) = apply {
       this.typeVariables += typeVariables
     }
 
+    /** Adds a type parameter: `interface Box<T> { }`. */
     fun addTypeVariable(typeVariable: TypeName.TypeVariable) = apply {
       typeVariables += typeVariable
     }
 
+    /** Adds an extended interface: `interface Admin extends Person { }`. */
     fun addSuperInterface(superClass: TypeName) = apply {
       this.superInterfaces.add(superClass)
     }
 
+    /** Adds members: `name: string;`. Initializers and decorators are not allowed. */
     fun addProperties(propertySpecs: Iterable<PropertySpec>) = apply {
       propertySpecs.forEach { addProperty(it) }
     }
 
+    /** Adds a member: `readonly name?: string;`. Initializers and decorators are not allowed. */
     fun addProperty(propertySpec: PropertySpec) = apply {
       require(propertySpec.decorators.isEmpty()) { "Interface properties cannot have decorators" }
       require(propertySpec.initializer == null) { "Interface properties cannot have initializers" }
       propertySpecs += propertySpec
     }
 
+    /** Adds a member: `readonly name?: string;`. */
     @JvmOverloads
     fun addProperty(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier) =
       addProperty(PropertySpec.builder(name, type, optional, *modifiers).build())
 
+    /** Adds method signatures: `greet(): string;`. */
     fun addFunctions(functionSpecs: Iterable<FunctionSpec>) = apply {
       functionSpecs.forEach { addFunction(it) }
     }
 
+    /** Adds a method signature: `greet(): string;`. Emitted body-less. */
     fun addFunction(functionSpec: FunctionSpec) = apply {
       require(functionSpec.modifiers.contains(Modifier.ABSTRACT)) { "Interface methods must be abstract" }
       require(functionSpec.body.isEmpty()) { "Interface methods cannot have code" }
@@ -163,15 +175,18 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
       this.functionSpecs += functionSpec
     }
 
+    /** Adds index signatures: `[key: string]: unknown;`. */
     fun addIndexables(indexableSpecs: Iterable<FunctionSpec>) = apply {
       indexableSpecs.forEach { addIndexable(it) }
     }
 
+    /** Adds an index signature: `[key: string]: unknown;`. Must be ABSTRACT. */
     fun addIndexable(functionSpec: FunctionSpec) = apply {
       require(functionSpec.modifiers.contains(Modifier.ABSTRACT)) { "Indexables must be ABSTRACT" }
       this.indexableSpecs += functionSpec
     }
 
+    /** Sets the call signature: `(value: string): number;`. */
     fun callable(callable: FunctionSpec?) = apply {
       if (callable != null) {
         require(callable.isCallable) {
@@ -187,12 +202,15 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
 
   companion object {
 
+    /** An interface: `interface Person { }`. */
     @JvmStatic
     fun builder(name: String) = Builder(name)
 
+    /** An interface: `interface Person { }`. */
     @JvmStatic
     fun builder(name: TypeName) = Builder("$name")
 
+    /** An interface derived from a class's public members. */
     @JvmStatic
     fun builder(classSpec: ClassSpec): Builder {
       val builder = Builder(classSpec.name)

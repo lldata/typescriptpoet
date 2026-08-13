@@ -18,22 +18,55 @@ package io.outfoxx.typescriptpoet
 /** Available declaration modifiers. */
 enum class Modifier {
 
+  /** `export class Widget { }` */
   EXPORT,
+
+  /** `export default class Widget { }` */
   DEFAULT,
+
+  /** `public greet() { }`. Implicit on class members, so normally suppressed. */
   PUBLIC,
+
+  /** `protected greet() { }` */
   PROTECTED,
+
+  /** `private name: string;` */
   PRIVATE,
+
+  /** `readonly name: string;` */
   READONLY,
+
+  /** `get size(): number { }` */
   GET,
+
+  /** `set size(value: number) { }` */
   SET,
+
+  /** `static create(): Widget { }` */
   STATIC,
+
+  /** `abstract class Base { }`, and body-less members. */
   ABSTRACT,
+
+  /** `override greet(): string { }` */
   OVERRIDE,
+
+  /** `accessor count: number;`, the ES decorator auto-accessor. */
   ACCESSOR,
+
+  /** `async function load() { }` */
   ASYNC,
+
+  /** `declare module Shapes { }`, for ambient declarations. */
   DECLARE,
+
+  /** `const VERSION = 1;`, and `const enum Direction { }`. */
   CONST,
+
+  /** `let count = 0;` */
   LET,
+
+  /** `var count = 0;` */
   VAR,
   ;
 

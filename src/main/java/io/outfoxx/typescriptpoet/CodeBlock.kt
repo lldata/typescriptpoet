@@ -51,10 +51,10 @@ package io.outfoxx.typescriptpoet
 class CodeBlock
 private constructor(internal val formatParts: List<String>, internal val args: List<Any?>) {
 
-  /** A heterogeneous list containing string literals and value placeholders.  */
-
+  /** Whether the block contains nothing. */
   fun isEmpty() = formatParts.isEmpty()
 
+  /** Whether the block contains anything. */
   fun isNotEmpty() = !isEmpty()
 
   /**
@@ -139,6 +139,7 @@ private constructor(internal val formatParts: List<String>, internal val args: L
 
   override fun toString() = buildCodeString { emitCode(this@CodeBlock) }
 
+  /** A builder pre-populated with this block, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val builder = Builder()
     builder.formatParts += formatParts
@@ -151,8 +152,10 @@ private constructor(internal val formatParts: List<String>, internal val args: L
     internal val formatParts = mutableListOf<String>()
     internal val args = mutableListOf<Any?>()
 
+    /** Whether the block contains nothing. */
     fun isEmpty() = formatParts.isEmpty()
 
+    /** Whether the block contains anything. */
     fun isNotEmpty() = !isEmpty()
 
     /**
@@ -370,30 +373,36 @@ private constructor(internal val formatParts: List<String>, internal val args: L
       indent()
     }
 
+    /** Closes a control flow block: `}`. */
     fun endControlFlow() = apply {
       unindent()
       add("}\n")
     }
 
+    /** Adds one statement, terminated and newline-separated: `return name;`. */
     fun addStatement(format: String, vararg args: Any?) = apply {
       add("%[")
       add(format, *args)
       add(";\n%]")
     }
 
+    /** Appends another block verbatim, preserving its type references. */
     fun add(codeBlock: CodeBlock) = apply {
       formatParts += codeBlock.formatParts
       args.addAll(codeBlock.args)
     }
 
+    /** Increases the indent level of everything that follows. */
     fun indent() = apply {
       formatParts += "%>"
     }
 
+    /** Decreases the indent level of everything that follows. */
     fun unindent() = apply {
       formatParts += "%<"
     }
 
+    /** Builds the block. */
     fun build() = CodeBlock(
       formatParts.toImmutableList(),
       args.toImmutableList(),
@@ -408,12 +417,15 @@ private constructor(internal val formatParts: List<String>, internal val args: L
     private const val TYPE_NAME = 2
     private val NO_ARG_PLACEHOLDERS = setOf("%W", "%>", "%<", "%[", "%]")
 
+    /** A block from one format string: `CodeBlock.of("return %T.of()", type)`. */
     @JvmStatic
     fun of(format: String, vararg args: Any?) = Builder().add(format, *args).build()
 
+    /** An empty block builder. */
     @JvmStatic
     fun builder() = Builder()
 
+    /** The empty block. */
     @JvmStatic
     fun empty() = builder().build()
 

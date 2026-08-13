@@ -85,12 +85,15 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     }
   }
 
+  /** Whether the module declares no members. */
   fun isEmpty(): Boolean = members.isEmpty()
 
+  /** Whether the module declares any members. */
   fun isNotEmpty(): Boolean = !isEmpty()
 
   override fun toString() = buildCodeString { emit(this) }
 
+  /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val builder = Builder(name, kind)
     builder.tsDoc.add(tsDoc)
@@ -120,14 +123,17 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       )
     }
 
+    /** Adds TSDoc above the module. */
     fun addTSDoc(format: String, vararg args: Any) = apply {
       tsDoc.add(format, *args)
     }
 
+    /** Adds TSDoc above the module. */
     fun addTSDoc(block: CodeBlock) = apply {
       tsDoc.add(block)
     }
 
+    /** Adds a modifier: `export namespace Shapes { }`. Only one of EXPORT or DECLARE. */
     fun addModifier(modifier: Modifier) = apply {
       requireNoneOrOneOf(
         modifiers + modifier,
@@ -137,25 +143,30 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       modifiers += modifier
     }
 
+    /** Nests a module: `namespace Outer { namespace Inner { } }`. */
     fun addModule(moduleSpec: ModuleSpec) = apply {
       members += moduleSpec
     }
 
+    /** Adds a class to the module body. */
     fun addClass(classSpec: ClassSpec) = apply {
       checkMemberModifiers(classSpec.modifiers)
       members += classSpec
     }
 
+    /** Adds an interface to the module body. */
     fun addInterface(ifaceSpec: InterfaceSpec) = apply {
       checkMemberModifiers(ifaceSpec.modifiers)
       members += ifaceSpec
     }
 
+    /** Adds an enum to the module body. */
     fun addEnum(enumSpec: EnumSpec) = apply {
       checkMemberModifiers(enumSpec.modifiers)
       members += enumSpec
     }
 
+    /** Adds a class, interface, enum or type alias, dispatching on its kind. */
     fun addType(typeSpec: AnyTypeSpec) = apply {
       when (typeSpec) {
         is EnumSpec -> addEnum(typeSpec)
@@ -165,6 +176,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       }
     }
 
+    /** Adds a function to the module body. Constructors and decorators are not allowed. */
     fun addFunction(functionSpec: FunctionSpec) = apply {
       require(!functionSpec.isConstructor) { "cannot add ${functionSpec.name} to module $name" }
       require(functionSpec.decorators.isEmpty()) { "decorators on module functions are not allowed" }
@@ -172,6 +184,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       members += functionSpec
     }
 
+    /** Adds a variable: `const VERSION: string = '1';`. Needs one of CONST, LET or VAR. */
     fun addProperty(propertySpec: PropertySpec) = apply {
       requireExactlyOneOf(
         propertySpec.modifiers,
@@ -184,27 +197,34 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       members += propertySpec
     }
 
+    /** Adds a type alias to the module body. */
     fun addTypeAlias(typeAliasSpec: TypeAliasSpec) = apply {
       members += typeAliasSpec
     }
 
+    /** Adds arbitrary code to the module body. */
     fun addCode(codeBlock: CodeBlock) = apply {
       members += codeBlock
     }
 
+    /** Whether the module declares no members. */
     fun isEmpty(): Boolean = members.isEmpty()
 
+    /** Whether the module declares any members. */
     fun isNotEmpty(): Boolean = !isEmpty()
 
+    /** Builds the module. */
     fun build() = ModuleSpec(this)
   }
 
   companion object {
 
+    /** A namespace or module: `namespace Shapes { }`. */
     @JvmStatic
     @JvmOverloads
     fun builder(name: String, kind: Kind = Kind.NAMESPACE) = Builder(name, kind)
 
+    /** A namespace or module: `namespace Shapes { }`. */
     @JvmStatic
     @JvmOverloads
     fun builder(name: TypeName, kind: Kind = Kind.NAMESPACE) = builder("$name", kind)

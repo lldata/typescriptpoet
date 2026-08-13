@@ -40,6 +40,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
   val members = builder.members.toList()
   val indent = builder.indent
 
+  /** Writes the file, resolving imports relative to [directory]. */
   @Throws(IOException::class)
   @JvmOverloads
   fun writeTo(out: Appendable, directory: Path = Paths.get("/")) {
@@ -230,8 +231,10 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     }
   }
 
+  /** Whether the file declares no members. */
   fun isEmpty(): Boolean = members.isEmpty()
 
+  /** Whether the file declares any members. */
   fun isNotEmpty(): Boolean = !isEmpty()
 
   override fun equals(other: Any?): Boolean {
@@ -245,6 +248,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
   override fun toString() = buildCodeString { emit(this, Paths.get("/")) }
 
+  /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val builder = Builder(modulePath)
     builder.comment.add(comment)
@@ -303,6 +307,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       )
     }
 
+    /** Adds a comment at the top of the file, above the imports: `// Generated. Do not edit.`. */
     fun addComment(format: String, vararg args: Any) = apply {
       comment.add(format, *args)
     }
@@ -330,20 +335,24 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       members += exportSpec
     }
 
+    /** Adds a namespace or module: `namespace Shapes { }`. */
     fun addModule(moduleSpec: ModuleSpec) = apply {
       members += moduleSpec
     }
 
+    /** Adds a class. Class-member modifiers are rejected at file scope. */
     fun addClass(classSpec: ClassSpec) = apply {
       checkMemberModifiers(classSpec.modifiers)
       members += classSpec
     }
 
+    /** Adds an interface. */
     fun addInterface(ifaceSpec: InterfaceSpec) = apply {
       checkMemberModifiers(ifaceSpec.modifiers)
       members += ifaceSpec
     }
 
+    /** Adds an enum: `export const enum Direction { }`. */
     fun addEnum(enumSpec: EnumSpec) = apply {
       // `const enum` is legal at file scope, so CONST is exempt here even though it is a
       // forbidden modifier for every other kind of member.
@@ -362,6 +371,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       members += enumSpec
     }
 
+    /** Adds a class, interface, enum or type alias, dispatching on its kind. */
     fun addType(typeSpec: AnyTypeSpec) = apply {
       when (typeSpec) {
         is EnumSpec -> addEnum(typeSpec)
@@ -371,6 +381,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       }
     }
 
+    /** Adds a function. Constructors and decorators are not allowed at file scope. */
     fun addFunction(functionSpec: FunctionSpec) = apply {
       require(!functionSpec.isConstructor) { "cannot add ${functionSpec.name} to file $modulePath" }
       require(functionSpec.decorators.isEmpty()) { "decorators on module functions are not allowed" }
@@ -378,36 +389,45 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       members += functionSpec
     }
 
+    /** Adds a variable: `const VERSION: string = '1';`. Needs one of CONST, LET or VAR. */
     fun addProperty(propertySpec: PropertySpec) = apply {
       require(propertySpec.decorators.isEmpty()) { "decorators on file properties are not allowed" }
       checkPropertyModifiers(propertySpec.modifiers)
       members += propertySpec
     }
 
+    /** Adds a type alias: `type Id = string;`. */
     fun addTypeAlias(typeAliasSpec: TypeAliasSpec) = apply {
       members += typeAliasSpec
     }
 
+    /** Adds arbitrary code, emitted after the declarations. */
     fun addCode(codeBlock: CodeBlock) = apply {
       members += codeBlock
     }
 
+    /** Sets the indent string. Two spaces by default. */
     fun indent(indent: String) = apply {
       this.indent = indent
     }
 
+    /** Whether the file declares no members. */
     fun isEmpty(): Boolean = members.isEmpty()
 
+    /** Whether the file declares any members. */
     fun isNotEmpty(): Boolean = !isEmpty()
 
+    /** Builds the file. */
     fun build() = FileSpec(this)
   }
 
   companion object {
 
+    /** A file at [modulePath], without the `.ts` extension. */
     @JvmStatic
     fun builder(modulePath: String) = Builder(modulePath)
 
+    /** A file holding a module's members, lifted out of the module itself. */
     @JvmStatic
     @JvmOverloads
     fun get(moduleSpec: ModuleSpec, modulePath: String = moduleSpec.name.replace('.', '/').lowercase()): FileSpec =
@@ -415,6 +435,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
         .apply { members.addAll(moduleSpec.members.toMutableList()) }
         .build()
 
+    /** A file holding a single type, at a path derived from the type's name. */
     @JvmStatic
     @JvmOverloads
     fun get(typeSpec: AnyTypeSpec, modulePath: String = typeSpec.name.replace('.', '/').lowercase()): FileSpec =

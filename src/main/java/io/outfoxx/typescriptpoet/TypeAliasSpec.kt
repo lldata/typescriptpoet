@@ -45,6 +45,7 @@ private constructor(builder: Builder) : TypeSpec<TypeAliasSpec, TypeAliasSpec.Bu
 
   override fun toString() = buildCodeString { emit(this) }
 
+  /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val builder = Builder(name, type)
     builder.tsDoc.add(tsDoc)
@@ -64,18 +65,22 @@ private constructor(builder: Builder) : TypeSpec<TypeAliasSpec, TypeAliasSpec.Bu
       require(name.isName) { "not a valid name: $name" }
     }
 
+    /** Adds TSDoc above the alias. */
     fun addTSDoc(format: String, vararg args: Any) = apply {
       tsDoc.add(format, *args)
     }
 
+    /** Adds TSDoc above the alias. */
     fun addTSDoc(block: CodeBlock) = apply {
       tsDoc.add(block)
     }
 
+    /** Adds modifiers: `export type Id = string;`. Only EXPORT is allowed. */
     fun addModifiers(vararg modifiers: Modifier) = apply {
       modifiers.forEach(this::addModifier)
     }
 
+    /** Adds a modifier: `export type Id = string;`. Only EXPORT is allowed. */
     fun addModifier(modifier: Modifier) {
       require(modifier in setOf(Modifier.EXPORT)) {
         "unexpected typealias modifier $modifier"
@@ -83,10 +88,12 @@ private constructor(builder: Builder) : TypeSpec<TypeAliasSpec, TypeAliasSpec.Bu
       this.modifiers.add(modifier)
     }
 
+    /** Adds type parameters: `type Box<T> = T[];`. */
     fun addTypeVariables(typeVariables: Iterable<TypeName.TypeVariable>) = apply {
       this.typeVariables += typeVariables
     }
 
+    /** Adds a type parameter: `type Box<T> = T[];`. */
     fun addTypeVariable(typeVariable: TypeName.TypeVariable) = apply {
       typeVariables += typeVariable
     }
@@ -96,6 +103,7 @@ private constructor(builder: Builder) : TypeSpec<TypeAliasSpec, TypeAliasSpec.Bu
 
   companion object {
 
+    /** A type alias: `type Id = string;`. */
     @JvmStatic
     fun builder(name: String, type: TypeName) = Builder(
       name,

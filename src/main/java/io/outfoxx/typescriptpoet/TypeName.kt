@@ -51,14 +51,19 @@ sealed class TypeName {
   data class Standard
   internal constructor(val base: SymbolSpec) : TypeName() {
 
+    /** A type nested inside this one: `Outer.Inner`. */
     fun nested(name: String) = Standard(base.nested(name))
 
+    /** The enclosing type of `Outer.Inner`, or null if this is top level. */
     fun enclosingTypeName() = base.enclosing()?.let { Standard(it) }
 
+    /** The outermost type of `Outer.Inner.Deep`, i.e. `Outer`. */
     fun topLevelTypeName() = Standard(base.topLevel())
 
+    /** The last segment of `Outer.Inner`, i.e. `Inner`. */
     fun simpleName() = base.value.split(".").last()
 
+    /** The segments of `Outer.Inner.Deep` after the first, i.e. `[Inner, Deep]`. */
     fun simpleNames(): List<String> {
       val names = base.value.split(".")
       return names.subList(1, names.size)
@@ -66,6 +71,7 @@ sealed class TypeName {
 
     val isTopLevelTypeName: Boolean get() = base.isTopLevelSymbol
 
+    /** Applies type arguments: `Array<string>`. */
     fun parameterized(vararg typeArgs: TypeName) = parameterizedType(this, *typeArgs)
 
     override fun emit(codeWriter: CodeWriter) {

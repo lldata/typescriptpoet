@@ -52,6 +52,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     }
   }
 
+  /** A body-less copy for use as an interface member: `greet(): string;`. */
   fun abstract(): FunctionSpec = builder(name)
     .addModifiers(Modifier.ABSTRACT)
     .addTypeVariables(typeVariables)
@@ -169,6 +170,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
   override fun toString() = buildCodeString { emit(this, null, emptySet()) }
 
+  /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val builder = Builder(name)
     builder.tsDoc.add(tsDoc)
@@ -209,26 +211,32 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       }
     }
 
+    /** Adds TSDoc above the declaration. */
     fun addTSDoc(format: String, vararg args: Any) = apply {
       tsDoc.add(format, *args)
     }
 
+    /** Adds TSDoc above the declaration. */
     fun addTSDoc(block: CodeBlock) = apply {
       tsDoc.add(block)
     }
 
+    /** Adds decorators above the declaration: `@logged`. */
     fun addDecorators(decoratorSpecs: Iterable<DecoratorSpec>) = apply {
       this.decorators += decoratorSpecs
     }
 
+    /** Adds a decorator above the declaration: `@logged`. */
     fun addDecorator(decoratorSpec: DecoratorSpec) = apply {
       decorators += decoratorSpec
     }
 
+    /** Adds modifiers: `public static async greet() { }`. */
     fun addModifiers(vararg modifiers: Modifier) = apply {
       this.modifiers += modifiers
     }
 
+    /** Adds modifiers: `public static async greet() { }`. */
     fun addModifiers(modifiers: Iterable<Modifier>) = apply {
       this.modifiers += modifiers
     }
@@ -269,10 +277,12 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       this.typeVariables += typeVariables
     }
 
+    /** Adds a type parameter: `greet<T>() { }`. */
     fun addTypeVariable(typeVariable: TypeName.TypeVariable) = apply {
       typeVariables += typeVariable
     }
 
+    /** Sets the return type: `greet(): string { }`. */
     fun returns(returnType: TypeName) = apply {
       check(!name.isConstructor) { "$name cannot have a return type" }
       this.returnType = returnType
@@ -317,10 +327,12 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       }
     }
 
+    /** Adds a parameter: `greet(name: string) { }`. */
     fun addParameter(parameterSpec: ParameterSpec) = apply {
       parameters += parameterSpec
     }
 
+    /** Adds a parameter with a default value: `greet(name: string = 'world') { }`. */
     @JvmOverloads
     fun addParameter(
       name: String,
@@ -337,31 +349,38 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       ).defaultValue(defaultValue).build(),
     )
 
+    /** Adds a parameter: `greet(name?: string)`. */
     @JvmOverloads
     fun addParameter(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier) =
       addParameter(ParameterSpec.builder(name, type, optional, *modifiers).build())
 
+    /** Sets the rest parameter: `greet(...names: string[]) { }`. */
     fun restParameter(name: String, type: TypeName) = restParameter(ParameterSpec.builder(name, type).build())
 
+    /** Sets the rest parameter: `greet(...names: string[]) { }`. */
     fun restParameter(parameterSpec: ParameterSpec) = apply {
       this.restParameter = parameterSpec
     }
 
+    /** Adds code to the body verbatim, without a trailing semicolon or newline. */
     fun addCode(format: String, vararg args: Any) = apply {
       modifiers -= Modifier.ABSTRACT
       body.add(format, *args)
     }
 
+    /** Adds code to the body using named format arguments. */
     fun addNamedCode(format: String, args: Map<String, *>) = apply {
       modifiers -= Modifier.ABSTRACT
       body.addNamed(format, args)
     }
 
+    /** Adds code to the body verbatim. */
     fun addCode(codeBlock: CodeBlock) = apply {
       modifiers -= Modifier.ABSTRACT
       body.add(codeBlock)
     }
 
+    /** Adds a line comment to the body: `// unreachable`. */
     fun addComment(format: String, vararg args: Any) = apply {
       body.add("// " + format + "\n", *args)
     }
@@ -389,11 +408,13 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       body.endControlFlow()
     }
 
+    /** Adds one statement to the body: `return name;`. */
     fun addStatement(format: String, vararg args: Any) = apply {
       modifiers -= Modifier.ABSTRACT
       body.addStatement(format, *args)
     }
 
+    /** Builds the function. */
     fun build() = FunctionSpec(this)
   }
 
@@ -451,16 +472,19 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       return signatures.map { it.toBuilder().signatureOnly().build() } + implementation
     }
 
+    /** A constructor: `constructor(name: string) { }`. */
     @JvmStatic
     fun constructorBuilder() = Builder(
       CONSTRUCTOR,
     )
 
+    /** An interface call signature: `(value: string): number;`. */
     @JvmStatic
     fun callableBuilder() = Builder(
       CALLABLE,
     )
 
+    /** An index signature: `[key: string]: unknown;`. */
     @JvmStatic
     fun indexableBuilder() = Builder(
       INDEXABLE,

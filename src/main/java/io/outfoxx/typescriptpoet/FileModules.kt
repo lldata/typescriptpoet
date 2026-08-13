@@ -19,6 +19,7 @@ import java.nio.file.Path
 
 object FileModules {
 
+  /** The path [importer] should use to import [import], relative when both are generated. */
   fun importPath(directory: Path, importer: String, import: String): String = if (import.startsWith("!")) {
     // Ensure two generated files use proper relative import path
     val importerPath = directory.resolve(importer).toAbsolutePath().normalize()
