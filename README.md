@@ -71,6 +71,12 @@ For everything else, the integration test is the worked reference:
 [`kitchen-sink.ts`][sink-out] is the exact output it produces. That file is type-checked with
 the real `tsc` on every build, so both sides stay honest.
 
+**TypeScript 5.0 or newer**, and the same file is type-checked against both 5 and 7 on every
+build. 5.0 is the floor because that is what the newest construct here needs — a `const` type
+parameter; emit only older constructs and older compilers are fine. Checking 7 as well says
+the output has not been left behind, not that you have to be on it: TypeScript 7 is the
+native compiler rather than a language release, so it accepts the same file 5 does.
+
 Emitted code tries to do a decent job of looking like it has already been through Prettier
 with default settings — double quotes, trailing commas, brace spacing, an 80-column width,
 and constructs that break onto several lines when they do not fit. That is an aim rather than

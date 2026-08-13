@@ -79,7 +79,8 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 
 **Project**
 - A golden-file integration test covering every construct once, type-checked with the real
-  `tsc` and validated with `prettier --check`.
+  `tsc` — against TypeScript 5 and 7, the floor the emitted constructs need and the current
+  major — and validated with `prettier --check`.
 - Binary compatibility validation, a coverage floor, and ktlint plus license-header checks,
   all wired into `check`.
 

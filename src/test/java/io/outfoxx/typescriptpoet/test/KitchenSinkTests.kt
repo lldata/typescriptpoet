@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.writeText
@@ -70,9 +72,24 @@ class KitchenSinkTests {
     }
   }
 
-  @Test
-  @DisplayName("tsc accepts the golden file")
-  fun testGoldenFileTypeChecks(@TempDir dir: Path) {
+  /**
+   * Both ends of the supported range, and the reason there are two rather than one.
+   *
+   * 5 is the floor: the newest construct the library can emit is a `const` type parameter,
+   * which is TypeScript 5.0, so that is the oldest compiler the output can be held to. It
+   * gates -- generated code that 5 rejects is a bug.
+   *
+   * 7 is the current major, and running it says the output has not been left behind. TypeScript
+   * 7 is the native compiler rather than a language release, so it should accept exactly what
+   * 5 does; if it ever stops, that is worth knowing before a consumer finds it. The likeliest
+   * candidate is `--experimentalDecorators`, which the sink needs for its parameter decorator
+   * and which the 6.x line exists to deprecate things like.
+   *
+   * Testing against 7 is not a claim that consumers need it.
+   */
+  @ParameterizedTest(name = "typescript@{0} accepts the golden file")
+  @ValueSource(ints = [5, 7])
+  fun testGoldenFileTypeChecks(typescriptMajor: Int, @TempDir dir: Path) {
     assumeTrue(npxAvailable(), "npx is not available; skipping the tsc type-check")
 
     val source = KitchenSink.emit()
@@ -83,7 +100,7 @@ class KitchenSinkTests {
 
     val result = run(
       listOf(
-        "npx", "-y", "-p", "typescript@5", "tsc",
+        "npx", "-y", "-p", "typescript@$typescriptMajor", "tsc",
         "--noEmit", "--strict", "--target", "ES2022", "--lib", "ES2022,DOM",
         "--module", "ES2022", "--moduleResolution", "bundler",
         "--experimentalDecorators",
@@ -93,7 +110,7 @@ class KitchenSinkTests {
     )
 
     assertThat(
-      "tsc rejected the generated source:\n\n$source\n\n${result.second}",
+      "tsc $typescriptMajor rejected the generated source:\n\n$source\n\n${result.second}",
       result.first,
       equalTo(0),
     )
