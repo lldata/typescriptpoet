@@ -12,6 +12,8 @@ plugins {
 
   id("com.diffplug.spotless") version "8.9.0"
   id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
+  // detekt 2.x, published as `dev.detekt`; the older io.gitlab.arturbosch.detekt line
+  // stops at 1.23.8 and cannot run on JDK 25. 2.x has no stable release yet.
   id("dev.detekt") version "2.0.0-alpha.6"
 }
 

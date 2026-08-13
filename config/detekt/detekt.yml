@@ -4,8 +4,10 @@
 # The theme of these relaxations: this is a code generator. Its shape is a handful of large
 # `emit` methods that walk a spec and write syntax, plus builder classes with one method per
 # thing the generated construct can carry. Both are the design rather than debt, and the
-# repository already reached the same conclusion years ago -- .codebeatsettings raises
-# exactly these thresholds for ARITY, ABC and TOO_MANY_METHODS.
+# project reached the same conclusion years ago: the .codebeatsettings it used to carry
+# raised exactly these thresholds (ARITY, ABC, TOO_MANY_METHODS). detekt replaces codebeat,
+# whose badge had been dead for years, so that file is gone and this one is the single
+# place static-analysis thresholds are set.
 #
 # Everything not listed keeps detekt's default, which is the point: the rules that earn
 # their place are the ones that found a locale-dependent escape bug and a dead private
