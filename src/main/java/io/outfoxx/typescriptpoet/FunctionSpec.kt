@@ -21,6 +21,7 @@ package io.outfoxx.typescriptpoet
  * These are return-position-only and depend on a parameter name, so they are not a
  * [TypeName] -- a predicate cannot appear anywhere a type can.
  */
+@ConsistentCopyVisibility
 data class TypePredicate
 internal constructor(val parameterName: String, val type: TypeName?, val asserts: Boolean)
 

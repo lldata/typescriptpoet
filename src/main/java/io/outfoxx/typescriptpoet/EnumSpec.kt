@@ -49,9 +49,6 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
     codeWriter.emit("}\n")
   }
 
-  private val hasNoBody: Boolean
-    get() = constants.isEmpty()
-
   /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {
     val builder = Builder(name)

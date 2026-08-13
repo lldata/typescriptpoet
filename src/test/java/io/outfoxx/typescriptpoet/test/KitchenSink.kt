@@ -61,7 +61,6 @@ object KitchenSink {
 
     val engine = TypeName.namedImport("Engine", "./engine")
     val logger = TypeName.defaultImport("Logger", "./logger")
-    val utils = TypeName.standard(SymbolSpec.importsAll("utils", "./utils"))
     val options = TypeName.namedImport("Options", "./options", typeOnly = true)
     val sealedDecorator = SymbolSpec.importsName("sealed", "./decorators")
     val loggedDecorator = SymbolSpec.importsName("logged", "./decorators")

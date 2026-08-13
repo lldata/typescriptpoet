@@ -20,6 +20,7 @@ import kotlin.math.min
 /**
  * A destructuring parameter pattern: `{ a, b: renamed }` or `[first, second]`.
  */
+@ConsistentCopyVisibility
 data class Destructure
 internal constructor(val kind: Kind, val bindings: List<Binding>) {
 

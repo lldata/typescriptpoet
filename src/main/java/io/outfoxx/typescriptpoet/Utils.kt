@@ -20,6 +20,7 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.LinkedHashMap
 import java.util.LinkedHashSet
+import java.util.Locale
 
 internal object NullAppendable : Appendable {
 
@@ -100,7 +101,7 @@ internal fun characterLiteralWithoutDoubleQuotes(c: Char) = when {
   c == '\\' -> "\\\\"
 
   // \u005c: backslash (\)
-  isISOControl(c) -> String.format("\\u%04x", c.code)
+  isISOControl(c) -> String.format(Locale.ROOT, "\\u%04x", c.code)
 
   else -> c.toString()
 }

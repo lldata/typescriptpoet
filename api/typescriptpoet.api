@@ -127,8 +127,6 @@ public final class io/outfoxx/typescriptpoet/DecoratorSpec$Companion {
 public final class io/outfoxx/typescriptpoet/Destructure {
 	public final fun component1 ()Lio/outfoxx/typescriptpoet/Destructure$Kind;
 	public final fun component2 ()Ljava/util/List;
-	public final fun copy (Lio/outfoxx/typescriptpoet/Destructure$Kind;Ljava/util/List;)Lio/outfoxx/typescriptpoet/Destructure;
-	public static synthetic fun copy$default (Lio/outfoxx/typescriptpoet/Destructure;Lio/outfoxx/typescriptpoet/Destructure$Kind;Ljava/util/List;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/Destructure;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getBindings ()Ljava/util/List;
 	public final fun getKind ()Lio/outfoxx/typescriptpoet/Destructure$Kind;
@@ -1240,8 +1238,6 @@ public final class io/outfoxx/typescriptpoet/TypePredicate {
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Lio/outfoxx/typescriptpoet/TypeName;
 	public final fun component3 ()Z
-	public final fun copy (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z)Lio/outfoxx/typescriptpoet/TypePredicate;
-	public static synthetic fun copy$default (Lio/outfoxx/typescriptpoet/TypePredicate;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypePredicate;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAsserts ()Z
 	public final fun getParameterName ()Ljava/lang/String;
