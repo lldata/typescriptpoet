@@ -231,4 +231,19 @@ class TypeOperatorTests {
       ),
     )
   }
+
+  @Test
+  @DisplayName("Generates Record, distinct from Map")
+  fun testRecordType() {
+    // Issue #1: Map is a runtime class accessed with .get(k) and is not what JSON.parse
+    // produces, so generated code modelling JSON-shaped data needs Record.
+    assertThat(
+      TypeName.recordType(TypeName.STRING, TypeName.NUMBER).toString(),
+      equalTo("Record<string, number>"),
+    )
+    assertThat(
+      TypeName.mapType(TypeName.STRING, TypeName.NUMBER).toString(),
+      equalTo("Map<string, number>"),
+    )
+  }
 }

@@ -19,6 +19,8 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Conditional types with `infer`, mapped types with `as` key remapping and `+`/`-`
   `readonly`/`?` modifiers, and template literal types.
 - Labelled, optional and rest tuple elements.
+- `recordType()`, emitting `Record<K, V>`. `mapType()` spells `Map<K, V>`, which is a runtime
+  class accessed with `.get(k)` and not what `JSON.parse` produces.
 - Generic function types, construct signatures including `abstract new`, and `unique symbol`.
 - Variance annotations (`in`/`out`) and `const` type parameters.
 - Operand precedence: a union or intersection used under `keyof`, `[]` or `[K]` is

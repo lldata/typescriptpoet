@@ -677,6 +677,25 @@ sealed class TypeName {
     )
 
     /**
+     * The `Record<K, V>` utility type (e.g. `Record<string, number>`)
+     *
+     * Distinct from [mapType], which spells `Map<K, V>`. `Map` is a runtime class, accessed
+     * with `.get(k)`, and is not what `JSON.parse` produces; `Record` describes a plain
+     * object accessed with `obj[k]`, which is usually what generated code modelling
+     * JSON-shaped data wants.
+     *
+     * @param keyType Key type of the record
+     * @param valueType Value type of the record
+     * @return Type name of the new record type
+     */
+    @JvmStatic
+    fun recordType(keyType: TypeName, valueType: TypeName): Parameterized = parameterizedType(
+      RECORD,
+      keyType,
+      valueType,
+    )
+
+    /**
      * Parameterized type that represents a concrete
      * usage of a generic type
      *
@@ -919,6 +938,15 @@ sealed class TypeName {
       typeVariables: List<TypeVariable> = emptyList(),
       abstract: Boolean = false,
     ) = Lambda(parameters, returnType, typeVariables, constructable = true, abstract = abstract)
+
+    /**
+     * The `Record` utility type, for use with [recordType].
+     *
+     * Deliberately not among the constants above: those are runtime globals that can be
+     * referenced in a value position, and `Record` exists only at the type level.
+     */
+    @JvmField
+    val RECORD: Standard = implicit("Record")
 
     /** `unique symbol`, as used for well-known symbol declarations. */
     @JvmField

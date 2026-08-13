@@ -835,6 +835,7 @@ public abstract class io/outfoxx/typescriptpoet/TypeName {
 	public static final field OBJECT Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public static final field OBJECT_CLASS Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public static final field PROMISE Lio/outfoxx/typescriptpoet/TypeName$Standard;
+	public static final field RECORD Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public static final field REGEXP Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public static final field SET Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public static final field SHARED_ARRAY_BUFFER Lio/outfoxx/typescriptpoet/TypeName$Standard;
@@ -886,6 +887,7 @@ public abstract class io/outfoxx/typescriptpoet/TypeName {
 	public static final fun namedImport (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public static final fun parameterizedType (Lio/outfoxx/typescriptpoet/TypeName$Standard;[Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Parameterized;
 	public static final fun readOnly (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Operator;
+	public static final fun recordType (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Parameterized;
 	public static final fun setType (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName;
 	public static final fun standard (Lio/outfoxx/typescriptpoet/SymbolSpec;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public static final fun standard (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
@@ -984,6 +986,7 @@ public final class io/outfoxx/typescriptpoet/TypeName$Companion {
 	public static synthetic fun namedImport$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public final fun parameterizedType (Lio/outfoxx/typescriptpoet/TypeName$Standard;[Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Parameterized;
 	public final fun readOnly (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Operator;
+	public final fun recordType (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Parameterized;
 	public final fun setType (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName;
 	public final fun standard (Lio/outfoxx/typescriptpoet/SymbolSpec;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public final fun standard (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
