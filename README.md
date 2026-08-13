@@ -63,7 +63,49 @@ val out = StringWriter()
 file.writeTo(out)
 ```
 
-The [KDoc][kdoc] catalogs the complete TypeScriptPoet API, which is inspired by [JavaPoet][javapoet].
+That example is compiled and asserted by [`ReadmeExampleTests`][readme-test], so it cannot
+drift from what the library actually emits.
+
+For everything else, the integration test is the worked reference:
+[`KitchenSink.kt`][sink-src] builds one file using every construct the library can emit, and
+[`kitchen-sink.ts`][sink-out] is the exact output it produces. That file is type-checked with
+the real `tsc` on every build, so both sides stay honest.
+
+The [KDoc][kdoc] catalogs the complete API, which is inspired by [JavaPoet][javapoet]. Each
+entry shows the TypeScript it emits.
+
+
+What's new in 2.0.0
+-------------------
+
+2.0.0 is the first release since 2021 and rebuilds what the library can express. The full
+list is in the [changelog](CHANGELOG.md); the upgrade path, including every breaking change,
+is in [MIGRATING.md](MIGRATING.md).
+
+**The type system caught up with TypeScript 5.** Conditional types with `infer`, mapped types
+with `as` remapping and `+`/`-` modifiers, template literal types, `keyof`, `typeof`, indexed
+access, the `readonly` array shorthand, labelled and rest tuple elements, variance annotations
+and `const` type parameters. Previously `keyof` existed only as a type-parameter bound and the
+rest could not be written at all.
+
+**Declarations gained what modern TypeScript uses:** `async`, generators, arrow functions,
+overload groups, type predicates and assertion signatures, `override`, `accessor`, `#private`
+members, static initializer blocks, `const enum`, definite assignment, and destructuring
+parameters.
+
+**Modules gained the rest of the import and export forms:** default imports, `import type` and
+`export type`, re-exports, standalone export lists, `export default` and `export =`.
+
+**Operand precedence is handled.** A union used under `keyof` or `[]` is parenthesised, so
+`keyof (A | B)` means what you asked for rather than silently re-associating.
+
+**It ships lighter.** Guava and kotlin-reflect are gone -- both were declared but never used --
+leaving no runtime dependencies beyond the Kotlin standard library.
+
+**Several long-standing bugs are fixed,** including types referenced inside a nested
+`CodeBlock` not being imported, a reserved-word list that was Kotlin's rather than
+TypeScript's, modifiers emitted in an order `tsc` rejects, and `FileSpec.addProperty` throwing
+for every input.
 
 
 TypeScript support
@@ -150,6 +192,9 @@ License
     limitations under the License.
 
 
+ [readme-test]: src/test/java/io/outfoxx/typescriptpoet/test/ReadmeExampleTests.kt
+ [sink-src]: src/test/java/io/outfoxx/typescriptpoet/test/KitchenSink.kt
+ [sink-out]: src/test/resources/kitchen-sink.ts
  [dl]: https://central.sonatype.com/artifact/io.outfoxx/typescriptpoet
  [kdoc]: https://outfoxx.github.io/typescriptpoet/2.0.0/index.html
  [javapoet]: https://github.com/square/javapoet/
