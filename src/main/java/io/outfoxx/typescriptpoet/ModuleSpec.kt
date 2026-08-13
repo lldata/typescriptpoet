@@ -38,7 +38,9 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       }
 
       if (modifiers.isNotEmpty()) {
-        codeWriter.emitCode(CodeBlock.of("%L ", modifiers.joinToString(" ") { it.keyword }))
+        codeWriter.emitCode(
+          CodeBlock.of("%L ", modifiers.toSet().inEmitOrder().joinToString(" ") { it.keyword }),
+        )
       }
       codeWriter.emitCode(CodeBlock.of("${kind.keyword} %L {\n", name))
       codeWriter.indent()

@@ -16,7 +16,6 @@
 package io.outfoxx.typescriptpoet
 
 import java.io.Closeable
-import java.util.EnumSet
 import java.util.Stack
 
 /**
@@ -103,7 +102,7 @@ internal class CodeWriter constructor(
    */
   fun emitModifiers(modifiers: Set<Modifier>, implicitModifiers: Set<Modifier> = emptySet()) {
     if (modifiers.isEmpty()) return
-    for (modifier in EnumSet.copyOf(modifiers)) {
+    for (modifier in modifiers.inEmitOrder()) {
       if (implicitModifiers.contains(modifier)) continue
       emit(modifier.keyword)
       emit(" ")
