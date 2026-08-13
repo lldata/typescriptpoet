@@ -407,8 +407,27 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     private val String.isCallable get() = this == CALLABLE
     private val String.isIndexable get() = this == INDEXABLE
 
+    /**
+     * A free function or method.
+     *
+     * Constructors, call signatures and index signatures are internally discriminated by
+     * name, so those three names are refused here: reaching them through this builder would
+     * silently produce a different kind of member than the caller asked for. Use
+     * [constructorBuilder], [callableBuilder] or [indexableBuilder] instead.
+     */
     @JvmStatic
-    fun builder(name: String) = Builder(name)
+    fun builder(name: String): Builder {
+      require(!name.isConstructor && !name.isCallable && !name.isIndexable) {
+        "'$name' is reserved; use ${
+          when (name) {
+            CONSTRUCTOR -> "constructorBuilder()"
+            CALLABLE -> "callableBuilder()"
+            else -> "indexableBuilder()"
+          }
+        } instead"
+      }
+      return Builder(name)
+    }
 
     /**
      * Builds an overload group: N signatures followed by the implementation.

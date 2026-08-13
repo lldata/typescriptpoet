@@ -188,4 +188,16 @@ class UncoveredApiTests {
 
     assertThat(error is IllegalArgumentException, equalTo(true))
   }
+
+  @Test
+  @DisplayName("Rejects the internal sentinel names from the public builder")
+  fun testSentinelNamesAreRejected() {
+    // FunctionSpec discriminates constructors, call signatures and index signatures by
+    // comparing the name against these literals. Reaching them through the ordinary builder
+    // would silently produce a different kind of member than the caller asked for.
+    for (sentinel in listOf("constructor()", "callable()", "indexable()")) {
+      val error = runCatching { FunctionSpec.builder(sentinel) }.exceptionOrNull()
+      assertThat("'$sentinel' should be rejected", error is IllegalArgumentException, equalTo(true))
+    }
+  }
 }
