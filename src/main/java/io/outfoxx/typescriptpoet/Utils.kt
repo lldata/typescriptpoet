@@ -163,36 +163,70 @@ internal fun stringTemplateLiteralWithBackticks(value: String, multiLineIndent: 
 
 internal val String.isKeyword get() = KEYWORDS.contains(this)
 
-internal val String.isName get() = split("\\.").none { it.isKeyword }
+// Note the literal delimiter: this splits a dotted name into its parts and checks each one.
+// It used to be split("\\."), which -- because the String overload of split takes a literal
+// delimiter, not a regex -- looked for a backslash followed by a dot and so never split
+// anything, silently reducing this to a whole-string check.
+internal val String.isName get() = split(".").none { it.isKeyword }
 
-// https://github.com/JetBrains/kotlin/blob/master/core/descriptors/src/org/jetbrains/kotlin/renderer/KeywordStringsGenerated.java
+/**
+ * Words that cannot be used as a TypeScript identifier.
+ *
+ * This deliberately holds only *reserved* words. TypeScript has a large set of contextual
+ * keywords -- `type`, `get`, `set`, `as`, `from`, `of`, `async`, `declare`, `namespace`,
+ * `readonly`, `any`, `string`, `number`, and so on -- which are all perfectly legal
+ * identifiers, and rejecting them would refuse names that generated code is entitled to use.
+ *
+ * Generated files are modules, hence always strict mode, so the strict-mode reservations and
+ * `await` apply too.
+ */
 private val KEYWORDS = setOf(
-  "package",
-  "as",
-  "typealias",
-  "class",
-  "this",
-  "super",
-  "val",
-  "var",
-  "fun",
-  "for",
-  "null",
-  "true",
-  "false",
-  "is",
-  "in",
-  "throw",
-  "return",
+  // Always reserved.
   "break",
+  "case",
+  "catch",
+  "class",
+  "const",
   "continue",
-  "object",
-  "if",
-  "try",
-  "else",
-  "while",
+  "debugger",
+  "default",
+  "delete",
   "do",
-  "when",
-  "interface",
+  "else",
+  "enum",
+  "export",
+  "extends",
+  "false",
+  "finally",
+  "for",
+  "function",
+  "if",
+  "import",
+  "in",
+  "instanceof",
+  "new",
+  "null",
+  "return",
+  "super",
+  "switch",
+  "this",
+  "throw",
+  "true",
+  "try",
   "typeof",
+  "var",
+  "void",
+  "while",
+  "with",
+  // Reserved in strict mode, which module code always is.
+  "await",
+  "implements",
+  "interface",
+  "let",
+  "package",
+  "private",
+  "protected",
+  "public",
+  "static",
+  "yield",
 )

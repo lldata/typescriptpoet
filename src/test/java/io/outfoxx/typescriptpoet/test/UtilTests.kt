@@ -16,6 +16,8 @@
 package io.outfoxx.typescriptpoet.test
 
 import io.outfoxx.typescriptpoet.dropCommon
+import io.outfoxx.typescriptpoet.isKeyword
+import io.outfoxx.typescriptpoet.isName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -50,5 +52,45 @@ class UtilTests {
       full.dropCommon(listOf("a", "b", "c", "d", "e")),
       equalTo(listOf("a", "b", "c", "d")),
     )
+  }
+
+  @Test
+  fun testReservedWordsAreRejectedAsNames() {
+    // Upstream outfoxx/typescriptpoet#23: the list used to be Kotlin's reserved words.
+    val reservedWords = listOf(
+      "function", "const", "let", "enum", "export", "import", "new", "delete", "void",
+      "class", "extends", "instanceof", "switch", "default", "await", "yield", "static",
+      "private", "public", "implements",
+    )
+    for (reserved in reservedWords) {
+      assertThat("'$reserved' should be reserved", reserved.isKeyword, equalTo(true))
+    }
+  }
+
+  @Test
+  fun testKotlinOnlyWordsAreAllowedAsNames() {
+    // These are Kotlin keywords but ordinary TypeScript identifiers.
+    for (allowed in listOf("fun", "val", "object", "when", "typealias", "is", "as")) {
+      assertThat("'$allowed' should not be reserved", allowed.isKeyword, equalTo(false))
+    }
+  }
+
+  @Test
+  fun testContextualKeywordsAreAllowedAsNames() {
+    // TypeScript's contextual keywords are legal identifiers and must not be refused.
+    val contextualKeywords = listOf(
+      "type", "get", "set", "from", "of", "async", "declare", "namespace", "readonly",
+      "any", "string", "number", "unknown", "never", "satisfies", "infer", "keyof",
+    )
+    for (allowed in contextualKeywords) {
+      assertThat("'$allowed' should not be reserved", allowed.isKeyword, equalTo(false))
+    }
+  }
+
+  @Test
+  fun testDottedNamesAreCheckedPerPart() {
+    assertThat("Foo.Bar".isName, equalTo(true))
+    assertThat("Foo.class".isName, equalTo(false))
+    assertThat("class.Foo".isName, equalTo(false))
   }
 }
