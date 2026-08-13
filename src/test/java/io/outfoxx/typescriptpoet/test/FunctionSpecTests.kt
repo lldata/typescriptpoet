@@ -63,8 +63,7 @@ class FunctionSpecTests {
             /**
              * this is a comment
              */
-            function test() {
-            }
+            function test() {}
 
         """.trimIndent(),
       ),
@@ -91,8 +90,7 @@ class FunctionSpecTests {
       emits(
         """
             @decorate(true, /* targetType */ Test2)
-            function test() {
-            }
+            function test() {}
 
         """.trimIndent(),
       ),
@@ -114,8 +112,7 @@ class FunctionSpecTests {
       out.toString(),
       emits(
         """
-            export private get function test() {
-            }
+            export private get function test() {}
 
         """.trimIndent(),
       ),
@@ -173,8 +170,7 @@ class FunctionSpecTests {
       out.toString(),
       emits(
         """
-            function test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6>() {
-            }
+            function test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6>() {}
 
         """.trimIndent(),
       ),
@@ -195,8 +191,7 @@ class FunctionSpecTests {
       out.toString(),
       emits(
         """
-            function test(): Value {
-            }
+            function test(): Value {}
 
         """.trimIndent(),
       ),
@@ -218,8 +213,7 @@ class FunctionSpecTests {
       out.toString(),
       emits(
         """
-            function test(): void {
-            }
+            function test(): void {}
 
         """.trimIndent(),
       ),
@@ -239,8 +233,7 @@ class FunctionSpecTests {
       out.toString(),
       emits(
         """
-            function test() {
-            }
+            function test() {}
 
         """.trimIndent(),
       ),
@@ -260,8 +253,7 @@ class FunctionSpecTests {
       out.toString(),
       emits(
         """
-            function test() {
-            }
+            function test() {}
 
         """.trimIndent(),
       ),
@@ -282,8 +274,7 @@ class FunctionSpecTests {
       out.toString(),
       emits(
         """
-            function test(b: string) {
-            }
+            function test(b: string) {}
 
         """.trimIndent(),
       ),
@@ -305,8 +296,7 @@ class FunctionSpecTests {
       out.toString(),
       emits(
         """
-            function test(b: string, ...c: Array<string>) {
-            }
+            function test(b: string, ...c: Array<string>) {}
 
         """.trimIndent(),
       ),
@@ -327,8 +317,7 @@ class FunctionSpecTests {
       out.toString(),
       emits(
         """
-            function test(a: number = 10) {
-            }
+            function test(a: number = 10) {}
 
         """.trimIndent(),
       ),
@@ -369,8 +358,7 @@ class FunctionSpecTests {
         """
             function test(
                 @required @size(/* min */ 10, /* max */ 100) @logged() a: number,
-            ) {
-            }
+            ) {}
 
         """.trimIndent(),
       ),

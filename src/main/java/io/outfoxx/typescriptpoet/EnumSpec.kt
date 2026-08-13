@@ -27,23 +27,21 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
   override fun emit(codeWriter: CodeWriter) {
     codeWriter.emitTSDoc(tsDoc)
     codeWriter.emitModifiers(modifiers, setOf())
-    codeWriter.emitCode(CodeBlock.of("enum %L {\n", name))
+    codeWriter.emitCode(CodeBlock.of("enum %L ", name))
 
-    codeWriter.indent()
-    val i = constants.entries.iterator()
-    while (i.hasNext()) {
-      val constant = i.next()
-      codeWriter.emitCode(CodeBlock.of("%L", constant.key))
-      constant.value?.let {
-        codeWriter.emitCode(" = ")
-        codeWriter.emitCode(it)
+    codeWriter.emitBody(constants.isEmpty()) {
+      val i = constants.entries.iterator()
+      while (i.hasNext()) {
+        val constant = i.next()
+        codeWriter.emitCode(CodeBlock.of("%L", constant.key))
+        constant.value?.let {
+          codeWriter.emitCode(" = ")
+          codeWriter.emitCode(it)
+        }
+        // Prettier puts a trailing comma on the last constant too.
+        codeWriter.emit(",\n")
       }
-      // Prettier puts a trailing comma on the last constant too.
-      codeWriter.emit(",\n")
     }
-
-    codeWriter.unindent()
-    codeWriter.emit("}\n")
   }
 
   /** A builder pre-populated with this spec, for deriving a modified copy. */

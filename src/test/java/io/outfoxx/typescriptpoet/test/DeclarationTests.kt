@@ -19,7 +19,9 @@ import io.outfoxx.typescriptpoet.ClassSpec
 import io.outfoxx.typescriptpoet.CodeWriter
 import io.outfoxx.typescriptpoet.EnumSpec
 import io.outfoxx.typescriptpoet.FunctionSpec
+import io.outfoxx.typescriptpoet.InterfaceSpec
 import io.outfoxx.typescriptpoet.Modifier
+import io.outfoxx.typescriptpoet.ModuleSpec
 import io.outfoxx.typescriptpoet.ParameterSpec
 import io.outfoxx.typescriptpoet.PropertySpec
 import io.outfoxx.typescriptpoet.TypeName
@@ -44,6 +46,24 @@ class DeclarationTests {
     return out.toString()
   }
 
+  private fun emit(iface: InterfaceSpec): String {
+    val out = StringWriter()
+    iface.emit(CodeWriter(out))
+    return out.toString()
+  }
+
+  private fun emit(module: ModuleSpec): String {
+    val out = StringWriter()
+    module.emit(CodeWriter(out))
+    return out.toString()
+  }
+
+  private fun emit(enumSpec: EnumSpec): String {
+    val out = StringWriter()
+    enumSpec.emit(CodeWriter(out))
+    return out.toString()
+  }
+
   @Test
   @DisplayName("Generates an async function")
   fun testAsync() {
@@ -52,7 +72,7 @@ class DeclarationTests {
       .returns(TypeName.parameterizedType(TypeName.PROMISE, TypeName.STRING))
       .build()
 
-    assertThat(emit(fn), emits("async function load(): Promise<string> {\n}\n"))
+    assertThat(emit(fn), emits("async function load(): Promise<string> {}\n"))
   }
 
   @Test
@@ -62,7 +82,7 @@ class DeclarationTests {
       .generator()
       .build()
 
-    assertThat(emit(fn), emits("function* items() {\n}\n"))
+    assertThat(emit(fn), emits("function* items() {}\n"))
   }
 
   @Test
@@ -73,7 +93,7 @@ class DeclarationTests {
       .generator()
       .build()
 
-    assertThat(emit(fn), emits("async function* items() {\n}\n"))
+    assertThat(emit(fn), emits("async function* items() {}\n"))
   }
 
   @Test
@@ -85,7 +105,7 @@ class DeclarationTests {
 
     assertThat(
       emit(testClass),
-      emits("class Test {\n\n  *items() {\n  }\n\n}\n"),
+      emits("class Test {\n\n  *items() {}\n\n}\n"),
     )
   }
 
@@ -97,7 +117,7 @@ class DeclarationTests {
       .returnsIs("value", TypeName.STRING)
       .build()
 
-    assertThat(emit(fn), emits("function isString(value: unknown): value is string {\n}\n"))
+    assertThat(emit(fn), emits("function isString(value: unknown): value is string {}\n"))
   }
 
   @Test
@@ -110,7 +130,7 @@ class DeclarationTests {
 
     assertThat(
       emit(withType),
-      emits("function assertString(value: unknown): asserts value is string {\n}\n"),
+      emits("function assertString(value: unknown): asserts value is string {}\n"),
     )
 
     val bare = FunctionSpec.builder("assertDefined")
@@ -120,7 +140,7 @@ class DeclarationTests {
 
     assertThat(
       emit(bare),
-      emits("function assertDefined(value: unknown): asserts value {\n}\n"),
+      emits("function assertDefined(value: unknown): asserts value {}\n"),
     )
   }
 
@@ -132,7 +152,7 @@ class DeclarationTests {
       .addParameter("event", TypeName.implicit("Event"))
       .build()
 
-    assertThat(emit(fn), emits("function handle(this: Window, event: Event) {\n}\n"))
+    assertThat(emit(fn), emits("function handle(this: Window, event: Event) {}\n"))
   }
 
   @Test
@@ -302,7 +322,7 @@ class DeclarationTests {
 
     assertThat(
       emit(fn),
-      emits("function configure({ host, port: listenPort }: Options) {\n}\n"),
+      emits("function configure({ host, port: listenPort }: Options) {}\n"),
     )
   }
 
@@ -319,7 +339,7 @@ class DeclarationTests {
 
     assertThat(
       emit(fn),
-      emits("function swap([first, second]: [string, string]) {\n}\n"),
+      emits("function swap([first, second]: [string, string]) {}\n"),
     )
   }
 
@@ -330,7 +350,7 @@ class DeclarationTests {
       .restParameter("args", TypeName.arrayShorthandType(TypeName.ANY))
       .build()
 
-    assertThat(emit(fn), emits("function log(...args: any[]) {\n}\n"))
+    assertThat(emit(fn), emits("function log(...args: any[]) {}\n"))
   }
 
   @Test
@@ -368,6 +388,58 @@ class DeclarationTests {
 
         """.trimIndent(),
       ),
+    )
+  }
+
+  @Test
+  @DisplayName("Collapses an empty body to {} for every construct that has one")
+  fun testEmptyBodiesCollapse() {
+    // One rule, in CodeWriter.emitBody, rather than one per construct -- which is how the
+    // six copies of the two-line form came to disagree with Prettier all at once.
+    assertEmitsExactly(emit(FunctionSpec.builder("f").returns(TypeName.VOID).build()), "function f(): void {}\n")
+    assertEmitsExactly(emit(ClassSpec.builder("A").build()), "class A {}\n")
+    assertEmitsExactly(emit(InterfaceSpec.builder("I").build()), "interface I {}\n")
+    assertEmitsExactly(emit(ModuleSpec.builder("N").build()), "namespace N {}\n")
+    assertEmitsExactly(emit(EnumSpec.builder("E").build()), "enum E {}\n")
+    assertEmitsExactly(emit(FunctionSpec.builder("a").arrow().build()), "() => {}")
+
+    // A method and a constructor, which a class writes rather than FunctionSpec.
+    assertEmitsExactly(
+      emit(
+        ClassSpec.builder("B")
+          .constructor(FunctionSpec.constructorBuilder().addParameter("x", TypeName.STRING).build())
+          .addFunction(FunctionSpec.builder("m").returns(TypeName.VOID).build())
+          .build(),
+      ),
+      """
+          class B {
+            constructor(x: string) {}
+
+            m(): void {}
+          }
+
+      """.trimIndent(),
+    )
+
+    // Not to be confused with a body-less declaration, which has no braces at all.
+    assertEmitsExactly(
+      emit(
+        ClassSpec.builder("C")
+          .addModifiers(Modifier.ABSTRACT)
+          .addFunction(
+            FunctionSpec.builder("m")
+              .addModifiers(Modifier.ABSTRACT)
+              .returns(TypeName.VOID)
+              .build(),
+          )
+          .build(),
+      ),
+      """
+          abstract class C {
+            abstract m(): void;
+          }
+
+      """.trimIndent(),
     )
   }
 }

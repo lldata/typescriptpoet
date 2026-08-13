@@ -190,8 +190,7 @@ class ModifierOrderingTests {
       out.toString(),
       emits(
         """
-            export declare class Test {
-            }
+            export declare class Test {}
 
         """.trimIndent(),
       ),

@@ -118,8 +118,7 @@ class CodeWriterTests {
 
 
             function test() {
-              const f = (m: X) => {
-              };
+              const f = (m: X) => {};
             }
 
         """.trimIndent(),

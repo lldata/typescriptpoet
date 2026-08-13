@@ -69,8 +69,7 @@ class ClassSpecTests {
             /**
              * this is a comment
              */
-            class Test {
-            }
+            class Test {}
 
         """.trimIndent(),
       ),
@@ -96,8 +95,7 @@ class ClassSpecTests {
       emits(
         """
             @decorate(true, /* targetType */ Test2)
-            class Test {
-            }
+            class Test {}
 
         """.trimIndent(),
       ),
@@ -118,8 +116,7 @@ class ClassSpecTests {
       out.toString(),
       emits(
         """
-            export abstract class Test {
-            }
+            export abstract class Test {}
 
         """.trimIndent(),
       ),
@@ -156,8 +153,7 @@ class ClassSpecTests {
       out.toString(),
       emits(
         """
-            class Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {
-            }
+            class Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {}
 
         """.trimIndent(),
       ),
@@ -178,8 +174,7 @@ class ClassSpecTests {
       out.toString(),
       emits(
         """
-            class Test extends Test2 {
-            }
+            class Test extends Test2 {}
 
         """.trimIndent(),
       ),
@@ -201,8 +196,7 @@ class ClassSpecTests {
       out.toString(),
       emits(
         """
-            class Test implements Test2, Test3 {
-            }
+            class Test implements Test2, Test3 {}
 
         """.trimIndent(),
       ),
@@ -225,8 +219,7 @@ class ClassSpecTests {
       out.toString(),
       emits(
         """
-            class Test extends Test2 implements Test3, Test4 {
-            }
+            class Test extends Test2 implements Test3, Test4 {}
 
         """.trimIndent(),
       ),
@@ -256,8 +249,7 @@ class ClassSpecTests {
       out.toString(),
       emits(
         """
-            class Test<Y extends Test3 & Test4> extends Test2 implements Test3, Test4 {
-            }
+            class Test<Y extends Test3 & Test4> extends Test2 implements Test3, Test4 {}
 
         """.trimIndent(),
       ),
@@ -284,8 +276,7 @@ class ClassSpecTests {
         """
             class Test {
 
-              constructor(value: number) {
-              }
+              constructor(value: number) {}
 
             }
 
@@ -315,8 +306,7 @@ class ClassSpecTests {
         """
             class Test {
 
-              constructor(value: number, ...all: Array<string>) {
-              }
+              constructor(value: number, ...all: Array<string>) {}
 
             }
 
@@ -620,12 +610,10 @@ class ClassSpecTests {
         """
             class Test {
 
-              test1() {
-              }
+              test1() {}
 
               @validated(/* strict */ true, /* name */ test2)
-              test2() {
-              }
+              test2() {}
 
             }
 

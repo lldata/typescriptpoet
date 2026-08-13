@@ -60,11 +60,9 @@ class FileSpecTests {
       emits(
         """
           
-          export interface Test {
-          }
+          export interface Test {}
 
-          export class Test implements Test {
-          }
+          export class Test implements Test {}
         
         """.trimIndent(),
       ),
@@ -98,11 +96,9 @@ class FileSpecTests {
       emits(
         """
           
-          export interface Test {
-          }
+          export interface Test {}
 
-          export class Test implements Test {
-          }
+          export class Test implements Test {}
         
         """.trimIndent(),
       ),
@@ -547,16 +543,13 @@ class FileSpecTests {
       emits(
         """
           
-          class Test {
-          }
+          class Test {}
           
           namespace Test {
           
-            class Nested {
-            }
+            class Nested {}
           
-            class SubNested extends Nested {
-            }
+            class SubNested extends Nested {}
           
           }
           
@@ -598,16 +591,13 @@ class FileSpecTests {
       emits(
         """
           
-          class Test {
-          }
+          class Test {}
           
           namespace Test {
           
-            class Nested {
-            }
+            class Nested {}
           
-            class SubNested extends Nested {
-            }
+            class SubNested extends Nested {}
           
           }
           

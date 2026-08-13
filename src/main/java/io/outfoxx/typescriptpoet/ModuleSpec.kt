@@ -42,16 +42,13 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
           CodeBlock.of("%L ", modifiers.toSet().inEmitOrder().joinToString(" ") { it.keyword }),
         )
       }
-      codeWriter.emitCode(CodeBlock.of("${kind.keyword} %L {\n", name))
-      codeWriter.indent()
-
-      members.forEachIndexed { index, member ->
-        if (index > 0) codeWriter.emit("\n")
-        codeWriter.emitMember(member)
+      codeWriter.emitCode(CodeBlock.of("${kind.keyword} %L ", name))
+      codeWriter.emitBody(members.isEmpty()) {
+        members.forEachIndexed { index, member ->
+          if (index > 0) codeWriter.emit("\n")
+          codeWriter.emitMember(member)
+        }
       }
-
-      codeWriter.unindent()
-      codeWriter.emitCode("}\n")
     } finally {
       codeWriter.popScope()
     }

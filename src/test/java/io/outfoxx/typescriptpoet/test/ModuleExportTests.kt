@@ -166,7 +166,7 @@ class ModuleExportTests {
       )
       .build()
 
-    assertThat(emit(file), emits("\nexport default class Engine {\n}\n"))
+    assertThat(emit(file), emits("\nexport default class Engine {}\n"))
   }
 
   @Test

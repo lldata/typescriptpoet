@@ -49,9 +49,14 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
     }
     codeWriter.emitCode(superClasses)
 
-    codeWriter.emit(" {\n")
-    codeWriter.indent()
+    codeWriter.emit(" ")
+    codeWriter.emitBody(hasNoBody) {
+      emitMembers(codeWriter, ::separate)
+    }
+  }
 
+  // The body's members, in the order an interface writes them.
+  private fun emitMembers(codeWriter: CodeWriter, separate: () -> Unit) {
     // Callable
     callable?.let {
       separate()
@@ -81,9 +86,6 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
       separate()
       funSpec.emit(codeWriter, name, setOf(Modifier.PUBLIC, Modifier.ABSTRACT))
     }
-
-    codeWriter.unindent()
-    codeWriter.emit("}\n")
   }
 
   private val hasNoBody: Boolean

@@ -266,9 +266,7 @@ export class Pair {
   constructor(
     private readonly left: string,
     private readonly right: string,
-  ) {
-    if (left === right) throw new Error("duplicate");
-  }
+  ) {}
 }
 
 let defaultLogger: Logger;

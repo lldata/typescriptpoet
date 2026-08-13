@@ -113,7 +113,7 @@ class UncoveredApiTests {
     val out = StringWriter()
     file.writeTo(out)
 
-    assertThat(out.toString(), emits("\nclass Greeter {\n}\n"))
+    assertThat(out.toString(), emits("\nclass Greeter {}\n"))
   }
 
   @Test
@@ -129,7 +129,7 @@ class UncoveredApiTests {
     file.writeTo(out)
 
     // The members are lifted out of the namespace, not nested inside it.
-    assertThat(out.toString(), emits("\nclass Circle {\n}\n"))
+    assertThat(out.toString(), emits("\nclass Circle {}\n"))
   }
 
   @Test
@@ -149,8 +149,7 @@ class UncoveredApiTests {
         """
             export namespace Shapes {
 
-              class Circle {
-              }
+              class Circle {}
 
             }
 
@@ -163,7 +162,7 @@ class UncoveredApiTests {
     val moduleOut = StringWriter()
     module.emit(CodeWriter(moduleOut))
 
-    assertThat(moduleOut.toString(), emits("module Shapes {\n}\n"))
+    assertThat(moduleOut.toString(), emits("module Shapes {}\n"))
   }
 
   @Test

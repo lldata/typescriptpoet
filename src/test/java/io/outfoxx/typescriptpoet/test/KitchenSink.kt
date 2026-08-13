@@ -740,9 +740,8 @@ object KitchenSink {
           FunctionSpec.constructorBuilder()
             .addParameter("left", TypeName.STRING)
             .addParameter("right", TypeName.STRING)
-            // A body only because an empty one is emitted as `{\n}` where Prettier writes
-            // `{}`, which is its own bug and not this one's to carry.
-            .addStatement("if (left === right) throw new Error(%S)", "duplicate")
+            // No body: the parameter properties are the whole constructor, which is the
+            // shape this is for and the reason an empty body has to come out as `{}`.
             .build(),
         )
         .build(),

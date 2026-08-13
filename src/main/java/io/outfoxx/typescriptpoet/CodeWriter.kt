@@ -84,6 +84,34 @@ internal class CodeWriter(
     indentLevel -= levels
   }
 
+  /**
+   * Emits a brace-delimited body: `{`, whatever [body] writes, indented, and `}`. An empty one
+   * collapses to `{}`.
+   *
+   * Prettier writes `{}` for every empty body there is -- a class, an interface, a namespace,
+   * an enum, a function, a method, a constructor, an arrow. That is not a rare shape in
+   * generated code: a constructor whose parameters are all parameter properties has nothing
+   * left to do. One place for the rule rather than one per construct, which is how the six
+   * copies of the two-line form came to exist.
+   *
+   * A body-less *declaration* is a different thing and is not this: an abstract member or a
+   * signature emits `m(): void;`, with no braces at all.
+   *
+   * @param endsLine whether the closing brace ends the line. An arrow function's body sits in
+   *   expression position, so the statement around it owns the terminator.
+   */
+  inline fun emitBody(isEmpty: Boolean, endsLine: Boolean = true, body: () -> Unit) {
+    if (isEmpty) {
+      emit(if (endsLine) "{}\n" else "{}")
+      return
+    }
+    emit("{\n")
+    indent()
+    body()
+    unindent()
+    emit(if (endsLine) "}\n" else "}")
+  }
+
   fun emitComment(codeBlock: CodeBlock) {
     trailingNewline = true // Force the '//' prefix for the comment.
     comment = true

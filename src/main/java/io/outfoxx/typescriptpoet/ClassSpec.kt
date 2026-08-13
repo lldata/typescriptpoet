@@ -68,9 +68,28 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
       codeWriter.emitCode(parents.joinToCode(separator = " ", prefix = " "))
     }
 
-    codeWriter.emit(" {\n")
-    codeWriter.indent()
+    // A property promoted into the constructor signature is not written in the body, so a
+    // class whose only members are promoted has an empty one.
+    val hasBodyMembers = propertySpecs.any {
+      !constructorProperties.containsKey(it.name) || it.modifiers.contains(Modifier.STATIC)
+    } ||
+      indexableSpecs.isNotEmpty() ||
+      constructor != null ||
+      staticBlocks.isNotEmpty() ||
+      functionSpecs.isNotEmpty()
 
+    codeWriter.emit(" ")
+    codeWriter.emitBody(!hasBodyMembers) {
+      emitMembers(codeWriter, constructorProperties, ::separate)
+    }
+  }
+
+  // The body's members, in the order a class writes them.
+  private fun emitMembers(
+    codeWriter: CodeWriter,
+    constructorProperties: Map<String, PropertySpec>,
+    separate: () -> Unit,
+  ) {
     // Non-static properties.
     for (propertySpec in propertySpecs) {
       if (constructorProperties.containsKey(propertySpec.name) && !propertySpec.modifiers.contains(Modifier.STATIC)) {
@@ -97,11 +116,8 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     // Static initializer blocks.
     for (block in staticBlocks) {
       separate()
-      codeWriter.emit("static {\n")
-      codeWriter.indent()
-      codeWriter.emitCode(block)
-      codeWriter.unindent()
-      codeWriter.emit("}\n")
+      codeWriter.emit("static ")
+      codeWriter.emitBody(block.isEmpty()) { codeWriter.emitCode(block) }
     }
 
     // Constructors.
@@ -117,9 +133,6 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
       separate()
       funSpec.emit(codeWriter, name, setOf(Modifier.PUBLIC))
     }
-
-    codeWriter.unindent()
-    codeWriter.emit("}\n")
   }
 
   /**
@@ -158,11 +171,8 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
       }
     }
 
-    codeWriter.emit(" {\n")
-    codeWriter.indent()
-    codeWriter.emitCode(constructor.body)
-    codeWriter.unindent()
-    codeWriter.emit("}\n")
+    codeWriter.emit(" ")
+    codeWriter.emitBody(constructor.body.isEmpty()) { codeWriter.emitCode(constructor.body) }
   }
 
   /**

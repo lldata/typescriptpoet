@@ -57,8 +57,7 @@ class EnumSpecTests {
             /**
              * this is a comment
              */
-            enum Test {
-            }
+            enum Test {}
 
         """.trimIndent(),
       ),
@@ -79,8 +78,7 @@ class EnumSpecTests {
       out.toString(),
       emits(
         """
-            export enum Test {
-            }
+            export enum Test {}
 
         """.trimIndent(),
       ),

@@ -60,8 +60,7 @@ class InterfaceSpecTests {
             /**
              * this is a comment
              */
-            interface Test {
-            }
+            interface Test {}
 
         """.trimIndent(),
       ),
@@ -82,8 +81,7 @@ class InterfaceSpecTests {
       out.toString(),
       emits(
         """
-            export interface Test {
-            }
+            export interface Test {}
 
         """.trimIndent(),
       ),
@@ -120,8 +118,7 @@ class InterfaceSpecTests {
       out.toString(),
       emits(
         """
-            interface Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {
-            }
+            interface Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {}
 
         """.trimIndent(),
       ),
@@ -143,8 +140,7 @@ class InterfaceSpecTests {
       out.toString(),
       emits(
         """
-            interface Test extends Test2, Test3 {
-            }
+            interface Test extends Test2, Test3 {}
 
         """.trimIndent(),
       ),
@@ -174,8 +170,7 @@ class InterfaceSpecTests {
       out.toString(),
       emits(
         """
-            interface Test<Y extends Test3 & Test4> extends Test2, Test3, Test4 {
-            }
+            interface Test<Y extends Test3 & Test4> extends Test2, Test3, Test4 {}
 
         """.trimIndent(),
       ),

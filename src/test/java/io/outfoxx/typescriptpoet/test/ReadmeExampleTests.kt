@@ -72,8 +72,7 @@ class ReadmeExampleTests {
 
             export class Greeter {
 
-              constructor(private name: string) {
-              }
+              constructor(private name: string) {}
 
               greet(): Observable<string> {
                 return Observable.of(`Hello ${'$'}{this.name}`);

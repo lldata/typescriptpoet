@@ -224,8 +224,7 @@ class TypeOperatorTests {
       out.toString(),
       emits(
         """
-            class Test<out T, const U> {
-            }
+            class Test<out T, const U> {}
 
         """.trimIndent(),
       ),

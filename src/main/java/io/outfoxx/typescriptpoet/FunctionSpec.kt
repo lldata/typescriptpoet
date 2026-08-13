@@ -78,19 +78,13 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     if (isArrow) {
       // An arrow function is an expression, so it neither starts on its own line nor ends
       // with one; the surrounding statement owns the terminator.
-      codeWriter.emit(" => {\n")
-      codeWriter.indent()
-      codeWriter.emitCode(body)
-      codeWriter.unindent()
-      codeWriter.emit("}")
+      codeWriter.emit(" => ")
+      codeWriter.emitBody(body.isEmpty(), endsLine = false) { codeWriter.emitCode(body) }
       return
     }
 
-    codeWriter.emit(" {\n")
-    codeWriter.indent()
-    codeWriter.emitCode(body)
-    codeWriter.unindent()
-    codeWriter.emit("}\n")
+    codeWriter.emit(" ")
+    codeWriter.emitBody(body.isEmpty()) { codeWriter.emitCode(body) }
   }
 
   private fun emitSignature(codeWriter: CodeWriter, enclosingName: String?) {
