@@ -30,7 +30,25 @@ private constructor(builder: Builder) : TypeSpec<TypeAliasSpec, TypeAliasSpec.Bu
     codeWriter.emitModifiers(modifiers)
     codeWriter.emitCode(CodeBlock.of("type %L", name))
     codeWriter.emitTypeVariables(typeVariables)
-    codeWriter.emitCode(CodeBlock.of(" = %T", type))
+    // Measure the whole declaration, prefix included, and break the union or intersection
+    // only if it does not fit. Prettier does not break either in member or parameter
+    // position, so this is deliberately only here.
+    val rendered = buildCodeString { emitCode(CodeBlock.of("%T", type)) }
+    val fits = codeWriter.currentColumn + 3 + rendered.length + 1 <= codeWriter.printWidth
+
+    codeWriter.emit(" =")
+    when {
+      fits -> codeWriter.emitCode(CodeBlock.of(" %T", type))
+
+      type is TypeName.Union -> type.emitBroken(codeWriter)
+
+      type is TypeName.Intersection -> {
+        codeWriter.emit(" ")
+        type.emitBroken(codeWriter)
+      }
+
+      else -> codeWriter.emitCode(CodeBlock.of(" %T", type))
+    }
     codeWriter.emit(";\n")
   }
 

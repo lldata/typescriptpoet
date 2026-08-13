@@ -438,6 +438,22 @@ sealed class TypeName {
       }
     }
 
+    /**
+     * The broken form: first operand on the current line, then a trailing `&` and one
+     * operand per line. This is how Prettier lays out an intersection that does not fit,
+     * and it differs from a union's.
+     */
+    internal fun emitBroken(codeWriter: CodeWriter) {
+      codeWriter.indent()
+      typeRequirements.forEachIndexed { idx, typeRequirement ->
+        typeRequirement.emit(codeWriter)
+        if (idx != typeRequirements.size - 1) {
+          codeWriter.emit(" &\n")
+        }
+      }
+      codeWriter.unindent()
+    }
+
     override fun toString() = buildCodeString { emit(this) }
   }
 
@@ -455,6 +471,21 @@ sealed class TypeName {
           codeWriter.emit(" | ")
         }
       }
+    }
+
+    /**
+     * The broken form: every choice on its own line with a leading `|`, starting on the line
+     * after the `=`. This is how Prettier lays out a union that does not fit.
+     */
+    internal fun emitBroken(codeWriter: CodeWriter) {
+      codeWriter.emit("\n")
+      codeWriter.indent()
+      typeChoices.forEachIndexed { idx, typeChoice ->
+        codeWriter.emit("| ")
+        typeChoice.emit(codeWriter)
+        if (idx != typeChoices.size - 1) codeWriter.emit("\n")
+      }
+      codeWriter.unindent()
     }
 
     override fun toString() = buildCodeString { emit(this) }

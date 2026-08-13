@@ -168,4 +168,76 @@ class ComputedTypeTests {
       emits("type Mutable<T> = { -readonly [K in keyof T]: T[K] };\n"),
     )
   }
+
+  @Test
+  @DisplayName("Breaks a long union type alias, one choice per line with a leading pipe")
+  fun testLongUnionAliasBreaks() {
+    // Issue #5: unions rendered on one line at any length. Prettier breaks them here, and
+    // only here -- not in member or parameter position.
+    val alias = TypeAliasSpec.builder(
+      "Long",
+      TypeName.unionType(*(1..4).map { TypeName.literal("AAAAAAAAAAAAAAAAAA$it") }.toTypedArray()),
+    ).build()
+
+    val out = StringWriter()
+    alias.emit(CodeWriter(out))
+
+    assertThat(
+      out.toString(),
+      equalTo(
+        """
+            type Long =
+              | "AAAAAAAAAAAAAAAAAA1"
+              | "AAAAAAAAAAAAAAAAAA2"
+              | "AAAAAAAAAAAAAAAAAA3"
+              | "AAAAAAAAAAAAAAAAAA4";
+
+        """.trimIndent(),
+      ),
+    )
+  }
+
+  @Test
+  @DisplayName("Leaves a short union inline")
+  fun testShortUnionAliasStaysInline() {
+    val alias = TypeAliasSpec.builder(
+      "Short",
+      TypeName.unionType(TypeName.literal("a"), TypeName.literal("b")),
+    ).build()
+
+    val out = StringWriter()
+    alias.emit(CodeWriter(out))
+
+    assertThat(out.toString(), equalTo("type Short = \"a\" | \"b\";\n"))
+  }
+
+  @Test
+  @DisplayName("Breaks a long intersection with a trailing ampersand")
+  fun testLongIntersectionAliasBreaks() {
+    // Prettier lays intersections out differently from unions: the first operand stays on
+    // the `=` line and the separator trails.
+    val alias = TypeAliasSpec.builder(
+      "Inter",
+      TypeName.intersectionType(
+        TypeName.implicit("AAAAAAAAAAAAAAAAAAAAAAAA"),
+        TypeName.implicit("BBBBBBBBBBBBBBBBBBBBBBBBBB"),
+        TypeName.implicit("CCCCCCCCCCCCCCCCCCCCCCCCCC"),
+      ),
+    ).build()
+
+    val out = StringWriter()
+    alias.emit(CodeWriter(out))
+
+    assertThat(
+      out.toString(),
+      equalTo(
+        """
+            type Inter = AAAAAAAAAAAAAAAAAAAAAAAA &
+              BBBBBBBBBBBBBBBBBBBBBBBBBB &
+              CCCCCCCCCCCCCCCCCCCCCCCCCC;
+
+        """.trimIndent(),
+      ),
+    )
+  }
 }
