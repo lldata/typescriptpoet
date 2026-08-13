@@ -95,7 +95,9 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       codeWriter.emitCode("]")
     }
 
-    if (returnType != null && returnType != TypeName.VOID) {
+    // An explicitly requested `void` is emitted. Leaving `returns()` uncalled is how you ask
+    // for no return type at all.
+    if (returnType != null) {
       codeWriter.emitCode(CodeBlock.of(": %T", returnType))
     }
   }

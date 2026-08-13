@@ -204,10 +204,32 @@ class FunctionSpecTests {
   }
 
   @Test
-  @DisplayName("Generates no return type when void")
-  fun testGenNoReturnTypeForVoid() {
+  @DisplayName("Generates an explicit return type when void is requested")
+  fun testGenReturnTypeForVoid() {
+    // Upstream outfoxx/typescriptpoet#24: asking for `void` used to be silently discarded.
     val testClass = FunctionSpec.builder("test")
       .returns(TypeName.VOID)
+      .build()
+
+    val out = StringWriter()
+    testClass.emit(CodeWriter(out), null, setOf())
+
+    assertThat(
+      out.toString(),
+      equalTo(
+        """
+            function test(): void {
+            }
+
+        """.trimIndent(),
+      ),
+    )
+  }
+
+  @Test
+  @DisplayName("Generates no return type when none is requested")
+  fun testGenNoReturnTypeWhenUnset() {
+    val testClass = FunctionSpec.builder("test")
       .build()
 
     val out = StringWriter()

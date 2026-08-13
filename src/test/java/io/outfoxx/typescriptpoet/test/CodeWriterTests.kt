@@ -15,12 +15,16 @@
  */
 package io.outfoxx.typescriptpoet.test
 
+import io.outfoxx.typescriptpoet.CodeBlock
+import io.outfoxx.typescriptpoet.FileSpec
 import io.outfoxx.typescriptpoet.FunctionSpec
+import io.outfoxx.typescriptpoet.TypeName
 import io.outfoxx.typescriptpoet.TypeName.Companion.STRING
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import java.io.StringWriter
 
 @DisplayName("CodeWriter Tests")
 class CodeWriterTests {
@@ -41,6 +45,40 @@ class CodeWriterTests {
             function test(): string {
               return X(aaaaa, bbbbb, ccccc, ddddd, eeeee, fffff, ggggg, hhhhh, iiiii, jjjjj, kkkkk, lllll,
                   mmmmm, nnnnn, ooooo, ppppp, qqqqq);
+            }
+
+        """.trimIndent(),
+      ),
+    )
+  }
+
+  @Test
+  @DisplayName("Collects imports for types referenced inside a nested CodeBlock")
+  fun testNestedCodeBlockKeepsImports() {
+    // Upstream outfoxx/typescriptpoet#27: a CodeBlock passed as a %L argument used to be
+    // flattened with toString(), which discarded its format parts, so the %T inside it never
+    // reached the import collector and `import { X } from 'x';` went missing.
+    val testFunc = FunctionSpec.builder("test")
+      .returns(STRING)
+      .addStatement("return %L", CodeBlock.of("new %T()", TypeName.namedImport("X", "x")))
+      .build()
+
+    val file = FileSpec.builder("Test")
+      .addFunction(testFunc)
+      .build()
+
+    val out = StringWriter()
+    file.writeTo(out)
+
+    MatcherAssert.assertThat(
+      out.toString(),
+      CoreMatchers.equalTo(
+        """
+            import {X} from 'x';
+
+
+            function test(): string {
+              return new X();
             }
 
         """.trimIndent(),

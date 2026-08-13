@@ -331,8 +331,11 @@ private constructor(internal val formatParts: List<String>, internal val args: L
       else -> throw IllegalArgumentException("expected name but was $o")
     }
 
+    // A nested CodeBlock must stay a CodeBlock. Flattening it to a string here bakes in the
+    // rendered text and discards its format parts, so any %T inside it never reaches
+    // CodeWriter.emitTypeName and the type's import is never collected.
     private fun argToLiteral(o: Any?) = when (o) {
-      is CodeBlock -> o.toString()
+      is CodeBlock -> o
       else -> o.toString()
     }
 
