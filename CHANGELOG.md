@@ -19,6 +19,9 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Conditional types with `infer`, mapped types with `as` key remapping and `+`/`-`
   `readonly`/`?` modifiers, and template literal types.
 - Labelled, optional and rest tuple elements.
+- `CodeBlock.objectLiteral()`, building an object literal expression whose members stay
+  structured until the file is written, so the layout is decided against the print width
+  rather than hand-formatted into a `CodeBlock`.
 - `literal()`, for literal types: `literal("a")` emits `"a"`, escaped, and there are
   numeric and boolean overloads. Previously the only route was `implicit()` with the caller
   writing the quotes, which emitted an unparseable file if the value contained one.

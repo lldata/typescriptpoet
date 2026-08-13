@@ -427,6 +427,15 @@ private constructor(internal val formatParts: List<String>, internal val args: L
     @JvmStatic
     fun builder() = Builder()
 
+    /**
+     * A builder for an object literal expression, for use as a `%L` argument.
+     *
+     * An object literal is an expression, so it belongs here rather than among the
+     * declaration specs. See [ObjectLiteral].
+     */
+    @JvmStatic
+    fun objectLiteral() = ObjectLiteral.Builder()
+
     /** The empty block. */
     @JvmStatic
     fun empty() = builder().build()

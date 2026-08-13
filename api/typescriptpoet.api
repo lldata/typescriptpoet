@@ -64,6 +64,7 @@ public final class io/outfoxx/typescriptpoet/CodeBlock {
 	public fun hashCode ()I
 	public final fun isEmpty ()Z
 	public final fun isNotEmpty ()Z
+	public static final fun objectLiteral ()Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
 	public static final fun of (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/CodeBlock;
 	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
 	public fun toString ()Ljava/lang/String;
@@ -93,6 +94,7 @@ public final class io/outfoxx/typescriptpoet/CodeBlock$Companion {
 	public final fun joinToCode (Ljava/util/Collection;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Lio/outfoxx/typescriptpoet/CodeBlock;
 	public final fun joinToCode (Ljava/util/Collection;Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Lio/outfoxx/typescriptpoet/CodeBlock;
 	public static synthetic fun joinToCode$default (Lio/outfoxx/typescriptpoet/CodeBlock$Companion;Ljava/util/Collection;Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/CodeBlock;
+	public final fun objectLiteral ()Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
 	public final fun of (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/CodeBlock;
 }
 
@@ -527,6 +529,17 @@ public final class io/outfoxx/typescriptpoet/NameAllocator {
 	public final fun newName (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
 	public static synthetic fun newName$default (Lio/outfoxx/typescriptpoet/NameAllocator;Ljava/lang/String;Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/String;
 	public final fun tagsToNames ()Ljava/util/Map;
+}
+
+public final class io/outfoxx/typescriptpoet/ObjectLiteral {
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/outfoxx/typescriptpoet/ObjectLiteral$Builder {
+	public final fun addProperty (Ljava/lang/String;Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
+	public final fun addProperty (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
+	public final fun addShorthand (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
+	public final fun build ()Lio/outfoxx/typescriptpoet/ObjectLiteral;
 }
 
 public final class io/outfoxx/typescriptpoet/ParameterSpec : io/outfoxx/typescriptpoet/Taggable {
