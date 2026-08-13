@@ -1,0 +1,15 @@
+# IntelliJ inspections — the analyser behind the warnings the IDE shows, which neither the
+# Kotlin CLI compiler nor detekt reports. Run in CI so those are visible outside an editor.
+version: "1.0"
+linter: jetbrains/qodana-jvm-community:2026.2
+
+profile:
+  name: qodana.recommended
+
+bootstrap: ./gradlew classes testClasses
+
+exclude:
+  - name: All
+    paths:
+      - build
+      - .gradle
