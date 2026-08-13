@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  # Lets the workflow be started from the Actions tab without pushing a commit.
+  workflow_dispatch:
 
 jobs:
   build-test:
