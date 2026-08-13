@@ -27,6 +27,12 @@ Order used to follow the `Modifier` enum's declaration order, which produced `re
 and `readonly abstract`; both are rejected by `tsc`. They are now `static readonly` and
 `abstract readonly`.
 
+**Emitted formatting now matches Prettier's defaults.**
+Double quotes rather than single, brace spacing in `import { A }`, `;` rather than `,` between
+type-literal members, trailing commas, no blank lines immediately inside `{ }`, and an
+80-column width. If you assert on generated output, regenerate your expectations; if you run
+Prettier over generated files, this removes the churn rather than adding it.
+
 **Rest parameters emit `...args` rather than `... args`.**
 Cosmetic; the old form was valid but not idiomatic.
 

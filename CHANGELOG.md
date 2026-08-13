@@ -39,9 +39,19 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Re-exports (`export * from`, `export * as ns from`, `export { a, b as c } from`),
   standalone export lists, `export default`, and `export =`.
 
+**Formatting**
+- Emitted output is Prettier-formatted with Prettier's default settings, verified by a
+  `prettier --check` test: double quotes, brace spacing in import and export specifiers, `;`
+  separators in type literals, trailing commas, no blank lines against braces, and an
+  80-column print width. Generated files no longer churn the first time Prettier is run over
+  a repository. **This changes emitted formatting for every 1.x user**; no API changed.
+- Long parameter lists and mapped types break on width rather than at fixed wrap points,
+  matching what Prettier does: measure the construct, and either keep it on one line or put
+  every element on its own.
+
 **Project**
 - A golden-file integration test covering every construct once, type-checked with the real
-  `tsc`.
+  `tsc` and validated with `prettier --check`.
 - Binary compatibility validation, a coverage floor, and ktlint plus license-header checks,
   all wired into `check`.
 
