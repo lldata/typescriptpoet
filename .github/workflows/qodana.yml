@@ -9,6 +9,14 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+
+# Runs for the same ref queue rather than pile up. cancel-in-progress only for pull
+# requests: on main every commit should keep its own verified result, so a rapid second
+# push queues behind the first instead of cancelling it.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   qodana:
     runs-on: ubuntu-latest

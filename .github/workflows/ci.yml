@@ -8,6 +8,14 @@ on:
   # Lets the workflow be started from the Actions tab without pushing a commit.
   workflow_dispatch:
 
+
+# Runs for the same ref queue rather than pile up. cancel-in-progress only for pull
+# requests: on main every commit should keep its own verified result, so a rapid second
+# push queues behind the first instead of cancelling it.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build-test:
     # Defaults to GitHub's hosted runners. A fork can point this at its own runner by
