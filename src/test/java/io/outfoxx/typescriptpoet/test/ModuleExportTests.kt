@@ -48,7 +48,7 @@ class ModuleExportTests {
       )
       .build()
 
-    assertThat(emit(file), emits("import Engine from 'templates';\n\n\nconst engine: Engine;\n"))
+    assertThat(emit(file), emits("import Engine from \"templates\";\n\n\nconst engine: Engine;\n"))
   }
 
   @Test
@@ -73,7 +73,7 @@ class ModuleExportTests {
 
     assertThat(
       emit(file),
-      emits("import type Engine from 'templates';\n\n\nconst engine: Engine;\n"),
+      emits("import type Engine from \"templates\";\n\n\nconst engine: Engine;\n"),
     )
   }
 
@@ -97,7 +97,7 @@ class ModuleExportTests {
     assertThat(
       emit(file),
       equalTo(
-        "import {Beta, type Alpha} from 'lib';\n\n\nconst a: Alpha;\n\nconst b: Beta;\n",
+        "import { Beta, type Alpha } from \"lib\";\n\n\nconst a: Alpha;\n\nconst b: Beta;\n",
       ),
     )
   }
@@ -122,13 +122,13 @@ class ModuleExportTests {
       emits(
         """
 
-            export * from './alpha';
+            export * from \"./alpha\";
 
-            export * as beta from './beta';
+            export * as beta from \"./beta\";
 
-            export {Gamma, Delta as Renamed} from './gamma';
+            export { Gamma, Delta as Renamed } from \"./gamma\";
 
-            export type {Epsilon} from './eps';
+            export type {Epsilon} from \"./eps\";
 
         """.trimIndent(),
       ),
@@ -142,7 +142,7 @@ class ModuleExportTests {
       .addExport(ExportSpec.named(listOf(ExportSpec.name("a"), ExportSpec.name("b", "c"))))
       .build()
 
-    assertThat(emit(file), emits("\nexport {a, b as c};\n"))
+    assertThat(emit(file), emits("\nexport { a, b as c };\n"))
   }
 
   @Test
