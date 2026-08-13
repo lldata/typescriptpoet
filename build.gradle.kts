@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
   `java-library`
@@ -13,7 +14,7 @@ plugins {
 }
 
 
-val releaseVersion: String by project
+val releaseVersion = project.property("releaseVersion") as String
 val isSnapshot = releaseVersion.endsWith("SNAPSHOT")
 
 
@@ -55,18 +56,52 @@ dependencies {
 // COMPILE
 //
 
-val javaVersion = 17
-
+// Build with current tooling, but emit a library that asks as little as possible of its
+// consumers.
+//
+//   - Java 8 bytecode, so any JVM 8+ consumer can load it.
+//   - Kotlin language/API version 2.0, which is the floor: the 2.4 compiler rejects 1.9
+//     outright ("API version 1.9 is no longer supported"). Metadata is therefore readable
+//     by any Kotlin 2.0+ compiler rather than requiring 2.4.
+//   - A kotlin-stdlib floor of 2.0.21 rather than 2.4.10. Gradle resolves to the highest
+//     version any participant asks for, so a low floor constrains nobody; it just avoids
+//     dragging every consumer up to the version we happened to build with.
 kotlin {
-  jvmToolchain(javaVersion)
+  jvmToolchain(17)
+
+  coreLibrariesVersion = "2.0.21"
 
   compilerOptions {
-    jvmTarget = JvmTarget.JVM_17
+    languageVersion = KotlinVersion.KOTLIN_2_0
+    apiVersion = KotlinVersion.KOTLIN_2_0
+    jvmTarget = JvmTarget.JVM_1_8
+    freeCompilerArgs.add("-Xjdk-release=1.8")
   }
 }
 
 java {
   withSourcesJar()
+}
+
+// There is no Java source, but the Kotlin plugin still cross-checks the two compile tasks'
+// targets, so they have to agree.
+tasks.compileJava {
+  options.release.set(8)
+}
+
+tasks.compileTestJava {
+  options.release.set(17)
+}
+
+// The tests are not published, so they are free to use current everything. JUnit 6
+// requires Java 17, which is why this is not simply inherited from `main`.
+tasks.compileTestKotlin {
+  compilerOptions {
+    languageVersion = KotlinVersion.DEFAULT
+    apiVersion = KotlinVersion.DEFAULT
+    jvmTarget = JvmTarget.JVM_17
+    freeCompilerArgs.set(emptyList<String>())
+  }
 }
 
 
@@ -103,7 +138,7 @@ dokka {
 
 // Maven Central requires a `-javadoc` artifact; Dokka's HTML output stands in for it,
 // because `java { withJavadocJar() }` produces an empty jar for a Kotlin-only source set.
-val javadocJar by tasks.registering(Jar::class) {
+val javadocJar = tasks.register<Jar>("javadocJar") {
   archiveClassifier.set("javadoc")
   from(tasks.named("dokkaGeneratePublicationHtml"))
 }
