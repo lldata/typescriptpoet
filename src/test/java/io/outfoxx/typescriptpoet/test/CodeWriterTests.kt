@@ -18,6 +18,7 @@ package io.outfoxx.typescriptpoet.test
 import io.outfoxx.typescriptpoet.CodeBlock
 import io.outfoxx.typescriptpoet.FileSpec
 import io.outfoxx.typescriptpoet.FunctionSpec
+import io.outfoxx.typescriptpoet.SymbolSpec
 import io.outfoxx.typescriptpoet.TypeName
 import io.outfoxx.typescriptpoet.TypeName.Companion.STRING
 import org.hamcrest.CoreMatchers
@@ -79,6 +80,81 @@ class CodeWriterTests {
 
             function test(): string {
               return new X();
+            }
+
+        """.trimIndent(),
+      ),
+    )
+  }
+
+  @Test
+  @DisplayName("Collects imports for types referenced inside a %L spec argument")
+  fun testSpecLiteralKeepsImports() {
+    // The same flattening as above, one argument kind over: argToLiteral keeps a CodeBlock
+    // but calls toString() on everything else, so a spec handed to %L is rendered by a
+    // throwaway CodeWriter and its types never reach the import collector. CodeWriter has
+    // arms for these -- ClassSpec, FunctionSpec and the rest -- that nothing could reach.
+    val arrow = FunctionSpec.builder("send")
+      .arrow()
+      .addParameter("m", TypeName.namedImport("X", "x"))
+      .build()
+
+    val file = FileSpec.builder("Test")
+      .addFunction(
+        FunctionSpec.builder("test")
+          .addCode("const f = %L;\n", arrow)
+          .build(),
+      )
+      .build()
+
+    val out = StringWriter()
+    file.writeTo(out)
+
+    MatcherAssert.assertThat(
+      out.toString(),
+      emits(
+        """
+            import { X } from "x";
+
+
+            function test() {
+              const f = (m: X) => {
+              };
+            }
+
+        """.trimIndent(),
+      ),
+    )
+  }
+
+  @Test
+  @DisplayName("Collects imports for a type or symbol passed directly to %L")
+  fun testTypeAndSymbolLiteralKeepImports() {
+    // %T and %Q are the placeholders for these, but nothing stopped a caller reaching for %L,
+    // and it used to render them with toString(): a TypeName gave the right text and no
+    // import, and a SymbolSpec -- a data class, with no toString of its own -- gave the
+    // Kotlin dump `ImportsName(value=Y, source=y)`.
+    val testFunc = FunctionSpec.builder("test")
+      .addStatement("const a: %L = new %L()", TypeName.namedImport("X", "x"), SymbolSpec.from("Y@y"))
+      .build()
+
+    val file = FileSpec.builder("Test")
+      .addFunction(testFunc)
+      .build()
+
+    val out = StringWriter()
+    file.writeTo(out)
+
+    MatcherAssert.assertThat(
+      out.toString(),
+      emits(
+        """
+            import { X } from "x";
+            import { Y } from "y";
+
+
+            function test() {
+              const a: X = new Y();
             }
 
         """.trimIndent(),

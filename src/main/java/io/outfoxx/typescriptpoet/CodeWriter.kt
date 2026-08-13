@@ -58,11 +58,19 @@ internal class CodeWriter(
   }
 
   /**
-   * When emitting a statement, this is the line of the statement currently being written. The first
-   * line of a statement is indented normally and subsequent wrapped lines are double-indented. This
-   * is -1 when the currently-written line isn't part of a statement.
+   * Whether a statement is being written. The first line of a statement is indented normally and
+   * subsequent wrapped lines are double-indented.
    */
-  private var statementLine = -1
+  private var inStatement = false
+
+  /**
+   * Whether that double indent has been applied. It goes on lazily, at the statement's first
+   * newline, so a statement that never wraps never pays for it -- which means whether it is
+   * owed cannot be inferred from the line count. [emitLiteral] emits a value that brings its
+   * own layout with the statement suspended, so a statement can reach its end having written
+   * several lines and no hanging indent at all.
+   */
+  private var statementIndented = false
 
   fun indent(levels: Int = 1) = apply {
     indentLevel += levels
@@ -169,6 +177,22 @@ internal class CodeWriter(
     }
   }
 
+  /**
+   * Renders [block] to a string without writing anything, for a measure-then-break decision.
+   *
+   * The measuring writer carries this one's scope and renames, so what is measured is the text
+   * that would actually be written: an import renamed around a collision, or a name made
+   * relative to the namespace it sits in, is not the length it has anywhere else.
+   */
+  fun measure(block: CodeWriter.() -> Unit): String {
+    val rendered = StringBuilder()
+    CodeWriter(rendered, indent, renamedSymbols).use { writer ->
+      currentScope().forEach(writer::pushScope)
+      writer.block()
+    }
+    return rendered.toString()
+  }
+
   fun emitCode(s: String) = emitCode(CodeBlock.of(s))
 
   fun emitCode(codeBlock: CodeBlock) = apply {
@@ -209,19 +233,21 @@ internal class CodeWriter(
   }
 
   private fun beginStatement() {
-    check(statementLine == -1) { "statement enter %[ followed by statement enter %[" }
+    check(!inStatement) { "statement enter %[ followed by statement enter %[" }
 
-    statementLine = 0
+    inStatement = true
+    statementIndented = false
   }
 
   private fun endStatement() {
-    check(statementLine != -1) { "statement exit %] has no matching statement enter %[" }
+    check(inStatement) { "statement exit %] has no matching statement enter %[" }
 
-    if (statementLine > 0) {
+    if (statementIndented) {
       unindent(2) // End a multi-line statement. Decrease the indentation level.
     }
 
-    statementLine = -1
+    inStatement = false
+    statementIndented = false
   }
 
   private fun emitWrappingSpace() = apply {
@@ -254,15 +280,49 @@ internal class CodeWriter(
     )
   }
 
+  /**
+   * Renders a `%L` argument.
+   *
+   * This is the only place that decides how a literal argument is rendered; [CodeBlock] keeps
+   * the argument as it was given. Everything with an arm here is emitted against live writer
+   * state -- the current indent and column, the scope stack, the rename map, and the set of
+   * symbols to import -- which is what a value cannot get once it has been flattened to text.
+   */
   private fun emitLiteral(o: Any?) {
     when (o) {
-      is ClassSpec -> o.emit(this)
-      is InterfaceSpec -> o.emit(this)
-      is EnumSpec -> o.emit(this)
+      is ClassSpec -> selfLaidOut { o.emit(this) }
+      is InterfaceSpec -> selfLaidOut { o.emit(this) }
+      is EnumSpec -> selfLaidOut { o.emit(this) }
       is DecoratorSpec -> o.emit(this)
-      is FunctionSpec -> o.emit(this, null, emptySet())
+      is FunctionSpec -> selfLaidOut { o.emit(this, null, emptySet()) }
+      is ObjectLiteral -> selfLaidOut { o.emit(this) }
+      is TypeName -> emitTypeName(o)
+      is SymbolSpec -> emitSymbol(o)
       is CodeBlock -> emitCode(o)
       else -> emit(o.toString())
+    }
+  }
+
+  /**
+   * Emits a value that decides its own layout, outside any enclosing statement.
+   *
+   * The `%[ %]` hanging indent exists for an expression too long for the line: its
+   * continuation lines are pushed out two levels so they read as continuations. A block-shaped
+   * value -- a class, an arrow function, an object literal -- is not a wrapped expression. Its
+   * lines are its own structure, already indented relative to where it starts, and giving them
+   * the hanging indent as well puts the body and its closing brace two levels too deep.
+   *
+   * Suspending the statement rather than unindenting keeps the paired markers balanced: the
+   * indent is owed only if it was applied, which [statementIndented] records rather than
+   * infers.
+   */
+  private inline fun selfLaidOut(emit: () -> Unit) {
+    val wasInStatement = inStatement
+    inStatement = false
+    try {
+      emit()
+    } finally {
+      inStatement = wasInStatement
     }
   }
 
@@ -284,11 +344,9 @@ internal class CodeWriter(
         }
         out.append("\n")
         trailingNewline = true
-        if (statementLine != -1) {
-          if (statementLine == 0) {
-            indent(2) // Begin multiple-line statement. Increase the indentation level.
-          }
-          statementLine++
+        if (inStatement && !statementIndented) {
+          indent(2) // Begin multiple-line statement. Increase the indentation level.
+          statementIndented = true
         }
       }
 

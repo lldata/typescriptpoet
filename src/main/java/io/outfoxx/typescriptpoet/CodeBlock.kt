@@ -336,13 +336,13 @@ private constructor(internal val formatParts: List<String>, internal val args: L
       else -> throw IllegalArgumentException("expected name but was $o")
     }
 
-    // A nested CodeBlock must stay a CodeBlock. Flattening it to a string here bakes in the
-    // rendered text and discards its format parts, so any %T inside it never reaches
-    // CodeWriter.emitTypeName and the type's import is never collected.
-    private fun argToLiteral(o: Any?) = when (o) {
-      is CodeBlock -> o
-      else -> o.toString()
-    }
+    // A %L argument is kept as it was given. Rendering it here bakes in the text a throwaway
+    // CodeWriter produced -- one with no imports to collect into, no renames, no scope and no
+    // column -- so a %T inside it never reaches CodeWriter.emitTypeName and the type's import
+    // is never collected, and a value that lays itself out measures against column 0 rather
+    // than where it is written. CodeWriter.emitLiteral decides how to render each kind, and
+    // falls back to toString() there for values it does not know.
+    private fun argToLiteral(o: Any?) = o
 
     private fun argToString(o: Any?) = o?.toString()
 

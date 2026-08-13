@@ -71,6 +71,19 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Types referenced only inside a nested `CodeBlock` were not imported, because passing a
   `CodeBlock` as a `%L` argument flattened it to a string and discarded its format parts.
   ([outfoxx/typescriptpoet#27](https://github.com/outfoxx/typescriptpoet/pull/27))
+- Every other kind of `%L` argument was still flattened that way. A spec, an object literal,
+  a `TypeName` or a `SymbolSpec` was rendered when the block was built, by a throwaway writer
+  with no imports to collect into, no rename map, no scope and no column — so its types were
+  not imported, a colliding name was not renamed, a name inside a namespace was not made
+  relative to it, and a value that lays out against the print width measured from column 0
+  rather than from where it was written. `%L` arguments now reach the writer as they were
+  given. ([#10](https://github.com/lldata/typescriptpoet/issues/10))
+- A value that brings its own layout — a class, an arrow function, an object literal — no
+  longer takes the hanging indent of an enclosing statement, which is meant for the
+  continuation lines of an over-long expression and put such a value's body and closing brace
+  two levels too deep. `addStatement("return %L", objectLiteral)` now lays the literal out at
+  the statement's own indent, so the terminator and newline no longer have to be hand-written
+  with `addCode`. ([#10](https://github.com/lldata/typescriptpoet/issues/10))
 - `returns(TypeName.VOID)` was silently discarded, so an explicit `: void` could not be
   emitted. ([outfoxx/typescriptpoet#24](https://github.com/outfoxx/typescriptpoet/issues/24))
 - The reserved-word list was Kotlin's, not TypeScript's, so `NameAllocator` could emit a

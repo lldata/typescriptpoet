@@ -57,9 +57,15 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     if (withInitializer && initializer != null) {
       codeWriter.emit(" = ")
       // The statement wrapper gives long expressions a hanging indent on continuation lines,
-      // which is wrong for a block-shaped value such as an arrow function or object literal:
-      // it would push the body and closing brace out by two extra levels. Those bring their
-      // own indentation, so emit them unwrapped.
+      // which is wrong for an initializer that brings its own layout: it would push the body
+      // and closing brace out by two extra levels.
+      //
+      // A spec or object literal initializer is handled by CodeWriter.emitLiteral, which
+      // suspends the statement around any value that lays itself out -- it has to be, because
+      // whether such a value breaks isn't known until it is written, so no test of the text
+      // here could tell. What is left for this test is an initializer written as literal text
+      // with the newlines already in it, where the layout is committed and sniffing it is the
+      // only thing that can tell.
       if (initializer.toString().contains("\n")) {
         codeWriter.emitCode(CodeBlock.of("%L", initializer))
       } else {

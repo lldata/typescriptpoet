@@ -47,8 +47,11 @@ internal constructor(internal val members: List<Member>) {
     }
 
     // Measure, then break, as elsewhere: keep the literal on one line if the whole thing
-    // fits, otherwise put every member on its own line with a trailing comma.
-    val inline = buildCodeString { emitMembers(this, separator = ", ") }
+    // fits, otherwise put every member on its own line with a trailing comma. Measuring
+    // through the writer rather than in isolation, so that a member whose rendered length
+    // depends on where it is written -- a renamed import, a name relative to its namespace --
+    // is measured at the length it will have.
+    val inline = codeWriter.measure { emitMembers(this, separator = ", ") }
     // A member that spans lines -- an arrow function with a body, a nested literal that
     // broke -- forces the whole literal to break, however short the text measures.
     val fits = !inline.contains('\n') &&
