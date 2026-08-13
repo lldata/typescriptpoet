@@ -133,18 +133,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
     members.filterNot { it is ModuleSpec || it is CodeBlock }.forEach { member ->
       codeWriter.emit("\n")
-      when (member) {
-        is ModuleSpec -> member.emit(codeWriter)
-        is InterfaceSpec -> member.emit(codeWriter)
-        is ClassSpec -> member.emit(codeWriter)
-        is EnumSpec -> member.emit(codeWriter)
-        is FunctionSpec -> member.emit(codeWriter, null, setOf(Modifier.PUBLIC))
-        is PropertySpec -> member.emit(codeWriter, setOf(Modifier.PUBLIC), asStatement = true)
-        is TypeAliasSpec -> member.emit(codeWriter)
-        is ExportSpec -> member.emit(codeWriter)
-        is CodeBlock -> codeWriter.emitCode(member)
-        else -> throw AssertionError()
-      }
+      codeWriter.emitMember(member)
     }
 
     members.filterIsInstance<ModuleSpec>().forEach { member ->

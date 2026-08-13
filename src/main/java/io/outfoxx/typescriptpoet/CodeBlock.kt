@@ -193,7 +193,7 @@ private constructor(internal val formatParts: List<String>, internal val args: L
         var matchResult: MatchResult? = null
         val colon = format.indexOf(':', p)
         if (colon != -1) {
-          val endIndex = Math.min(colon + 2, format.length)
+          val endIndex = minOf(colon + 2, format.length)
           matchResult = NAMED_ARGUMENT.matchEntire(format.substring(p, endIndex))
         }
         if (matchResult != null) {
@@ -204,7 +204,7 @@ private constructor(internal val formatParts: List<String>, internal val args: L
           val formatChar = matchResult.groupValues[TYPE_NAME].first()
           addArgument(format, formatChar, arguments[argumentName])
           formatParts += "%$formatChar"
-          p += matchResult.range.endInclusive + 1
+          p += matchResult.range.last + 1
         } else {
           require(p < format.length - 1) { "dangling % at end" }
           require(isNoArgPlaceholder(format[p + 1])) {

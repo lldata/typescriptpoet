@@ -320,3 +320,25 @@ internal inline fun buildCodeString(builderAction: CodeWriter.() -> Unit): Strin
   }
   return stringBuilder.toString()
 }
+
+/**
+ * Emits one member of a file or module, dispatching on its kind.
+ *
+ * Shared by [FileSpec] and [ModuleSpec], which carried the same `when` separately. They had
+ * already drifted: the module copy had no `ExportSpec` arm, so an export inside a namespace
+ * hit the `else` and threw.
+ */
+internal fun CodeWriter.emitMember(member: Any) {
+  when (member) {
+    is ModuleSpec -> member.emit(this)
+    is InterfaceSpec -> member.emit(this)
+    is ClassSpec -> member.emit(this)
+    is EnumSpec -> member.emit(this)
+    is FunctionSpec -> member.emit(this, null, setOf(Modifier.PUBLIC))
+    is PropertySpec -> member.emit(this, setOf(Modifier.PUBLIC), asStatement = true)
+    is TypeAliasSpec -> member.emit(this)
+    is ExportSpec -> member.emit(this)
+    is CodeBlock -> emitCode(member)
+    else -> throw AssertionError("unhandled member type ${member.javaClass.name}")
+  }
+}

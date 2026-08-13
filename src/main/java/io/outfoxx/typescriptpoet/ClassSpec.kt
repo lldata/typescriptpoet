@@ -83,65 +83,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
       funSpec.emit(codeWriter, null, setOf(Modifier.PUBLIC))
     }
 
-    // Write the constructor manually, allowing the replacement
-    // of property specs with constructor parameters
-    constructor?.let {
-      codeWriter.emit("\n")
-
-      if (it.decorators.isNotEmpty()) {
-        codeWriter.emit(" ")
-        codeWriter.emitDecorators(it.decorators, false)
-        codeWriter.emit("\n")
-      }
-
-      if (it.modifiers.isNotEmpty()) {
-        codeWriter.emitModifiers(it.modifiers)
-      }
-
-      codeWriter.emit("constructor")
-
-      val body = constructor.body
-
-      // Emit constructor parameters & property specs that can be replaced with parameters
-      it.parameters.emit(
-        codeWriter,
-        rest = it.restParameter,
-        constructorProperties = constructorProperties,
-      ) { param, isRest, optionalAllowed ->
-
-        var property = constructorProperties[param.name]
-        if (property != null && !isRest) {
-          // Ensure the parameter always has a modifier (that makes it a property in TS)
-          if (
-            property.modifiers.none { mod ->
-              mod.isOneOf(
-                Modifier.PUBLIC,
-                Modifier.PRIVATE,
-                Modifier.PROTECTED,
-                Modifier.READONLY,
-              )
-            }
-          ) {
-            // Add default public modifier
-            property = property.toBuilder().addModifiers(Modifier.PUBLIC).build()
-          }
-          property.emit(codeWriter, setOf(), compactOptionalAllowed = false, withInitializer = false)
-          param.emitDefaultValue(codeWriter)
-        } else {
-          param.emit(
-            codeWriter,
-            isRest = isRest,
-            optionalAllowed = optionalAllowed && !useConstructorPropertiesAutomatically,
-          )
-        }
-      }
-
-      codeWriter.emit(" {\n")
-      codeWriter.indent()
-      codeWriter.emitCode(body)
-      codeWriter.unindent()
-      codeWriter.emit("}\n")
-    }
+    emitConstructor(codeWriter, constructorProperties)
 
     // Static initializer blocks.
     for (block in staticBlocks) {
@@ -173,6 +115,68 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
       codeWriter.emit("\n")
     }
     codeWriter.emit("}\n")
+  }
+
+  /**
+   * Emits the constructor, replacing property declarations with parameter properties where
+   * the two describe the same thing. See [constructorProperties].
+   */
+  private fun emitConstructor(codeWriter: CodeWriter, constructorProperties: Map<String, PropertySpec>) {
+    val constructor = constructor ?: return
+
+    codeWriter.emit("\n")
+
+    if (constructor.decorators.isNotEmpty()) {
+      codeWriter.emit(" ")
+      codeWriter.emitDecorators(constructor.decorators, false)
+      codeWriter.emit("\n")
+    }
+
+    if (constructor.modifiers.isNotEmpty()) {
+      codeWriter.emitModifiers(constructor.modifiers)
+    }
+
+    codeWriter.emit("constructor")
+
+    constructor.parameters.emit(
+      codeWriter,
+      rest = constructor.restParameter,
+      constructorProperties = constructorProperties,
+    ) { param, isRest, optionalAllowed ->
+      val promoted = if (isRest) null else constructorProperties[param.name]
+      if (promoted != null) {
+        emitParameterProperty(codeWriter, promoted, param)
+      } else {
+        param.emit(
+          codeWriter,
+          isRest = isRest,
+          optionalAllowed = optionalAllowed && !useConstructorPropertiesAutomatically,
+        )
+      }
+    }
+
+    codeWriter.emit(" {\n")
+    codeWriter.indent()
+    codeWriter.emitCode(constructor.body)
+    codeWriter.unindent()
+    codeWriter.emit("}\n")
+  }
+
+  /**
+   * Emits a property promoted into the constructor signature: `constructor(private name: string)`.
+   *
+   * TypeScript only treats a parameter as a property declaration when it carries an
+   * accessibility or `readonly` modifier, so one is added when the property has none.
+   */
+  private fun emitParameterProperty(codeWriter: CodeWriter, property: PropertySpec, param: ParameterSpec) {
+    val declaresProperty = property.modifiers.any { modifier ->
+      modifier.isOneOf(Modifier.PUBLIC, Modifier.PRIVATE, Modifier.PROTECTED, Modifier.READONLY)
+    }
+    val declaration =
+      if (declaresProperty) property else property.toBuilder().addModifiers(Modifier.PUBLIC).build()
+
+    declaration.emit(codeWriter, setOf(), compactOptionalAllowed = false, withInitializer = false)
+    param.emitDefaultValue(codeWriter)
   }
 
   /** Returns the properties that can be declared inline as constructor parameters. */

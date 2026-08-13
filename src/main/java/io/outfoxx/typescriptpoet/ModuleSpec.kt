@@ -51,27 +51,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
       members.forEachIndexed { index, member ->
         if (index > 0) codeWriter.emit("\n")
-        when (member) {
-          is ModuleSpec -> member.emit(codeWriter)
-
-          is InterfaceSpec -> member.emit(codeWriter)
-
-          is ClassSpec -> member.emit(codeWriter)
-
-          is EnumSpec -> member.emit(codeWriter)
-
-          is FunctionSpec ->
-            member.emit(codeWriter, null, setOf(Modifier.PUBLIC))
-
-          is PropertySpec ->
-            member.emit(codeWriter, setOf(Modifier.PUBLIC), asStatement = true)
-
-          is TypeAliasSpec -> member.emit(codeWriter)
-
-          is CodeBlock -> codeWriter.emitCode(member)
-
-          else -> throw AssertionError()
-        }
+        codeWriter.emitMember(member)
       }
 
       if (members.isNotEmpty()) {

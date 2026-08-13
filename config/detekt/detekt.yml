@@ -1,32 +1,40 @@
 # Layered on top of detekt's defaults (buildUponDefaultConfig = true), so only the
 # deviations appear here.
 #
-# The theme of these relaxations: this is a code generator. Its shape is a handful of large
-# `emit` methods that walk a spec and write syntax, plus builder classes with one method per
-# thing the generated construct can carry. Both are the design rather than debt, and the
-# project reached the same conclusion years ago: the .codebeatsettings it used to carry
-# raised exactly these thresholds (ARITY, ABC, TOO_MANY_METHODS). detekt replaces codebeat,
-# whose badge had been dead for years, so that file is gone and this one is the single
-# place static-analysis thresholds are set.
+# Every finding detekt raised was looked at individually. Where a real improvement existed
+# it was made rather than configured away:
 #
-# Only three rules are relaxed globally, and only because they fire across five to nine
-# sites each and describe the architecture rather than any one method. Everything else that
-# fired was either fixed in the code or suppressed at the single site with a reason, so the
-# rule keeps working everywhere else -- a global threshold is a blind spot, not a fix.
+#   - ClassSpec.emit: the constructor block became emitConstructor + emitParameterProperty.
+#     110 lines / complexity 26 -> 64 / 19.
+#   - FunctionSpec.emitSignature: became emitName + emitReturnType. Complexity 17 -> clear.
+#   - FileSpec.emit and ModuleSpec.emit carried the same member `when` separately and had
+#     already drifted apart; both now call a shared CodeWriter.emitMember. Complexity 17 and
+#     15 -> clear, and an ExportSpec inside a namespace no longer throws.
+#   - FunctionSpec's five-way body-less test became a named isDeclarationOnly.
+#   - ParameterSpec's `size < 5` became MAX_PARAMETERS_ON_ONE_LINE.
 #
-# The thresholds below carry deliberate headroom over the current worst case (110/26/35), so
-# they are a ceiling rather than a line drawn under the existing code. If a new method needs
-# them raised again, that is a signal worth reading, not a number to bump.
+# What is left is relaxed because the rule is measuring the design, not a defect:
+#
+#   - TooManyFunctions fires on eight builders and TypeName's companion. A builder has one
+#     method per feature of the thing it builds, and the companion is the factory for every
+#     type TypeScript has. Splitting either would make the API worse to use.
+#   - The remaining complex methods are dispatch tables. CodeWriter.emitCode is a `when` over
+#     format placeholders; breaking it into per-placeholder functions replaces one readable
+#     table with indirection.
+#
+# Thresholds are round numbers set comfortably above the current worst case, not just above
+# it: 100 lines against a worst of 68, complexity 25 against 19, 40 functions against 35. If
+# new code needs them raised, that is a signal worth reading rather than a number to bump.
+#
+# Narrower findings are suppressed at the single site with a reason, so the rule keeps
+# working everywhere else -- see NestedBlockDepth and LoopWithTooManyJumpStatements in
+# CodeWriter, FileSpec, CodeBlock and Utils.
 
 complexity:
-  # ClassSpec.emit is 110 lines of "write the class, then its properties, then its
-  # constructor, then its methods". Splitting it would scatter the emission order.
   LongMethod:
-    allowedLines: 120
+    allowedLines: 100
   CyclomaticComplexMethod:
-    allowedComplexity: 30
-  # Builders expose one method per feature of the construct they build, and TypeName's
-  # companion is the factory for every type the language has: 35 and counting.
+    allowedComplexity: 25
   TooManyFunctions:
     allowedFunctionsPerFile: 40
     allowedFunctionsPerClass: 40

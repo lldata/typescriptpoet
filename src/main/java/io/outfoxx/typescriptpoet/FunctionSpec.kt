@@ -94,26 +94,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
   }
 
   private fun emitSignature(codeWriter: CodeWriter, enclosingName: String?) {
-    when {
-      isConstructor -> codeWriter.emitCode("constructor")
-
-      isCallable -> codeWriter.emitCode("")
-
-      isIndexable -> codeWriter.emitCode("[")
-
-      isArrow -> codeWriter.emitCode("")
-
-      else -> {
-        if (enclosingName == null) {
-          codeWriter.emit("function")
-          codeWriter.emit(if (isGenerator) "* " else " ")
-        } else if (isGenerator) {
-          // On a method the star binds to the name, not to a `function` keyword.
-          codeWriter.emit("*")
-        }
-        codeWriter.emitCode(CodeBlock.of("%L", name))
-      }
-    }
+    emitName(codeWriter, enclosingName)
 
     if (typeVariables.isNotEmpty()) {
       codeWriter.emitTypeVariables(typeVariables)
@@ -134,7 +115,40 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       codeWriter.emitCode("]")
     }
 
-    // A type predicate replaces the return type entirely.
+    emitReturnType(codeWriter)
+  }
+
+  /** The leading keyword and name, which differ per kind of function. */
+  private fun emitName(codeWriter: CodeWriter, enclosingName: String?) {
+    when {
+      isConstructor -> codeWriter.emitCode("constructor")
+
+      // Call signatures, index signatures and arrows have no name of their own; an index
+      // signature's bracket is closed back in emitSignature, after its parameters.
+      isCallable || isArrow -> codeWriter.emitCode("")
+
+      isIndexable -> codeWriter.emitCode("[")
+
+      else -> {
+        if (enclosingName == null) {
+          codeWriter.emit("function")
+          codeWriter.emit(if (isGenerator) "* " else " ")
+        } else if (isGenerator) {
+          // On a method the star binds to the name, not to a `function` keyword.
+          codeWriter.emit("*")
+        }
+        codeWriter.emitCode(CodeBlock.of("%L", name))
+      }
+    }
+  }
+
+  /**
+   * The return type, or the type predicate that stands in for it.
+   *
+   * An explicitly requested `void` is emitted; leaving `returns()` uncalled is how you ask
+   * for no return type at all.
+   */
+  private fun emitReturnType(codeWriter: CodeWriter) {
     if (typePredicate != null) {
       codeWriter.emitCode(": ")
       if (typePredicate.asserts) {
@@ -145,8 +159,6 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       return
     }
 
-    // An explicitly requested `void` is emitted. Leaving `returns()` uncalled is how you ask
-    // for no return type at all.
     if (returnType != null) {
       codeWriter.emitCode(CodeBlock.of(": %T", returnType))
     }
