@@ -26,6 +26,16 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
   val modifiers = builder.modifiers.toImmutableSet()
   val initializer = builder.initializer
   val optional = builder.optional
+  val definiteAssignment = builder.definiteAssignment
+
+  init {
+    require(!(optional && definiteAssignment)) {
+      "property $name cannot be both optional and definitely assigned"
+    }
+    require(!(name.startsWith("#") && Modifier.PRIVATE in builder.modifiers)) {
+      "property $name is already private by virtue of its name; drop Modifier.PRIVATE"
+    }
+  }
 
   internal fun emit(
     codeWriter: CodeWriter,
@@ -39,7 +49,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     codeWriter.emitModifiers(modifiers, implicitModifiers)
     codeWriter.emitCode(
       CodeBlock.of(
-        "%L${if (optional && compactOptionalAllowed) "?" else ""}: %T${if (optional && !compactOptionalAllowed) " | undefined" else ""}",
+        "%L${suffix(compactOptionalAllowed)}: %T${if (optional && !compactOptionalAllowed) " | undefined" else ""}",
         name,
         type,
       ),
@@ -53,6 +63,13 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     }
   }
 
+  /** The `?` or `!` that follows the property name, if any. */
+  private fun suffix(compactOptionalAllowed: Boolean) = when {
+    optional && compactOptionalAllowed -> "?"
+    definiteAssignment -> "!"
+    else -> ""
+  }
+
   override fun toString() = buildCodeString { emit(this, emptySet()) }
 
   fun toBuilder(): Builder {
@@ -61,6 +78,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       .addDecorators(decorators)
       .addModifiers(*modifiers.toTypedArray())
     initializer?.let { bldr.initializer(it) }
+    bldr.definiteAssignment(definiteAssignment)
 
     return bldr
   }
@@ -75,6 +93,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     internal val decorators = mutableListOf<DecoratorSpec>()
     internal val modifiers = mutableListOf<Modifier>()
     internal var initializer: CodeBlock? = null
+    internal var definiteAssignment: Boolean = false
 
     fun addTSDoc(format: String, vararg args: Any) = apply {
       tsDoc.add(format, *args)
@@ -107,6 +126,16 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     fun initializer(codeBlock: CodeBlock) = apply {
       check(this.initializer == null) { "initializer was already set" }
       this.initializer = codeBlock
+    }
+
+    /**
+     * Marks the property as definitely assigned, emitting `name!: Type`.
+     *
+     * Mutually exclusive with `optional`.
+     */
+    @JvmOverloads
+    fun definiteAssignment(value: Boolean = true) = apply {
+      this.definiteAssignment = value
     }
 
     fun build() = PropertySpec(this)

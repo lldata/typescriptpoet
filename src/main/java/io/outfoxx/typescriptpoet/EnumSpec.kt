@@ -76,7 +76,11 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
     }
 
     fun addModifiers(vararg modifiers: Modifier) = apply {
-      modifiers.forEach { require(it == Modifier.EXPORT || it == Modifier.DECLARE) }
+      modifiers.forEach {
+        require(it == Modifier.EXPORT || it == Modifier.DECLARE || it == Modifier.CONST) {
+          "enums support only EXPORT, DECLARE and CONST, but was $it"
+        }
+      }
       this.modifiers += modifiers
     }
 

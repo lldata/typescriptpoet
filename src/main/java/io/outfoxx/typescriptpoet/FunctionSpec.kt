@@ -15,6 +15,15 @@
  */
 package io.outfoxx.typescriptpoet
 
+/**
+ * A type-predicate return type: `x is Y`, `asserts x`, or `asserts x is Y`.
+ *
+ * These are return-position-only and depend on a parameter name, so they are not a
+ * [TypeName] -- a predicate cannot appear anywhere a type can.
+ */
+data class TypePredicate
+internal constructor(val parameterName: String, val type: TypeName?, val asserts: Boolean)
+
 /** A generated function declaration. */
 class FunctionSpec
 private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) {
@@ -25,13 +34,20 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
   val modifiers = builder.modifiers.toImmutableSet()
   val typeVariables = builder.typeVariables.toImmutableList()
   val returnType = builder.returnType
+  val typePredicate = builder.typePredicate
+  val thisParameterType = builder.thisParameterType
   val parameters = builder.parameters.toImmutableList()
   val restParameter = builder.restParameter
+  val isGenerator = builder.isGenerator
+  val isSignatureOnly = builder.isSignatureOnly
   val body = builder.body.build()
 
   init {
     require(body.isEmpty() || Modifier.ABSTRACT !in builder.modifiers) {
       "abstract function ${builder.name} cannot have code"
+    }
+    require(body.isEmpty() || !builder.isSignatureOnly) {
+      "signature-only function ${builder.name} cannot have code"
     }
   }
 
@@ -54,7 +70,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     // Call and index signatures are declarations, never definitions: they have no body in any
     // context. Interfaces got this for free by forcing ABSTRACT onto their members, but a
     // class index signature is concrete and would otherwise be emitted with an empty body.
-    if (Modifier.ABSTRACT in modifiers || isEmptyConstructor || isCallable || isIndexable) {
+    if (Modifier.ABSTRACT in modifiers || isEmptyConstructor || isCallable || isIndexable || isSignatureOnly) {
       codeWriter.emit(";\n")
       return
     }
@@ -76,7 +92,11 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
       else -> {
         if (enclosingName == null) {
-          codeWriter.emit("function ")
+          codeWriter.emit("function")
+          codeWriter.emit(if (isGenerator) "* " else " ")
+        } else if (isGenerator) {
+          // On a method the star binds to the name, not to a `function` keyword.
+          codeWriter.emit("*")
         }
         codeWriter.emitCode(CodeBlock.of("%L", name))
       }
@@ -86,7 +106,10 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       codeWriter.emitTypeVariables(typeVariables)
     }
 
-    parameters.emit(
+    val allParameters =
+      thisParameterType?.let { listOf(ParameterSpec.thisParameter(it)) + parameters } ?: parameters
+
+    allParameters.emit(
       codeWriter,
       enclosed = !isIndexable,
       rest = restParameter,
@@ -96,6 +119,17 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
     if (isIndexable) {
       codeWriter.emitCode("]")
+    }
+
+    // A type predicate replaces the return type entirely.
+    if (typePredicate != null) {
+      codeWriter.emitCode(": ")
+      if (typePredicate.asserts) {
+        codeWriter.emitCode("asserts ")
+      }
+      codeWriter.emitCode(typePredicate.parameterName)
+      typePredicate.type?.let { codeWriter.emitCode(CodeBlock.of(" is %T", it)) }
+      return
     }
 
     // An explicitly requested `void` is emitted. Leaving `returns()` uncalled is how you ask
@@ -128,7 +162,12 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     builder.modifiers += modifiers
     builder.typeVariables += typeVariables
     builder.returnType = returnType
+    builder.typePredicate = typePredicate
+    builder.thisParameterType = thisParameterType
     builder.parameters += parameters
+    builder.restParameter = restParameter
+    builder.isGenerator = isGenerator
+    builder.isSignatureOnly = isSignatureOnly
     builder.body.add(body)
     return builder
   }
@@ -140,8 +179,12 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     internal val modifiers = mutableSetOf<Modifier>()
     internal val typeVariables = mutableListOf<TypeName.TypeVariable>()
     internal var returnType: TypeName? = null
+    internal var typePredicate: TypePredicate? = null
+    internal var thisParameterType: TypeName? = null
     internal val parameters = mutableListOf<ParameterSpec>()
     internal var restParameter: ParameterSpec? = null
+    internal var isGenerator = false
+    internal var isSignatureOnly = false
     internal val body = CodeBlock.builder()
 
     init {
@@ -174,6 +217,27 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       this.modifiers += modifiers
     }
 
+    /**
+     * Marks this as a generator function, emitting `function*` or `*method()`.
+     *
+     * Combine with [Modifier.ASYNC] for `async function*`.
+     */
+    @JvmOverloads
+    fun generator(value: Boolean = true) = apply {
+      this.isGenerator = value
+    }
+
+    /**
+     * Emits this as a declaration only -- a signature terminated with `;` and no body.
+     *
+     * This is how overload signatures are written: several signature-only specs sharing a
+     * name, followed by one implementation that has a body. See [FunctionSpec.overloads].
+     */
+    @JvmOverloads
+    fun signatureOnly(value: Boolean = true) = apply {
+      this.isSignatureOnly = value
+    }
+
     fun addTypeVariables(typeVariables: Iterable<TypeName.TypeVariable>) = apply {
       this.typeVariables += typeVariables
     }
@@ -185,6 +249,39 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     fun returns(returnType: TypeName) = apply {
       check(!name.isConstructor) { "$name cannot have a return type" }
       this.returnType = returnType
+    }
+
+    /**
+     * Declares a type-predicate return type (e.g. `value is string`).
+     *
+     * @param parameterName Name of the parameter being narrowed
+     * @param type Type it is narrowed to
+     */
+    fun returnsIs(parameterName: String, type: TypeName) = apply {
+      check(!name.isConstructor) { "$name cannot have a return type" }
+      this.typePredicate = TypePredicate(parameterName, type, asserts = false)
+    }
+
+    /**
+     * Declares an assertion signature (e.g. `asserts value` or `asserts value is string`).
+     *
+     * @param parameterName Name of the parameter being asserted about
+     * @param type Type it is asserted to be, or null for a bare `asserts value`
+     */
+    @JvmOverloads
+    fun returnsAsserts(parameterName: String, type: TypeName? = null) = apply {
+      check(!name.isConstructor) { "$name cannot have a return type" }
+      this.typePredicate = TypePredicate(parameterName, type, asserts = true)
+    }
+
+    /**
+     * Declares the `this` pseudo-parameter (e.g. `function f(this: Window, x: number)`).
+     *
+     * It is erased at call sites and exists only to type the receiver, so it is not an
+     * ordinary parameter and cannot be optional, rest, or decorated.
+     */
+    fun thisParameter(type: TypeName) = apply {
+      this.thisParameterType = type
     }
 
     fun addParameters(parameterSpecs: Iterable<ParameterSpec>) = apply {
@@ -283,6 +380,28 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
     @JvmStatic
     fun builder(name: String) = Builder(name)
+
+    /**
+     * Builds an overload group: N signatures followed by the implementation.
+     *
+     * TypeScript writes overloads as several body-less signatures immediately followed by a
+     * single implementation, all sharing a name. This validates that shape -- same name
+     * throughout, implementation last -- and marks the signatures body-less, so callers pass
+     * the result straight to `addFunctions`.
+     *
+     * @param signatures The overload signatures, in the order they should be declared
+     * @param implementation The single implementation, which carries the body
+     */
+    @JvmStatic
+    fun overloads(signatures: List<FunctionSpec>, implementation: FunctionSpec): List<FunctionSpec> {
+      require(signatures.isNotEmpty()) { "an overload group needs at least one signature" }
+      val mismatched = signatures.map { it.name }.filter { it != implementation.name }
+      require(mismatched.isEmpty()) {
+        "every overload signature must share the implementation's name " +
+          "'${implementation.name}', but found $mismatched"
+      }
+      return signatures.map { it.toBuilder().signatureOnly().build() } + implementation
+    }
 
     @JvmStatic
     fun constructorBuilder() = Builder(

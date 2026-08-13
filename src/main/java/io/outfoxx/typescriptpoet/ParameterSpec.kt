@@ -128,6 +128,13 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
       require(name.isName) { "not a valid name: $name" }
       return Builder(name, type, optional).addModifiers(*modifiers)
     }
+
+    /**
+     * The `this` pseudo-parameter (e.g. `function f(this: Window, x: number)`).
+     *
+     * Bypasses the name check, since `this` is a reserved word everywhere else.
+     */
+    internal fun thisParameter(type: TypeName): ParameterSpec = Builder("this", type, false).build()
   }
 }
 

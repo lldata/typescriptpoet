@@ -32,6 +32,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
   val constructor = builder.constructor
   val functionSpecs = builder.functionSpecs.toImmutableList()
   val indexableSpecs = builder.indexableSpecs.toImmutableList()
+  val staticBlocks = builder.staticBlocks.toImmutableList()
   val useConstructorPropertiesAutomatically = builder.useConstructorPropertiesAutomatically
 
   override fun emit(codeWriter: CodeWriter) {
@@ -142,6 +143,16 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
       codeWriter.emit("}\n")
     }
 
+    // Static initializer blocks.
+    for (block in staticBlocks) {
+      codeWriter.emit("\n")
+      codeWriter.emit("static {\n")
+      codeWriter.indent()
+      codeWriter.emitCode(block)
+      codeWriter.unindent()
+      codeWriter.emit("}\n")
+    }
+
     // Constructors.
     for (funSpec in functionSpecs) {
       if (!funSpec.isConstructor) continue
@@ -176,7 +187,8 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
           .filterNot { constructorProperties.containsKey(it.name) }
           .forEach { _ -> return false }
       }
-      return constructor == null && functionSpecs.isEmpty() && indexableSpecs.isEmpty()
+      return constructor == null && functionSpecs.isEmpty() && indexableSpecs.isEmpty() &&
+        staticBlocks.isEmpty()
     }
 
   fun toBuilder(): Builder {
@@ -191,6 +203,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     builder.constructor = constructor
     builder.functionSpecs += functionSpecs
     builder.indexableSpecs += indexableSpecs
+    builder.staticBlocks += staticBlocks
     return builder
   }
 
@@ -206,6 +219,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     internal var constructor: FunctionSpec? = null
     internal val functionSpecs = mutableListOf<FunctionSpec>()
     internal val indexableSpecs = mutableListOf<FunctionSpec>()
+    internal val staticBlocks = mutableListOf<CodeBlock>()
     internal var useConstructorPropertiesAutomatically = true
 
     fun addTSDoc(format: String, vararg args: Any) = apply {
@@ -298,6 +312,14 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
       }
       this.indexableSpecs += functionSpec
     }
+
+    /** Adds a `static { ... }` initializer block. */
+    fun addStaticBlock(codeBlock: CodeBlock) = apply {
+      this.staticBlocks += codeBlock
+    }
+
+    /** Adds a `static { ... }` initializer block. */
+    fun addStaticBlock(format: String, vararg args: Any?) = addStaticBlock(CodeBlock.of(format, *args))
 
     fun allowUsingConstructorPropertiesAutomatically(value: Boolean = true) = apply {
       this.useConstructorPropertiesAutomatically = value
