@@ -1,0 +1,107 @@
+/*
+ * Copyright 2017 Outfox, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package dk.lldata.typescriptpoet
+
+/** A generated `enum` declaration. */
+class EnumSpec
+private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(builder) {
+
+  override val name = builder.name
+  val tsDoc = builder.tsDoc.build()
+  val modifiers = builder.modifiers.toImmutableSet()
+  val constants = builder.constants.toImmutableMap()
+
+  override fun emit(codeWriter: CodeWriter) {
+    codeWriter.emitTSDoc(tsDoc)
+    codeWriter.emitModifiers(modifiers, setOf())
+    codeWriter.emitCode(CodeBlock.of("enum %L ", name))
+
+    codeWriter.emitBody(constants.isEmpty()) {
+      val i = constants.entries.iterator()
+      while (i.hasNext()) {
+        val constant = i.next()
+        codeWriter.emitCode(CodeBlock.of("%L", constant.key))
+        constant.value?.let {
+          codeWriter.emitCode(" = ")
+          codeWriter.emitCode(it)
+        }
+        // Prettier puts a trailing comma on the last constant too.
+        codeWriter.emit(",\n")
+      }
+    }
+  }
+
+  /** A builder pre-populated with this spec, for deriving a modified copy. */
+  fun toBuilder(): Builder {
+    val builder = Builder(name)
+    builder.tsDoc.add(tsDoc)
+    builder.modifiers += modifiers
+    builder.constants += constants
+    return builder
+  }
+
+  class Builder
+  internal constructor(name: String, val constants: MutableMap<String, CodeBlock?> = mutableMapOf()) :
+    TypeSpec.Builder<EnumSpec, Builder>(name) {
+
+    internal val tsDoc = CodeBlock.builder()
+    internal val modifiers = mutableListOf<Modifier>()
+
+    /** Adds TSDoc above the enum. */
+    fun addTSDoc(format: String, vararg args: Any) = apply {
+      tsDoc.add(format, *args)
+    }
+
+    /** Adds TSDoc above the enum. */
+    fun addTSDoc(block: CodeBlock) = apply {
+      tsDoc.add(block)
+    }
+
+    /** Adds modifiers: `export const enum Direction { }`. Only EXPORT, DECLARE and CONST. */
+    fun addModifiers(vararg modifiers: Modifier) = apply {
+      modifiers.forEach {
+        require(it == Modifier.EXPORT || it == Modifier.DECLARE || it == Modifier.CONST) {
+          "enums support only EXPORT, DECLARE and CONST, but was $it"
+        }
+      }
+      this.modifiers += modifiers
+    }
+
+    /** Adds a constant: `Up` or `Up = 'UP'`. */
+    @JvmOverloads
+    fun addConstant(name: String, initializer: String? = null) =
+      addConstant(name, initializer?.let { CodeBlock.of(it) })
+
+    /** Adds a constant: `Up` or `Up = 1 << 2`. */
+    fun addConstant(name: String, initializer: CodeBlock?) = apply {
+      require(name.isName) { "not a valid enum constant: $name" }
+      constants[name] = initializer
+    }
+
+    override fun build(): EnumSpec = EnumSpec(this)
+  }
+
+  companion object {
+
+    /** An enum: `enum Direction { }`. */
+    @JvmStatic
+    fun builder(name: String) = Builder(name)
+
+    /** An enum: `enum Direction { }`. */
+    @JvmStatic
+    fun builder(name: TypeName) = Builder("$name")
+  }
+}

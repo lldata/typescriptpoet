@@ -25,4 +25,4 @@ exclude:
   # where the non-capturing groups keep the composition unambiguous rather than being noise.
   - name: RegExpUnnecessaryNonCapturingGroup
     paths:
-      - src/main/java/io/outfoxx/typescriptpoet/SymbolSpec.kt
+      - src/main/kotlin/dk/lldata/typescriptpoet/SymbolSpec.kt

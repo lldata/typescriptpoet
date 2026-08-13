@@ -2,8 +2,8 @@ TypeScriptPoet
 ==========
 
 [![CI](https://github.com/lldata/typescriptpoet/actions/workflows/ci.yml/badge.svg)](https://github.com/lldata/typescriptpoet/actions/workflows/ci.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/io.outfoxx/typescriptpoet?label=Maven%20Central)][dl]
-[![License](https://img.shields.io/github/license/outfoxx/typescriptpoet?color=blue)](LICENSE.txt)
+[![Maven Central](https://img.shields.io/maven-central/v/dk.lldata/typescriptpoet?label=Maven%20Central)][dl]
+[![License](https://img.shields.io/github/license/lldata/typescriptpoet?color=blue)](LICENSE.txt)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![JVM](https://img.shields.io/badge/JVM-8%2B-437291?logo=openjdk&logoColor=white)](#download)
 [![TypeScript](https://img.shields.io/badge/emits-TypeScript%205.x-3178C6?logo=typescript&logoColor=white)](#typescript-support)
@@ -156,16 +156,16 @@ Download [the latest .jar][dl] or depend via Maven:
 
 ```xml
 <dependency>
-  <groupId>io.outfoxx</groupId>
+  <groupId>dk.lldata</groupId>
   <artifactId>typescriptpoet</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.0-alpha4</version>
 </dependency>
 ```
 
 or Gradle:
 
 ```kotlin
-implementation("io.outfoxx:typescriptpoet:2.0.0")
+implementation("dk.lldata:typescriptpoet:2.0.0-alpha4")
 ```
 
 The library has no runtime dependencies beyond the Kotlin standard library. It targets Java 8
@@ -205,9 +205,9 @@ License
     limitations under the License.
 
 
- [readme-test]: src/test/java/io/outfoxx/typescriptpoet/test/ReadmeExampleTests.kt
- [sink-src]: src/test/java/io/outfoxx/typescriptpoet/test/KitchenSink.kt
+ [readme-test]: src/test/kotlin/dk/lldata/typescriptpoet/test/ReadmeExampleTests.kt
+ [sink-src]: src/test/kotlin/dk/lldata/typescriptpoet/test/KitchenSink.kt
  [sink-out]: src/test/resources/kitchen-sink.ts
- [dl]: https://central.sonatype.com/artifact/io.outfoxx/typescriptpoet
- [kdoc]: https://outfoxx.github.io/typescriptpoet/2.0.0/index.html
+ [dl]: https://central.sonatype.com/artifact/dk.lldata/typescriptpoet
+ [kdoc]: https://lldata.github.io/typescriptpoet/2.0.0/index.html
  [javapoet]: https://github.com/square/javapoet/

@@ -22,7 +22,7 @@ val releaseVersion = project.property("releaseVersion") as String
 val isSnapshot = releaseVersion.endsWith("SNAPSHOT")
 
 
-group = "io.outfoxx"
+group = "dk.lldata"
 version = releaseVersion
 description = "A Kotlin/Java API for generating .ts source files."
 
@@ -229,37 +229,43 @@ publishing {
 
         name.set("TypeScript Poet")
         description.set("TypeScriptPoet is a Kotlin and Java API for generating .ts source files.")
-        url.set("https://github.com/outfoxx/typescriptpoet")
+        url.set("https://github.com/lldata/typescriptpoet")
 
         organization {
-          name.set("Outfox, Inc.")
-          url.set("https://outfoxx.io")
+          name.set("LL Data ApS")
+          url.set("https://lldata.dk")
         }
 
         issueManagement {
           system.set("GitHub")
-          url.set("https://github.com/outfoxx/typescriptpoet/issues")
+          url.set("https://github.com/lldata/typescriptpoet/issues")
         }
 
         licenses {
           license {
             name.set("Apache License 2.0")
-            url.set("https://raw.githubusercontent.com/outfoxx/typescriptpoet/main/LICENSE.txt")
+            url.set("https://raw.githubusercontent.com/lldata/typescriptpoet/main/LICENSE.txt")
             distribution.set("repo")
           }
         }
 
         scm {
-          url.set("https://github.com/outfoxx/typescriptpoet")
-          connection.set("scm:https://github.com/outfoxx/typescriptpoet.git")
-          developerConnection.set("scm:git@github.com:outfoxx/typescriptpoet.git")
+          url.set("https://github.com/lldata/typescriptpoet")
+          connection.set("scm:https://github.com/lldata/typescriptpoet.git")
+          developerConnection.set("scm:git@github.com:lldata/typescriptpoet.git")
         }
 
         developers {
+          // The original author, whose work this continues.
           developer {
             id.set("kdubb")
             name.set("Kevin Wooten")
             email.set("kevin@outfoxx.io")
+          }
+          developer {
+            id.set("lldata")
+            name.set("Lasse Lindgard")
+            email.set("lasse@lldata.dk")
           }
         }
 

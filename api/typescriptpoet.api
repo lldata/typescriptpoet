@@ -1,9 +1,9 @@
-public final class io/outfoxx/typescriptpoet/ClassSpec : io/outfoxx/typescriptpoet/TypeSpec {
-	public static final field Companion Lio/outfoxx/typescriptpoet/ClassSpec$Companion;
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/ClassSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun builder (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public static final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun getConstructor ()Lio/outfoxx/typescriptpoet/FunctionSpec;
+public final class dk/lldata/typescriptpoet/ClassSpec : dk/lldata/typescriptpoet/TypeSpec {
+	public static final field Companion Ldk/lldata/typescriptpoet/ClassSpec$Companion;
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/ClassSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun builder (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public static final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun getConstructor ()Ldk/lldata/typescriptpoet/FunctionSpec;
 	public final fun getDecorators ()Ljava/util/List;
 	public final fun getFunctionSpecs ()Ljava/util/List;
 	public final fun getIndexableSpecs ()Ljava/util/List;
@@ -12,137 +12,137 @@ public final class io/outfoxx/typescriptpoet/ClassSpec : io/outfoxx/typescriptpo
 	public fun getName ()Ljava/lang/String;
 	public final fun getPropertySpecs ()Ljava/util/List;
 	public final fun getStaticBlocks ()Ljava/util/List;
-	public final fun getSuperClass ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun getTsDoc ()Lio/outfoxx/typescriptpoet/CodeBlock;
+	public final fun getSuperClass ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun getTsDoc ()Ldk/lldata/typescriptpoet/CodeBlock;
 	public final fun getTypeVariables ()Ljava/util/List;
 	public final fun getUseConstructorPropertiesAutomatically ()Z
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/ClassSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/ClassSpec$Builder : io/outfoxx/typescriptpoet/TypeSpec$Builder {
+public final class dk/lldata/typescriptpoet/ClassSpec$Builder : dk/lldata/typescriptpoet/TypeSpec$Builder {
 	public fun <init> (Ljava/lang/String;)V
-	public final fun addDecorator (Lio/outfoxx/typescriptpoet/DecoratorSpec;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addDecorators (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addFunction (Lio/outfoxx/typescriptpoet/FunctionSpec;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addFunctions (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addIndexable (Lio/outfoxx/typescriptpoet/FunctionSpec;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addIndexables (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addMixin (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addMixins (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addModifiers ([Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addProperties (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addProperty (Lio/outfoxx/typescriptpoet/PropertySpec;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addProperty (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addProperty (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public static synthetic fun addProperty$default (Lio/outfoxx/typescriptpoet/ClassSpec$Builder;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addStaticBlock (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addStaticBlock (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addTSDoc (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addTypeVariable (Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun addTypeVariables (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun allowUsingConstructorPropertiesAutomatically ()Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun allowUsingConstructorPropertiesAutomatically (Z)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public static synthetic fun allowUsingConstructorPropertiesAutomatically$default (Lio/outfoxx/typescriptpoet/ClassSpec$Builder;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public fun build ()Lio/outfoxx/typescriptpoet/ClassSpec;
-	public synthetic fun build ()Lio/outfoxx/typescriptpoet/TypeSpec;
-	public final fun constructor (Lio/outfoxx/typescriptpoet/FunctionSpec;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun superClass (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
+	public final fun addDecorator (Ldk/lldata/typescriptpoet/DecoratorSpec;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addDecorators (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addFunction (Ldk/lldata/typescriptpoet/FunctionSpec;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addFunctions (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addIndexable (Ldk/lldata/typescriptpoet/FunctionSpec;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addIndexables (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addMixin (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addMixins (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addModifiers ([Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addProperties (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addProperty (Ldk/lldata/typescriptpoet/PropertySpec;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addProperty (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addProperty (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public static synthetic fun addProperty$default (Ldk/lldata/typescriptpoet/ClassSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addStaticBlock (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addStaticBlock (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addTSDoc (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addTypeVariable (Ldk/lldata/typescriptpoet/TypeName$TypeVariable;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun addTypeVariables (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun allowUsingConstructorPropertiesAutomatically ()Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun allowUsingConstructorPropertiesAutomatically (Z)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public static synthetic fun allowUsingConstructorPropertiesAutomatically$default (Ldk/lldata/typescriptpoet/ClassSpec$Builder;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public fun build ()Ldk/lldata/typescriptpoet/ClassSpec;
+	public synthetic fun build ()Ldk/lldata/typescriptpoet/TypeSpec;
+	public final fun constructor (Ldk/lldata/typescriptpoet/FunctionSpec;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun superClass (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/ClassSpec$Companion {
-	public final fun builder (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
-	public final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ClassSpec$Builder;
+public final class dk/lldata/typescriptpoet/ClassSpec$Companion {
+	public final fun builder (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/CodeBlock {
-	public static final field Companion Lio/outfoxx/typescriptpoet/CodeBlock$Companion;
+public final class dk/lldata/typescriptpoet/CodeBlock {
+	public static final field Companion Ldk/lldata/typescriptpoet/CodeBlock$Companion;
 	public synthetic fun <init> (Ljava/util/List;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun builder ()Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
-	public static final fun empty ()Lio/outfoxx/typescriptpoet/CodeBlock;
+	public static final fun builder ()Ldk/lldata/typescriptpoet/CodeBlock$Builder;
+	public static final fun empty ()Ldk/lldata/typescriptpoet/CodeBlock;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun hashCode ()I
 	public final fun isEmpty ()Z
 	public final fun isNotEmpty ()Z
-	public static final fun objectLiteral ()Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
-	public static final fun of (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
+	public static final fun objectLiteral ()Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public static final fun of (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/CodeBlock$Builder;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/CodeBlock$Builder {
+public final class dk/lldata/typescriptpoet/CodeBlock$Builder {
 	public fun <init> ()V
-	public final fun add (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
-	public final fun add (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
-	public final fun addNamed (Ljava/lang/String;Ljava/util/Map;)Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
-	public final fun addStatement (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
-	public final fun beginControlFlow (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
-	public final fun build ()Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun endControlFlow ()Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
-	public final fun indent ()Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
+	public final fun add (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/CodeBlock$Builder;
+	public final fun add (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/CodeBlock$Builder;
+	public final fun addNamed (Ljava/lang/String;Ljava/util/Map;)Ldk/lldata/typescriptpoet/CodeBlock$Builder;
+	public final fun addStatement (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/CodeBlock$Builder;
+	public final fun beginControlFlow (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/CodeBlock$Builder;
+	public final fun build ()Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun endControlFlow ()Ldk/lldata/typescriptpoet/CodeBlock$Builder;
+	public final fun indent ()Ldk/lldata/typescriptpoet/CodeBlock$Builder;
 	public final fun isEmpty ()Z
 	public final fun isNotEmpty ()Z
-	public final fun nextControlFlow (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
-	public final fun unindent ()Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
+	public final fun nextControlFlow (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/CodeBlock$Builder;
+	public final fun unindent ()Ldk/lldata/typescriptpoet/CodeBlock$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/CodeBlock$Companion {
-	public final fun builder ()Lio/outfoxx/typescriptpoet/CodeBlock$Builder;
-	public final fun empty ()Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun joinToCode (Ljava/util/Collection;)Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun joinToCode (Ljava/util/Collection;Ljava/lang/CharSequence;)Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun joinToCode (Ljava/util/Collection;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun joinToCode (Ljava/util/Collection;Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Lio/outfoxx/typescriptpoet/CodeBlock;
-	public static synthetic fun joinToCode$default (Lio/outfoxx/typescriptpoet/CodeBlock$Companion;Ljava/util/Collection;Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun objectLiteral ()Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
-	public final fun of (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/CodeBlock;
+public final class dk/lldata/typescriptpoet/CodeBlock$Companion {
+	public final fun builder ()Ldk/lldata/typescriptpoet/CodeBlock$Builder;
+	public final fun empty ()Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun joinToCode (Ljava/util/Collection;)Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun joinToCode (Ljava/util/Collection;Ljava/lang/CharSequence;)Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun joinToCode (Ljava/util/Collection;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun joinToCode (Ljava/util/Collection;Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ldk/lldata/typescriptpoet/CodeBlock;
+	public static synthetic fun joinToCode$default (Ldk/lldata/typescriptpoet/CodeBlock$Companion;Ljava/util/Collection;Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun objectLiteral ()Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public final fun of (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/CodeBlock;
 }
 
-public final class io/outfoxx/typescriptpoet/DecoratorSpec : io/outfoxx/typescriptpoet/Taggable {
-	public static final field Companion Lio/outfoxx/typescriptpoet/DecoratorSpec$Companion;
-	public static final fun builder (Lio/outfoxx/typescriptpoet/SymbolSpec;)Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
-	public static final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
+public final class dk/lldata/typescriptpoet/DecoratorSpec : dk/lldata/typescriptpoet/Taggable {
+	public static final field Companion Ldk/lldata/typescriptpoet/DecoratorSpec$Companion;
+	public static final fun builder (Ldk/lldata/typescriptpoet/SymbolSpec;)Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
+	public static final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
 	public final fun getFactory ()Ljava/lang/Boolean;
-	public final fun getName ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public final fun getName ()Ldk/lldata/typescriptpoet/SymbolSpec;
 	public final fun getParameters ()Ljava/util/List;
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/DecoratorSpec$Builder : io/outfoxx/typescriptpoet/Taggable$Builder {
-	public final fun addParameter (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
-	public final fun addParameter (Ljava/lang/String;Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
-	public final fun addParameter (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
-	public final fun addParameter (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
-	public static synthetic fun addParameter$default (Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;Ljava/lang/String;Lio/outfoxx/typescriptpoet/CodeBlock;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
-	public static synthetic fun addParameter$default (Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
-	public final fun asFactory ()Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
-	public final fun build ()Lio/outfoxx/typescriptpoet/DecoratorSpec;
-	public final fun getName ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+public final class dk/lldata/typescriptpoet/DecoratorSpec$Builder : dk/lldata/typescriptpoet/Taggable$Builder {
+	public final fun addParameter (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
+	public final fun addParameter (Ljava/lang/String;Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
+	public final fun addParameter (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
+	public final fun addParameter (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
+	public static synthetic fun addParameter$default (Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/CodeBlock;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
+	public static synthetic fun addParameter$default (Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
+	public final fun asFactory ()Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
+	public final fun build ()Ldk/lldata/typescriptpoet/DecoratorSpec;
+	public final fun getName ()Ldk/lldata/typescriptpoet/SymbolSpec;
 }
 
-public final class io/outfoxx/typescriptpoet/DecoratorSpec$Companion {
-	public final fun builder (Lio/outfoxx/typescriptpoet/SymbolSpec;)Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
-	public final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/DecoratorSpec$Builder;
+public final class dk/lldata/typescriptpoet/DecoratorSpec$Companion {
+	public final fun builder (Ldk/lldata/typescriptpoet/SymbolSpec;)Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
+	public final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/DecoratorSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/Destructure {
-	public final fun component1 ()Lio/outfoxx/typescriptpoet/Destructure$Kind;
+public final class dk/lldata/typescriptpoet/Destructure {
+	public final fun component1 ()Ldk/lldata/typescriptpoet/Destructure$Kind;
 	public final fun component2 ()Ljava/util/List;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getBindings ()Ljava/util/List;
-	public final fun getKind ()Lio/outfoxx/typescriptpoet/Destructure$Kind;
+	public final fun getKind ()Ldk/lldata/typescriptpoet/Destructure$Kind;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/Destructure$Binding {
+public final class dk/lldata/typescriptpoet/Destructure$Binding {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/Destructure$Binding;
-	public static synthetic fun copy$default (Lio/outfoxx/typescriptpoet/Destructure$Binding;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/Destructure$Binding;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/Destructure$Binding;
+	public static synthetic fun copy$default (Ldk/lldata/typescriptpoet/Destructure$Binding;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/Destructure$Binding;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAlias ()Ljava/lang/String;
 	public final fun getName ()Ljava/lang/String;
@@ -150,102 +150,102 @@ public final class io/outfoxx/typescriptpoet/Destructure$Binding {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/Destructure$Kind : java/lang/Enum {
-	public static final field ARRAY Lio/outfoxx/typescriptpoet/Destructure$Kind;
-	public static final field OBJECT Lio/outfoxx/typescriptpoet/Destructure$Kind;
+public final class dk/lldata/typescriptpoet/Destructure$Kind : java/lang/Enum {
+	public static final field ARRAY Ldk/lldata/typescriptpoet/Destructure$Kind;
+	public static final field OBJECT Ldk/lldata/typescriptpoet/Destructure$Kind;
 	public final fun getClose ()Ljava/lang/String;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getOpen ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/Destructure$Kind;
-	public static fun values ()[Lio/outfoxx/typescriptpoet/Destructure$Kind;
+	public static fun valueOf (Ljava/lang/String;)Ldk/lldata/typescriptpoet/Destructure$Kind;
+	public static fun values ()[Ldk/lldata/typescriptpoet/Destructure$Kind;
 }
 
-public final class io/outfoxx/typescriptpoet/EnumSpec : io/outfoxx/typescriptpoet/TypeSpec {
-	public static final field Companion Lio/outfoxx/typescriptpoet/EnumSpec$Companion;
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/EnumSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun builder (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
-	public static final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
+public final class dk/lldata/typescriptpoet/EnumSpec : dk/lldata/typescriptpoet/TypeSpec {
+	public static final field Companion Ldk/lldata/typescriptpoet/EnumSpec$Companion;
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/EnumSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun builder (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
+	public static final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
 	public final fun getConstants ()Ljava/util/Map;
 	public final fun getModifiers ()Ljava/util/Set;
 	public fun getName ()Ljava/lang/String;
-	public final fun getTsDoc ()Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
+	public final fun getTsDoc ()Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/EnumSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/EnumSpec$Builder : io/outfoxx/typescriptpoet/TypeSpec$Builder {
-	public final fun addConstant (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
-	public final fun addConstant (Ljava/lang/String;Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
-	public final fun addConstant (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
-	public static synthetic fun addConstant$default (Lio/outfoxx/typescriptpoet/EnumSpec$Builder;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
-	public final fun addModifiers ([Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
-	public final fun addTSDoc (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
-	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
-	public fun build ()Lio/outfoxx/typescriptpoet/EnumSpec;
-	public synthetic fun build ()Lio/outfoxx/typescriptpoet/TypeSpec;
+public final class dk/lldata/typescriptpoet/EnumSpec$Builder : dk/lldata/typescriptpoet/TypeSpec$Builder {
+	public final fun addConstant (Ljava/lang/String;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
+	public final fun addConstant (Ljava/lang/String;Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
+	public final fun addConstant (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
+	public static synthetic fun addConstant$default (Ldk/lldata/typescriptpoet/EnumSpec$Builder;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
+	public final fun addModifiers ([Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
+	public final fun addTSDoc (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
+	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
+	public fun build ()Ldk/lldata/typescriptpoet/EnumSpec;
+	public synthetic fun build ()Ldk/lldata/typescriptpoet/TypeSpec;
 	public final fun getConstants ()Ljava/util/Map;
 }
 
-public final class io/outfoxx/typescriptpoet/EnumSpec$Companion {
-	public final fun builder (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
-	public final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/EnumSpec$Builder;
+public final class dk/lldata/typescriptpoet/EnumSpec$Companion {
+	public final fun builder (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
+	public final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/EnumSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/ExportSpec {
-	public static final field Companion Lio/outfoxx/typescriptpoet/ExportSpec$Companion;
-	public static final fun all (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static final fun all (Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static final fun allAs (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static final fun allAs (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static final fun default (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static final fun default (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static final fun exportEquals (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static final fun exportEquals (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static final fun name (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec$Name;
-	public static final fun name (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec$Name;
-	public static final fun named (Ljava/util/List;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static final fun named (Ljava/util/List;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static final fun named (Ljava/util/List;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/ExportSpec;
+public final class dk/lldata/typescriptpoet/ExportSpec {
+	public static final field Companion Ldk/lldata/typescriptpoet/ExportSpec$Companion;
+	public static final fun all (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static final fun all (Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static final fun allAs (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static final fun allAs (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static final fun default (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static final fun default (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static final fun exportEquals (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static final fun exportEquals (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static final fun name (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec$Name;
+	public static final fun name (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec$Name;
+	public static final fun named (Ljava/util/List;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static final fun named (Ljava/util/List;Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static final fun named (Ljava/util/List;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/ExportSpec;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/ExportSpec$Companion {
-	public final fun all (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public final fun all (Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static synthetic fun all$default (Lio/outfoxx/typescriptpoet/ExportSpec$Companion;Ljava/lang/String;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public final fun allAs (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public final fun allAs (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static synthetic fun allAs$default (Lio/outfoxx/typescriptpoet/ExportSpec$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public final fun default (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public final fun default (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public final fun exportEquals (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public final fun exportEquals (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public final fun name (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec$Name;
-	public final fun name (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec$Name;
-	public static synthetic fun name$default (Lio/outfoxx/typescriptpoet/ExportSpec$Companion;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ExportSpec$Name;
-	public final fun named (Ljava/util/List;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public final fun named (Ljava/util/List;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public final fun named (Ljava/util/List;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/ExportSpec;
-	public static synthetic fun named$default (Lio/outfoxx/typescriptpoet/ExportSpec$Companion;Ljava/util/List;Ljava/lang/String;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ExportSpec;
+public final class dk/lldata/typescriptpoet/ExportSpec$Companion {
+	public final fun all (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public final fun all (Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static synthetic fun all$default (Ldk/lldata/typescriptpoet/ExportSpec$Companion;Ljava/lang/String;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public final fun allAs (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public final fun allAs (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static synthetic fun allAs$default (Ldk/lldata/typescriptpoet/ExportSpec$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public final fun default (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public final fun default (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public final fun exportEquals (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public final fun exportEquals (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public final fun name (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec$Name;
+	public final fun name (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec$Name;
+	public static synthetic fun name$default (Ldk/lldata/typescriptpoet/ExportSpec$Companion;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ExportSpec$Name;
+	public final fun named (Ljava/util/List;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public final fun named (Ljava/util/List;Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec;
+	public final fun named (Ljava/util/List;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/ExportSpec;
+	public static synthetic fun named$default (Ldk/lldata/typescriptpoet/ExportSpec$Companion;Ljava/util/List;Ljava/lang/String;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/ExportSpec;
 }
 
-public final class io/outfoxx/typescriptpoet/ExportSpec$Kind : java/lang/Enum {
-	public static final field ALL Lio/outfoxx/typescriptpoet/ExportSpec$Kind;
-	public static final field ALL_AS Lio/outfoxx/typescriptpoet/ExportSpec$Kind;
-	public static final field DEFAULT Lio/outfoxx/typescriptpoet/ExportSpec$Kind;
-	public static final field EQUALS Lio/outfoxx/typescriptpoet/ExportSpec$Kind;
-	public static final field NAMED Lio/outfoxx/typescriptpoet/ExportSpec$Kind;
+public final class dk/lldata/typescriptpoet/ExportSpec$Kind : java/lang/Enum {
+	public static final field ALL Ldk/lldata/typescriptpoet/ExportSpec$Kind;
+	public static final field ALL_AS Ldk/lldata/typescriptpoet/ExportSpec$Kind;
+	public static final field DEFAULT Ldk/lldata/typescriptpoet/ExportSpec$Kind;
+	public static final field EQUALS Ldk/lldata/typescriptpoet/ExportSpec$Kind;
+	public static final field NAMED Ldk/lldata/typescriptpoet/ExportSpec$Kind;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec$Kind;
-	public static fun values ()[Lio/outfoxx/typescriptpoet/ExportSpec$Kind;
+	public static fun valueOf (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec$Kind;
+	public static fun values ()[Ldk/lldata/typescriptpoet/ExportSpec$Kind;
 }
 
-public final class io/outfoxx/typescriptpoet/ExportSpec$Name {
+public final class dk/lldata/typescriptpoet/ExportSpec$Name {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ExportSpec$Name;
-	public static synthetic fun copy$default (Lio/outfoxx/typescriptpoet/ExportSpec$Name;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ExportSpec$Name;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/ExportSpec$Name;
+	public static synthetic fun copy$default (Ldk/lldata/typescriptpoet/ExportSpec$Name;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ExportSpec$Name;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAlias ()Ljava/lang/String;
 	public final fun getName ()Ljava/lang/String;
@@ -253,85 +253,85 @@ public final class io/outfoxx/typescriptpoet/ExportSpec$Name {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/FileModules {
-	public static final field INSTANCE Lio/outfoxx/typescriptpoet/FileModules;
+public final class dk/lldata/typescriptpoet/FileModules {
+	public static final field INSTANCE Ldk/lldata/typescriptpoet/FileModules;
 	public final fun importPath (Ljava/nio/file/Path;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/FileSpec : io/outfoxx/typescriptpoet/Taggable {
-	public static final field Companion Lio/outfoxx/typescriptpoet/FileSpec$Companion;
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/FileSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
+public final class dk/lldata/typescriptpoet/FileSpec : dk/lldata/typescriptpoet/Taggable {
+	public static final field Companion Ldk/lldata/typescriptpoet/FileSpec$Companion;
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/FileSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
 	public fun equals (Ljava/lang/Object;)Z
-	public static final fun get (Lio/outfoxx/typescriptpoet/ModuleSpec;)Lio/outfoxx/typescriptpoet/FileSpec;
-	public static final fun get (Lio/outfoxx/typescriptpoet/ModuleSpec;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/FileSpec;
-	public static final fun get (Lio/outfoxx/typescriptpoet/TypeSpec;)Lio/outfoxx/typescriptpoet/FileSpec;
-	public static final fun get (Lio/outfoxx/typescriptpoet/TypeSpec;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/FileSpec;
-	public final fun getComment ()Lio/outfoxx/typescriptpoet/CodeBlock;
+	public static final fun get (Ldk/lldata/typescriptpoet/ModuleSpec;)Ldk/lldata/typescriptpoet/FileSpec;
+	public static final fun get (Ldk/lldata/typescriptpoet/ModuleSpec;Ljava/lang/String;)Ldk/lldata/typescriptpoet/FileSpec;
+	public static final fun get (Ldk/lldata/typescriptpoet/TypeSpec;)Ldk/lldata/typescriptpoet/FileSpec;
+	public static final fun get (Ldk/lldata/typescriptpoet/TypeSpec;Ljava/lang/String;)Ldk/lldata/typescriptpoet/FileSpec;
+	public final fun getComment ()Ldk/lldata/typescriptpoet/CodeBlock;
 	public final fun getIndent ()Ljava/lang/String;
 	public final fun getMembers ()Ljava/util/List;
 	public final fun getModulePath ()Ljava/lang/String;
 	public fun hashCode ()I
 	public final fun isEmpty ()Z
 	public final fun isNotEmpty ()Z
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/FileSpec$Builder;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/FileSpec$Builder;
 	public fun toString ()Ljava/lang/String;
 	public final fun writeTo (Ljava/io/File;)V
 	public final fun writeTo (Ljava/lang/Appendable;)V
 	public final fun writeTo (Ljava/lang/Appendable;Ljava/nio/file/Path;)V
 	public final fun writeTo (Ljava/nio/file/Path;)V
-	public static synthetic fun writeTo$default (Lio/outfoxx/typescriptpoet/FileSpec;Ljava/lang/Appendable;Ljava/nio/file/Path;ILjava/lang/Object;)V
+	public static synthetic fun writeTo$default (Ldk/lldata/typescriptpoet/FileSpec;Ljava/lang/Appendable;Ljava/nio/file/Path;ILjava/lang/Object;)V
 }
 
-public final class io/outfoxx/typescriptpoet/FileSpec$Builder : io/outfoxx/typescriptpoet/Taggable$Builder {
-	public final fun addClass (Lio/outfoxx/typescriptpoet/ClassSpec;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun addCode (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun addComment (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun addEnum (Lio/outfoxx/typescriptpoet/EnumSpec;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun addExport (Lio/outfoxx/typescriptpoet/ExportSpec;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun addFunction (Lio/outfoxx/typescriptpoet/FunctionSpec;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun addInterface (Lio/outfoxx/typescriptpoet/InterfaceSpec;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun addModule (Lio/outfoxx/typescriptpoet/ModuleSpec;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun addProperty (Lio/outfoxx/typescriptpoet/PropertySpec;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun addType (Lio/outfoxx/typescriptpoet/TypeSpec;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun addTypeAlias (Lio/outfoxx/typescriptpoet/TypeAliasSpec;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun build ()Lio/outfoxx/typescriptpoet/FileSpec;
-	public final fun indent (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
+public final class dk/lldata/typescriptpoet/FileSpec$Builder : dk/lldata/typescriptpoet/Taggable$Builder {
+	public final fun addClass (Ldk/lldata/typescriptpoet/ClassSpec;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun addCode (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun addComment (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun addEnum (Ldk/lldata/typescriptpoet/EnumSpec;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun addExport (Ldk/lldata/typescriptpoet/ExportSpec;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun addFunction (Ldk/lldata/typescriptpoet/FunctionSpec;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun addInterface (Ldk/lldata/typescriptpoet/InterfaceSpec;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun addModule (Ldk/lldata/typescriptpoet/ModuleSpec;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun addProperty (Ldk/lldata/typescriptpoet/PropertySpec;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun addType (Ldk/lldata/typescriptpoet/TypeSpec;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun addTypeAlias (Ldk/lldata/typescriptpoet/TypeAliasSpec;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun build ()Ldk/lldata/typescriptpoet/FileSpec;
+	public final fun indent (Ljava/lang/String;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
 	public final fun isEmpty ()Z
 	public final fun isNotEmpty ()Z
 }
 
-public final class io/outfoxx/typescriptpoet/FileSpec$Companion {
-	public final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/FileSpec$Builder;
-	public final fun get (Lio/outfoxx/typescriptpoet/ModuleSpec;)Lio/outfoxx/typescriptpoet/FileSpec;
-	public final fun get (Lio/outfoxx/typescriptpoet/ModuleSpec;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/FileSpec;
-	public final fun get (Lio/outfoxx/typescriptpoet/TypeSpec;)Lio/outfoxx/typescriptpoet/FileSpec;
-	public final fun get (Lio/outfoxx/typescriptpoet/TypeSpec;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/FileSpec;
-	public static synthetic fun get$default (Lio/outfoxx/typescriptpoet/FileSpec$Companion;Lio/outfoxx/typescriptpoet/ModuleSpec;Ljava/lang/String;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/FileSpec;
-	public static synthetic fun get$default (Lio/outfoxx/typescriptpoet/FileSpec$Companion;Lio/outfoxx/typescriptpoet/TypeSpec;Ljava/lang/String;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/FileSpec;
+public final class dk/lldata/typescriptpoet/FileSpec$Companion {
+	public final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public final fun get (Ldk/lldata/typescriptpoet/ModuleSpec;)Ldk/lldata/typescriptpoet/FileSpec;
+	public final fun get (Ldk/lldata/typescriptpoet/ModuleSpec;Ljava/lang/String;)Ldk/lldata/typescriptpoet/FileSpec;
+	public final fun get (Ldk/lldata/typescriptpoet/TypeSpec;)Ldk/lldata/typescriptpoet/FileSpec;
+	public final fun get (Ldk/lldata/typescriptpoet/TypeSpec;Ljava/lang/String;)Ldk/lldata/typescriptpoet/FileSpec;
+	public static synthetic fun get$default (Ldk/lldata/typescriptpoet/FileSpec$Companion;Ldk/lldata/typescriptpoet/ModuleSpec;Ljava/lang/String;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/FileSpec;
+	public static synthetic fun get$default (Ldk/lldata/typescriptpoet/FileSpec$Companion;Ldk/lldata/typescriptpoet/TypeSpec;Ljava/lang/String;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/FileSpec;
 }
 
-public final class io/outfoxx/typescriptpoet/FunctionSpec : io/outfoxx/typescriptpoet/Taggable {
-	public static final field Companion Lio/outfoxx/typescriptpoet/FunctionSpec$Companion;
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun abstract ()Lio/outfoxx/typescriptpoet/FunctionSpec;
-	public static final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public static final fun callableBuilder ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public static final fun constructorBuilder ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
+public final class dk/lldata/typescriptpoet/FunctionSpec : dk/lldata/typescriptpoet/Taggable {
+	public static final field Companion Ldk/lldata/typescriptpoet/FunctionSpec$Companion;
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun abstract ()Ldk/lldata/typescriptpoet/FunctionSpec;
+	public static final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public static final fun callableBuilder ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public static final fun constructorBuilder ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getBody ()Lio/outfoxx/typescriptpoet/CodeBlock;
+	public final fun getBody ()Ldk/lldata/typescriptpoet/CodeBlock;
 	public final fun getDecorators ()Ljava/util/List;
 	public final fun getModifiers ()Ljava/util/Set;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getParameters ()Ljava/util/List;
-	public final fun getRestParameter ()Lio/outfoxx/typescriptpoet/ParameterSpec;
-	public final fun getReturnType ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun getThisParameterType ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun getTsDoc ()Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun getTypePredicate ()Lio/outfoxx/typescriptpoet/TypePredicate;
+	public final fun getRestParameter ()Ldk/lldata/typescriptpoet/ParameterSpec;
+	public final fun getReturnType ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun getThisParameterType ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun getTsDoc ()Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun getTypePredicate ()Ldk/lldata/typescriptpoet/TypePredicate;
 	public final fun getTypeVariables ()Ljava/util/List;
 	public fun hashCode ()I
-	public static final fun indexableBuilder ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
+	public static final fun indexableBuilder ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
 	public final fun isAccessor ()Z
 	public final fun isArrow ()Z
 	public final fun isCallable ()Z
@@ -339,597 +339,597 @@ public final class io/outfoxx/typescriptpoet/FunctionSpec : io/outfoxx/typescrip
 	public final fun isGenerator ()Z
 	public final fun isIndexable ()Z
 	public final fun isSignatureOnly ()Z
-	public static final fun overloads (Ljava/util/List;Lio/outfoxx/typescriptpoet/FunctionSpec;)Ljava/util/List;
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
+	public static final fun overloads (Ljava/util/List;Ldk/lldata/typescriptpoet/FunctionSpec;)Ljava/util/List;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/FunctionSpec$Builder : io/outfoxx/typescriptpoet/Taggable$Builder {
-	public final fun addCode (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addCode (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addComment (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addDecorator (Lio/outfoxx/typescriptpoet/DecoratorSpec;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addDecorators (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addModifiers (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addModifiers ([Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addNamedCode (Ljava/lang/String;Ljava/util/Map;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addParameter (Lio/outfoxx/typescriptpoet/ParameterSpec;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addParameter (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/CodeBlock;[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addParameter (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;ZLio/outfoxx/typescriptpoet/CodeBlock;[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addParameter (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addParameter (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public static synthetic fun addParameter$default (Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;ZLio/outfoxx/typescriptpoet/CodeBlock;[Lio/outfoxx/typescriptpoet/Modifier;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public static synthetic fun addParameter$default (Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addParameters (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addStatement (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addTSDoc (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addTypeVariable (Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun addTypeVariables (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun arrow ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun arrow (Z)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public static synthetic fun arrow$default (Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun beginControlFlow (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun build ()Lio/outfoxx/typescriptpoet/FunctionSpec;
-	public final fun endControlFlow ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun generator ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun generator (Z)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public static synthetic fun generator$default (Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun nextControlFlow (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun restParameter (Lio/outfoxx/typescriptpoet/ParameterSpec;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun restParameter (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun returns (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun returnsAsserts (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun returnsAsserts (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public static synthetic fun returnsAsserts$default (Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun returnsIs (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun signatureOnly ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun signatureOnly (Z)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public static synthetic fun signatureOnly$default (Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun thisParameter (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
+public final class dk/lldata/typescriptpoet/FunctionSpec$Builder : dk/lldata/typescriptpoet/Taggable$Builder {
+	public final fun addCode (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addCode (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addComment (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addDecorator (Ldk/lldata/typescriptpoet/DecoratorSpec;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addDecorators (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addModifiers (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addModifiers ([Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addNamedCode (Ljava/lang/String;Ljava/util/Map;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addParameter (Ldk/lldata/typescriptpoet/ParameterSpec;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addParameter (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/CodeBlock;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addParameter (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addParameter (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addParameter (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public static synthetic fun addParameter$default (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;[Ldk/lldata/typescriptpoet/Modifier;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public static synthetic fun addParameter$default (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addParameters (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addStatement (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addTSDoc (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addTypeVariable (Ldk/lldata/typescriptpoet/TypeName$TypeVariable;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun addTypeVariables (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun arrow ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun arrow (Z)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public static synthetic fun arrow$default (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun beginControlFlow (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun build ()Ldk/lldata/typescriptpoet/FunctionSpec;
+	public final fun endControlFlow ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun generator ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun generator (Z)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public static synthetic fun generator$default (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun nextControlFlow (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun restParameter (Ldk/lldata/typescriptpoet/ParameterSpec;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun restParameter (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun returns (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun returnsAsserts (Ljava/lang/String;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun returnsAsserts (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public static synthetic fun returnsAsserts$default (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun returnsIs (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun signatureOnly ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun signatureOnly (Z)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public static synthetic fun signatureOnly$default (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun thisParameter (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/FunctionSpec$Companion {
-	public final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun callableBuilder ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun constructorBuilder ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun indexableBuilder ()Lio/outfoxx/typescriptpoet/FunctionSpec$Builder;
-	public final fun overloads (Ljava/util/List;Lio/outfoxx/typescriptpoet/FunctionSpec;)Ljava/util/List;
+public final class dk/lldata/typescriptpoet/FunctionSpec$Companion {
+	public final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun callableBuilder ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun constructorBuilder ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun indexableBuilder ()Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
+	public final fun overloads (Ljava/util/List;Ldk/lldata/typescriptpoet/FunctionSpec;)Ljava/util/List;
 }
 
-public final class io/outfoxx/typescriptpoet/InterfaceSpec : io/outfoxx/typescriptpoet/TypeSpec {
-	public static final field Companion Lio/outfoxx/typescriptpoet/InterfaceSpec$Companion;
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun builder (Lio/outfoxx/typescriptpoet/ClassSpec;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public static final fun builder (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public static final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun getCallable ()Lio/outfoxx/typescriptpoet/FunctionSpec;
+public final class dk/lldata/typescriptpoet/InterfaceSpec : dk/lldata/typescriptpoet/TypeSpec {
+	public static final field Companion Ldk/lldata/typescriptpoet/InterfaceSpec$Companion;
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun builder (Ldk/lldata/typescriptpoet/ClassSpec;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public static final fun builder (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public static final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun getCallable ()Ldk/lldata/typescriptpoet/FunctionSpec;
 	public final fun getFunctionSpecs ()Ljava/util/List;
 	public final fun getIndexableSpecs ()Ljava/util/List;
 	public final fun getModifiers ()Ljava/util/Set;
 	public fun getName ()Ljava/lang/String;
 	public final fun getPropertySpecs ()Ljava/util/List;
 	public final fun getSuperInterfaces ()Ljava/util/List;
-	public final fun getTsDoc ()Lio/outfoxx/typescriptpoet/CodeBlock;
+	public final fun getTsDoc ()Ldk/lldata/typescriptpoet/CodeBlock;
 	public final fun getTypeVariables ()Ljava/util/List;
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/InterfaceSpec$Builder : io/outfoxx/typescriptpoet/TypeSpec$Builder {
+public final class dk/lldata/typescriptpoet/InterfaceSpec$Builder : dk/lldata/typescriptpoet/TypeSpec$Builder {
 	public fun <init> (Ljava/lang/String;)V
-	public final fun addFunction (Lio/outfoxx/typescriptpoet/FunctionSpec;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addFunctions (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addIndexable (Lio/outfoxx/typescriptpoet/FunctionSpec;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addIndexables (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addModifiers ([Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addProperties (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addProperty (Lio/outfoxx/typescriptpoet/PropertySpec;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addProperty (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addProperty (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public static synthetic fun addProperty$default (Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addSuperInterface (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addTSDoc (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addTypeVariable (Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun addTypeVariables (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public fun build ()Lio/outfoxx/typescriptpoet/InterfaceSpec;
-	public synthetic fun build ()Lio/outfoxx/typescriptpoet/TypeSpec;
-	public final fun callable (Lio/outfoxx/typescriptpoet/FunctionSpec;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addFunction (Ldk/lldata/typescriptpoet/FunctionSpec;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addFunctions (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addIndexable (Ldk/lldata/typescriptpoet/FunctionSpec;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addIndexables (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addModifiers ([Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addProperties (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addProperty (Ldk/lldata/typescriptpoet/PropertySpec;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addProperty (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addProperty (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public static synthetic fun addProperty$default (Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addSuperInterface (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addTSDoc (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addTypeVariable (Ldk/lldata/typescriptpoet/TypeName$TypeVariable;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun addTypeVariables (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public fun build ()Ldk/lldata/typescriptpoet/InterfaceSpec;
+	public synthetic fun build ()Ldk/lldata/typescriptpoet/TypeSpec;
+	public final fun callable (Ldk/lldata/typescriptpoet/FunctionSpec;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/InterfaceSpec$Companion {
-	public final fun builder (Lio/outfoxx/typescriptpoet/ClassSpec;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun builder (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
-	public final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/InterfaceSpec$Builder;
+public final class dk/lldata/typescriptpoet/InterfaceSpec$Companion {
+	public final fun builder (Ldk/lldata/typescriptpoet/ClassSpec;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun builder (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
+	public final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/Modifier : java/lang/Enum {
-	public static final field ABSTRACT Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field ACCESSOR Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field ASYNC Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field CONST Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field DECLARE Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field DEFAULT Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field EXPORT Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field GET Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field LET Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field OVERRIDE Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field PRIVATE Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field PROTECTED Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field PUBLIC Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field READONLY Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field SET Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field STATIC Lio/outfoxx/typescriptpoet/Modifier;
-	public static final field VAR Lio/outfoxx/typescriptpoet/Modifier;
+public final class dk/lldata/typescriptpoet/Modifier : java/lang/Enum {
+	public static final field ABSTRACT Ldk/lldata/typescriptpoet/Modifier;
+	public static final field ACCESSOR Ldk/lldata/typescriptpoet/Modifier;
+	public static final field ASYNC Ldk/lldata/typescriptpoet/Modifier;
+	public static final field CONST Ldk/lldata/typescriptpoet/Modifier;
+	public static final field DECLARE Ldk/lldata/typescriptpoet/Modifier;
+	public static final field DEFAULT Ldk/lldata/typescriptpoet/Modifier;
+	public static final field EXPORT Ldk/lldata/typescriptpoet/Modifier;
+	public static final field GET Ldk/lldata/typescriptpoet/Modifier;
+	public static final field LET Ldk/lldata/typescriptpoet/Modifier;
+	public static final field OVERRIDE Ldk/lldata/typescriptpoet/Modifier;
+	public static final field PRIVATE Ldk/lldata/typescriptpoet/Modifier;
+	public static final field PROTECTED Ldk/lldata/typescriptpoet/Modifier;
+	public static final field PUBLIC Ldk/lldata/typescriptpoet/Modifier;
+	public static final field READONLY Ldk/lldata/typescriptpoet/Modifier;
+	public static final field SET Ldk/lldata/typescriptpoet/Modifier;
+	public static final field STATIC Ldk/lldata/typescriptpoet/Modifier;
+	public static final field VAR Ldk/lldata/typescriptpoet/Modifier;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getKeyword ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/Modifier;
-	public static fun values ()[Lio/outfoxx/typescriptpoet/Modifier;
+	public static fun valueOf (Ljava/lang/String;)Ldk/lldata/typescriptpoet/Modifier;
+	public static fun values ()[Ldk/lldata/typescriptpoet/Modifier;
 }
 
-public final class io/outfoxx/typescriptpoet/ModuleSpec : io/outfoxx/typescriptpoet/Taggable {
-	public static final field Companion Lio/outfoxx/typescriptpoet/ModuleSpec$Companion;
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun builder (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public static final fun builder (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public static final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public static final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun getKind ()Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;
+public final class dk/lldata/typescriptpoet/ModuleSpec : dk/lldata/typescriptpoet/Taggable {
+	public static final field Companion Ldk/lldata/typescriptpoet/ModuleSpec$Companion;
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/ModuleSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun builder (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public static final fun builder (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/ModuleSpec$Kind;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public static final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public static final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/ModuleSpec$Kind;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun getKind ()Ldk/lldata/typescriptpoet/ModuleSpec$Kind;
 	public final fun getMembers ()Ljava/util/List;
 	public final fun getModifiers ()Ljava/util/List;
 	public final fun getName ()Ljava/lang/String;
-	public final fun getTsDoc ()Lio/outfoxx/typescriptpoet/CodeBlock;
+	public final fun getTsDoc ()Ldk/lldata/typescriptpoet/CodeBlock;
 	public final fun isEmpty ()Z
 	public final fun isNotEmpty ()Z
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
 	public fun toString ()Ljava/lang/String;
 }
 
-public class io/outfoxx/typescriptpoet/ModuleSpec$Builder : io/outfoxx/typescriptpoet/Taggable$Builder {
-	public final fun addClass (Lio/outfoxx/typescriptpoet/ClassSpec;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addCode (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addEnum (Lio/outfoxx/typescriptpoet/EnumSpec;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addFunction (Lio/outfoxx/typescriptpoet/FunctionSpec;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addInterface (Lio/outfoxx/typescriptpoet/InterfaceSpec;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addModifier (Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addModule (Lio/outfoxx/typescriptpoet/ModuleSpec;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addProperty (Lio/outfoxx/typescriptpoet/PropertySpec;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addTSDoc (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addType (Lio/outfoxx/typescriptpoet/TypeSpec;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun addTypeAlias (Lio/outfoxx/typescriptpoet/TypeAliasSpec;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun build ()Lio/outfoxx/typescriptpoet/ModuleSpec;
+public class dk/lldata/typescriptpoet/ModuleSpec$Builder : dk/lldata/typescriptpoet/Taggable$Builder {
+	public final fun addClass (Ldk/lldata/typescriptpoet/ClassSpec;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addCode (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addEnum (Ldk/lldata/typescriptpoet/EnumSpec;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addFunction (Ldk/lldata/typescriptpoet/FunctionSpec;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addInterface (Ldk/lldata/typescriptpoet/InterfaceSpec;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addModifier (Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addModule (Ldk/lldata/typescriptpoet/ModuleSpec;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addProperty (Ldk/lldata/typescriptpoet/PropertySpec;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addTSDoc (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addType (Ldk/lldata/typescriptpoet/TypeSpec;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun addTypeAlias (Ldk/lldata/typescriptpoet/TypeAliasSpec;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun build ()Ldk/lldata/typescriptpoet/ModuleSpec;
 	public final fun isEmpty ()Z
 	public final fun isNotEmpty ()Z
 }
 
-public final class io/outfoxx/typescriptpoet/ModuleSpec$Companion {
-	public final fun builder (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun builder (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun builder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public static synthetic fun builder$default (Lio/outfoxx/typescriptpoet/ModuleSpec$Companion;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
-	public static synthetic fun builder$default (Lio/outfoxx/typescriptpoet/ModuleSpec$Companion;Ljava/lang/String;Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ModuleSpec$Builder;
+public final class dk/lldata/typescriptpoet/ModuleSpec$Companion {
+	public final fun builder (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun builder (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/ModuleSpec$Kind;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun builder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/ModuleSpec$Kind;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public static synthetic fun builder$default (Ldk/lldata/typescriptpoet/ModuleSpec$Companion;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/ModuleSpec$Kind;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public static synthetic fun builder$default (Ldk/lldata/typescriptpoet/ModuleSpec$Companion;Ljava/lang/String;Ldk/lldata/typescriptpoet/ModuleSpec$Kind;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/ModuleSpec$Kind : java/lang/Enum {
-	public static final field MODULE Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;
-	public static final field NAMESPACE Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;
+public final class dk/lldata/typescriptpoet/ModuleSpec$Kind : java/lang/Enum {
+	public static final field MODULE Ldk/lldata/typescriptpoet/ModuleSpec$Kind;
+	public static final field NAMESPACE Ldk/lldata/typescriptpoet/ModuleSpec$Kind;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getKeyword ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;
-	public static fun values ()[Lio/outfoxx/typescriptpoet/ModuleSpec$Kind;
+	public static fun valueOf (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ModuleSpec$Kind;
+	public static fun values ()[Ldk/lldata/typescriptpoet/ModuleSpec$Kind;
 }
 
-public final class io/outfoxx/typescriptpoet/NameAllocator {
+public final class dk/lldata/typescriptpoet/NameAllocator {
 	public fun <init> ()V
-	public final fun copy ()Lio/outfoxx/typescriptpoet/NameAllocator;
+	public final fun copy ()Ldk/lldata/typescriptpoet/NameAllocator;
 	public final fun get (Ljava/lang/Object;)Ljava/lang/String;
 	public final fun newName (Ljava/lang/String;)Ljava/lang/String;
 	public final fun newName (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
-	public static synthetic fun newName$default (Lio/outfoxx/typescriptpoet/NameAllocator;Ljava/lang/String;Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/String;
+	public static synthetic fun newName$default (Ldk/lldata/typescriptpoet/NameAllocator;Ljava/lang/String;Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/String;
 	public final fun tagsToNames ()Ljava/util/Map;
 }
 
-public final class io/outfoxx/typescriptpoet/ObjectLiteral {
+public final class dk/lldata/typescriptpoet/ObjectLiteral {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/ObjectLiteral$Builder {
-	public final fun addGetter (Ljava/lang/String;Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
-	public final fun addGetter (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
-	public final fun addProperty (Ljava/lang/String;Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
-	public final fun addProperty (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
-	public final fun addShorthand (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
-	public final fun build ()Lio/outfoxx/typescriptpoet/ObjectLiteral;
+public final class dk/lldata/typescriptpoet/ObjectLiteral$Builder {
+	public final fun addGetter (Ljava/lang/String;Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public final fun addGetter (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public final fun addProperty (Ljava/lang/String;Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public final fun addProperty (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public final fun addShorthand (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public final fun build ()Ldk/lldata/typescriptpoet/ObjectLiteral;
 }
 
-public final class io/outfoxx/typescriptpoet/ParameterSpec : io/outfoxx/typescriptpoet/Taggable {
-	public static final field Companion Lio/outfoxx/typescriptpoet/ParameterSpec$Companion;
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun arrayPattern ([Ljava/lang/String;)Lio/outfoxx/typescriptpoet/Destructure;
-	public static final fun binding (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/Destructure$Binding;
-	public static final fun binding (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/Destructure$Binding;
-	public static final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public static final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
+public final class dk/lldata/typescriptpoet/ParameterSpec : dk/lldata/typescriptpoet/Taggable {
+	public static final field Companion Ldk/lldata/typescriptpoet/ParameterSpec$Companion;
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/ParameterSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun arrayPattern ([Ljava/lang/String;)Ldk/lldata/typescriptpoet/Destructure;
+	public static final fun binding (Ljava/lang/String;)Ldk/lldata/typescriptpoet/Destructure$Binding;
+	public static final fun binding (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/Destructure$Binding;
+	public static final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public static final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getDecorators ()Ljava/util/List;
-	public final fun getDefaultValue ()Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun getDestructure ()Lio/outfoxx/typescriptpoet/Destructure;
+	public final fun getDefaultValue ()Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun getDestructure ()Ldk/lldata/typescriptpoet/Destructure;
 	public final fun getModifiers ()Ljava/util/Set;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getOptional ()Z
-	public final fun getType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
-	public static final fun objectPattern ([Lio/outfoxx/typescriptpoet/Destructure$Binding;)Lio/outfoxx/typescriptpoet/Destructure;
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun toBuilder (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun toBuilder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public static synthetic fun toBuilder$default (Lio/outfoxx/typescriptpoet/ParameterSpec;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
+	public static final fun objectPattern ([Ldk/lldata/typescriptpoet/Destructure$Binding;)Ldk/lldata/typescriptpoet/Destructure;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun toBuilder (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun toBuilder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public static synthetic fun toBuilder$default (Ldk/lldata/typescriptpoet/ParameterSpec;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/ParameterSpec$Builder : io/outfoxx/typescriptpoet/Taggable$Builder {
-	public final fun addDecorator (Lio/outfoxx/typescriptpoet/DecoratorSpec;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun addDecorator (Lio/outfoxx/typescriptpoet/SymbolSpec;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun addDecorators (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun addModifiers (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun addModifiers ([Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun build ()Lio/outfoxx/typescriptpoet/ParameterSpec;
-	public final fun defaultValue (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun defaultValue (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun destructure (Lio/outfoxx/typescriptpoet/Destructure;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun optional (Z)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
+public final class dk/lldata/typescriptpoet/ParameterSpec$Builder : dk/lldata/typescriptpoet/Taggable$Builder {
+	public final fun addDecorator (Ldk/lldata/typescriptpoet/DecoratorSpec;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun addDecorator (Ldk/lldata/typescriptpoet/SymbolSpec;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun addDecorators (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun addModifiers (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun addModifiers ([Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun build ()Ldk/lldata/typescriptpoet/ParameterSpec;
+	public final fun defaultValue (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun defaultValue (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun destructure (Ldk/lldata/typescriptpoet/Destructure;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun optional (Z)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/ParameterSpec$Companion {
-	public final fun arrayPattern ([Ljava/lang/String;)Lio/outfoxx/typescriptpoet/Destructure;
-	public final fun binding (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/Destructure$Binding;
-	public final fun binding (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/Destructure$Binding;
-	public static synthetic fun binding$default (Lio/outfoxx/typescriptpoet/ParameterSpec$Companion;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/Destructure$Binding;
-	public final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public static synthetic fun builder$default (Lio/outfoxx/typescriptpoet/ParameterSpec$Companion;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/ParameterSpec$Builder;
-	public final fun objectPattern ([Lio/outfoxx/typescriptpoet/Destructure$Binding;)Lio/outfoxx/typescriptpoet/Destructure;
+public final class dk/lldata/typescriptpoet/ParameterSpec$Companion {
+	public final fun arrayPattern ([Ljava/lang/String;)Ldk/lldata/typescriptpoet/Destructure;
+	public final fun binding (Ljava/lang/String;)Ldk/lldata/typescriptpoet/Destructure$Binding;
+	public final fun binding (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/Destructure$Binding;
+	public static synthetic fun binding$default (Ldk/lldata/typescriptpoet/ParameterSpec$Companion;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/Destructure$Binding;
+	public final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public static synthetic fun builder$default (Ldk/lldata/typescriptpoet/ParameterSpec$Companion;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ParameterSpec$Builder;
+	public final fun objectPattern ([Ldk/lldata/typescriptpoet/Destructure$Binding;)Ldk/lldata/typescriptpoet/Destructure;
 }
 
-public final class io/outfoxx/typescriptpoet/PropertySpec : io/outfoxx/typescriptpoet/Taggable {
-	public static final field Companion Lio/outfoxx/typescriptpoet/PropertySpec$Companion;
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/PropertySpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public static final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
+public final class dk/lldata/typescriptpoet/PropertySpec : dk/lldata/typescriptpoet/Taggable {
+	public static final field Companion Ldk/lldata/typescriptpoet/PropertySpec$Companion;
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/PropertySpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public static final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
 	public final fun getDecorators ()Ljava/util/List;
 	public final fun getDefiniteAssignment ()Z
-	public final fun getInitializer ()Lio/outfoxx/typescriptpoet/CodeBlock;
+	public final fun getInitializer ()Ldk/lldata/typescriptpoet/CodeBlock;
 	public final fun getModifiers ()Ljava/util/Set;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getOptional ()Z
-	public final fun getTsDoc ()Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun getType ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
+	public final fun getTsDoc ()Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun getType ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/PropertySpec$Builder;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/PropertySpec$Builder : io/outfoxx/typescriptpoet/Taggable$Builder {
-	public final fun addDecorator (Lio/outfoxx/typescriptpoet/DecoratorSpec;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public final fun addDecorators (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public final fun addModifiers ([Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public final fun addTSDoc (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public final fun build ()Lio/outfoxx/typescriptpoet/PropertySpec;
-	public final fun definiteAssignment ()Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public final fun definiteAssignment (Z)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public static synthetic fun definiteAssignment$default (Lio/outfoxx/typescriptpoet/PropertySpec$Builder;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public final fun initializer (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public final fun initializer (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public final fun optional (Z)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
+public final class dk/lldata/typescriptpoet/PropertySpec$Builder : dk/lldata/typescriptpoet/Taggable$Builder {
+	public final fun addDecorator (Ldk/lldata/typescriptpoet/DecoratorSpec;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun addDecorators (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun addModifiers ([Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun addTSDoc (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun build ()Ldk/lldata/typescriptpoet/PropertySpec;
+	public final fun definiteAssignment ()Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun definiteAssignment (Z)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public static synthetic fun definiteAssignment$default (Ldk/lldata/typescriptpoet/PropertySpec$Builder;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun initializer (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun initializer (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun optional (Z)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/PropertySpec$Companion {
-	public final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;[Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
-	public static synthetic fun builder$default (Lio/outfoxx/typescriptpoet/PropertySpec$Companion;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z[Lio/outfoxx/typescriptpoet/Modifier;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/PropertySpec$Builder;
+public final class dk/lldata/typescriptpoet/PropertySpec$Companion {
+	public final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public static synthetic fun builder$default (Ldk/lldata/typescriptpoet/PropertySpec$Companion;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
 }
 
-public abstract class io/outfoxx/typescriptpoet/SymbolSpec {
-	public static final field Companion Lio/outfoxx/typescriptpoet/SymbolSpec$Companion;
+public abstract class dk/lldata/typescriptpoet/SymbolSpec {
+	public static final field Companion Ldk/lldata/typescriptpoet/SymbolSpec$Companion;
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun augmented (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public abstract fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static final fun from (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public static final fun augmented (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public abstract fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static final fun from (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun getValue ()Ljava/lang/String;
-	public static final fun implicit (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static final fun importsAll (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static final fun importsAll (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static final fun importsDefault (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static final fun importsDefault (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static final fun importsName (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static final fun importsName (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public static final fun implicit (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static final fun importsAll (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static final fun importsAll (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static final fun importsDefault (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static final fun importsDefault (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static final fun importsName (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static final fun importsName (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/SymbolSpec;
 	public final fun isTopLevelSymbol ()Z
-	public abstract fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static final fun sideEffect (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public abstract fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public abstract fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static final fun sideEffect (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public abstract fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec;
 }
 
-public final class io/outfoxx/typescriptpoet/SymbolSpec$Augmented : io/outfoxx/typescriptpoet/SymbolSpec$Imported {
+public final class dk/lldata/typescriptpoet/SymbolSpec$Augmented : dk/lldata/typescriptpoet/SymbolSpec$Imported {
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/String;
-	public fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec$Augmented;
-	public synthetic fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec$Augmented;
+	public synthetic fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAugmented ()Ljava/lang/String;
 	public fun getSource ()Ljava/lang/String;
 	public fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
-	public fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec$Augmented;
-	public synthetic fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec$Augmented;
+	public synthetic fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun toString ()Ljava/lang/String;
-	public fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec$Augmented;
-	public synthetic fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec$Augmented;
+	public synthetic fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec;
 }
 
-public final class io/outfoxx/typescriptpoet/SymbolSpec$Companion {
-	public final fun augmented (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public final fun from (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public final fun implicit (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public final fun importsAll (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public final fun importsAll (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static synthetic fun importsAll$default (Lio/outfoxx/typescriptpoet/SymbolSpec$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public final fun importsDefault (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public final fun importsDefault (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static synthetic fun importsDefault$default (Lio/outfoxx/typescriptpoet/SymbolSpec$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public final fun importsName (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public final fun importsName (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public static synthetic fun importsName$default (Lio/outfoxx/typescriptpoet/SymbolSpec$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public final fun sideEffect (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
+public final class dk/lldata/typescriptpoet/SymbolSpec$Companion {
+	public final fun augmented (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public final fun from (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public final fun implicit (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public final fun importsAll (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public final fun importsAll (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static synthetic fun importsAll$default (Ldk/lldata/typescriptpoet/SymbolSpec$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public final fun importsDefault (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public final fun importsDefault (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static synthetic fun importsDefault$default (Ldk/lldata/typescriptpoet/SymbolSpec$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public final fun importsName (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public final fun importsName (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public static synthetic fun importsName$default (Ldk/lldata/typescriptpoet/SymbolSpec$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/SymbolSpec;
+	public final fun sideEffect (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
 }
 
-public final class io/outfoxx/typescriptpoet/SymbolSpec$Implicit : io/outfoxx/typescriptpoet/SymbolSpec {
+public final class dk/lldata/typescriptpoet/SymbolSpec$Implicit : dk/lldata/typescriptpoet/SymbolSpec {
 	public final fun component1 ()Ljava/lang/String;
-	public fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec$Implicit;
-	public synthetic fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec$Implicit;
+	public synthetic fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
-	public fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec$Implicit;
-	public synthetic fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec$Implicit;
+	public synthetic fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun toString ()Ljava/lang/String;
-	public fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec$Implicit;
-	public synthetic fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec$Implicit;
+	public synthetic fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec;
 }
 
-public abstract class io/outfoxx/typescriptpoet/SymbolSpec$Imported : io/outfoxx/typescriptpoet/SymbolSpec {
+public abstract class dk/lldata/typescriptpoet/SymbolSpec$Imported : dk/lldata/typescriptpoet/SymbolSpec {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public fun getSource ()Ljava/lang/String;
 	public fun getTypeOnly ()Z
 	public fun getValue ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/SymbolSpec$ImportsAll : io/outfoxx/typescriptpoet/SymbolSpec$Imported {
+public final class dk/lldata/typescriptpoet/SymbolSpec$ImportsAll : dk/lldata/typescriptpoet/SymbolSpec$Imported {
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Z
-	public fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec$ImportsAll;
-	public synthetic fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec$ImportsAll;
+	public synthetic fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getSource ()Ljava/lang/String;
 	public fun getTypeOnly ()Z
 	public fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
-	public fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec$ImportsAll;
-	public synthetic fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec$ImportsAll;
+	public synthetic fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun toString ()Ljava/lang/String;
-	public fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec$ImportsAll;
-	public synthetic fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec$ImportsAll;
+	public synthetic fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec;
 }
 
-public final class io/outfoxx/typescriptpoet/SymbolSpec$ImportsDefault : io/outfoxx/typescriptpoet/SymbolSpec$Imported {
+public final class dk/lldata/typescriptpoet/SymbolSpec$ImportsDefault : dk/lldata/typescriptpoet/SymbolSpec$Imported {
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Z
-	public fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec$ImportsDefault;
-	public synthetic fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec$ImportsDefault;
+	public synthetic fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getSource ()Ljava/lang/String;
 	public fun getTypeOnly ()Z
 	public fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
-	public fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec$ImportsDefault;
-	public synthetic fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec$ImportsDefault;
+	public synthetic fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun toString ()Ljava/lang/String;
-	public fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec$ImportsDefault;
-	public synthetic fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec$ImportsDefault;
+	public synthetic fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec;
 }
 
-public final class io/outfoxx/typescriptpoet/SymbolSpec$ImportsName : io/outfoxx/typescriptpoet/SymbolSpec$Imported {
+public final class dk/lldata/typescriptpoet/SymbolSpec$ImportsName : dk/lldata/typescriptpoet/SymbolSpec$Imported {
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Z
-	public fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec$ImportsName;
-	public synthetic fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec$ImportsName;
+	public synthetic fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getSource ()Ljava/lang/String;
 	public fun getTypeOnly ()Z
 	public fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
-	public fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec$ImportsName;
-	public synthetic fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec$ImportsName;
+	public synthetic fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun toString ()Ljava/lang/String;
-	public fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec$ImportsName;
-	public synthetic fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec$ImportsName;
+	public synthetic fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec;
 }
 
-public final class io/outfoxx/typescriptpoet/SymbolSpec$SideEffect : io/outfoxx/typescriptpoet/SymbolSpec$Imported {
+public final class dk/lldata/typescriptpoet/SymbolSpec$SideEffect : dk/lldata/typescriptpoet/SymbolSpec$Imported {
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec$SideEffect;
-	public synthetic fun enclosing ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec$SideEffect;
+	public synthetic fun enclosing ()Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getSource ()Ljava/lang/String;
 	public fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
-	public fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec$SideEffect;
-	public synthetic fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec$SideEffect;
+	public synthetic fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun toString ()Ljava/lang/String;
-	public fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec$SideEffect;
-	public synthetic fun topLevel ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec$SideEffect;
+	public synthetic fun topLevel ()Ldk/lldata/typescriptpoet/SymbolSpec;
 }
 
-public abstract class io/outfoxx/typescriptpoet/Taggable {
+public abstract class dk/lldata/typescriptpoet/Taggable {
 	public fun <init> (Ljava/util/Map;)V
 	public final fun getTags ()Ljava/util/Map;
 }
 
-public abstract class io/outfoxx/typescriptpoet/Taggable$Builder {
+public abstract class dk/lldata/typescriptpoet/Taggable$Builder {
 	public fun <init> ()V
 	public final fun getTags ()Ljava/util/Map;
-	public final fun tag (Ljava/lang/Class;Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/Taggable$Builder;
-	public final fun tag (Lkotlin/reflect/KClass;Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/Taggable$Builder;
+	public final fun tag (Ljava/lang/Class;Ljava/lang/Object;)Ldk/lldata/typescriptpoet/Taggable$Builder;
+	public final fun tag (Lkotlin/reflect/KClass;Ljava/lang/Object;)Ldk/lldata/typescriptpoet/Taggable$Builder;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeAliasSpec : io/outfoxx/typescriptpoet/TypeSpec {
-	public static final field Companion Lio/outfoxx/typescriptpoet/TypeAliasSpec$Companion;
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/TypeAliasSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeAliasSpec$Builder;
+public final class dk/lldata/typescriptpoet/TypeAliasSpec : dk/lldata/typescriptpoet/TypeSpec {
+	public static final field Companion Ldk/lldata/typescriptpoet/TypeAliasSpec$Companion;
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/TypeAliasSpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeAliasSpec$Builder;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getModifiers ()Ljava/util/Set;
 	public fun getName ()Ljava/lang/String;
-	public final fun getTsDoc ()Lio/outfoxx/typescriptpoet/CodeBlock;
-	public final fun getType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getTsDoc ()Ldk/lldata/typescriptpoet/CodeBlock;
+	public final fun getType ()Ldk/lldata/typescriptpoet/TypeName;
 	public final fun getTypeVariables ()Ljava/util/List;
 	public fun hashCode ()I
-	public final fun toBuilder ()Lio/outfoxx/typescriptpoet/TypeAliasSpec$Builder;
+	public final fun toBuilder ()Ldk/lldata/typescriptpoet/TypeAliasSpec$Builder;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeAliasSpec$Builder : io/outfoxx/typescriptpoet/TypeSpec$Builder {
-	public final fun addModifier (Lio/outfoxx/typescriptpoet/Modifier;)V
-	public final fun addModifiers ([Lio/outfoxx/typescriptpoet/Modifier;)Lio/outfoxx/typescriptpoet/TypeAliasSpec$Builder;
-	public final fun addTSDoc (Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/TypeAliasSpec$Builder;
-	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeAliasSpec$Builder;
-	public final fun addTypeVariable (Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;)Lio/outfoxx/typescriptpoet/TypeAliasSpec$Builder;
-	public final fun addTypeVariables (Ljava/lang/Iterable;)Lio/outfoxx/typescriptpoet/TypeAliasSpec$Builder;
-	public fun build ()Lio/outfoxx/typescriptpoet/TypeAliasSpec;
-	public synthetic fun build ()Lio/outfoxx/typescriptpoet/TypeSpec;
+public final class dk/lldata/typescriptpoet/TypeAliasSpec$Builder : dk/lldata/typescriptpoet/TypeSpec$Builder {
+	public final fun addModifier (Ldk/lldata/typescriptpoet/Modifier;)V
+	public final fun addModifiers ([Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/TypeAliasSpec$Builder;
+	public final fun addTSDoc (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/TypeAliasSpec$Builder;
+	public final fun addTSDoc (Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/TypeAliasSpec$Builder;
+	public final fun addTypeVariable (Ldk/lldata/typescriptpoet/TypeName$TypeVariable;)Ldk/lldata/typescriptpoet/TypeAliasSpec$Builder;
+	public final fun addTypeVariables (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/TypeAliasSpec$Builder;
+	public fun build ()Ldk/lldata/typescriptpoet/TypeAliasSpec;
+	public synthetic fun build ()Ldk/lldata/typescriptpoet/TypeSpec;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeAliasSpec$Companion {
-	public final fun builder (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeAliasSpec$Builder;
+public final class dk/lldata/typescriptpoet/TypeAliasSpec$Companion {
+	public final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeAliasSpec$Builder;
 }
 
-public abstract class io/outfoxx/typescriptpoet/TypeName {
-	public static final field ANY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field ARRAY_BUFFER Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field ATOMICS Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field BIGINT Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field BIGINT_CLASS Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field BIG_INT64_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field BIG_UINT64_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field BOOLEAN Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field BOOLEAN_CLASS Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field Companion Lio/outfoxx/typescriptpoet/TypeName$Companion;
-	public static final field DATA_VIEW Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field DATE Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field ERROR Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field FLOAT32_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field FLOAT64_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field FUNCTION Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field GENERATOR Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field INT16_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field INT32_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field INT8_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field JSON Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field MAP Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field MATH Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field NEVER Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field NULL Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field NUMBER Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field NUMBER_CLASS Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field OBJECT Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field OBJECT_CLASS Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field PROMISE Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field RECORD Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field REGEXP Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field SET Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field SHARED_ARRAY_BUFFER Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field STRING Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field STRING_CLASS Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field SYMBOL Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field SYMBOL_CLASS Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field UINT16_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field UINT32_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field UINT8_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field UINT8_CLAMPED_ARRAY Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field UNDEFINED Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field UNIQUE_SYMBOL Lio/outfoxx/typescriptpoet/TypeName$Operator;
-	public static final field VOID Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field WEAK_MAP Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final field WEAK_SET Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun anonymousType (Ljava/util/List;)Lio/outfoxx/typescriptpoet/TypeName$Anonymous;
-	public static final fun anonymousType ([Lkotlin/Pair;)Lio/outfoxx/typescriptpoet/TypeName$Anonymous;
-	public static final fun arrayShorthandType (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$ArrayShorthand;
-	public static final fun arrayType (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName;
-	public static final fun bound (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static final fun bound (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static final fun bound (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static final fun conditionalType (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Conditional;
-	public static final fun constructorType (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static final fun constructorType (Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static final fun constructorType (Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;Ljava/util/List;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static final fun constructorType (Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;Ljava/util/List;Z)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static final fun defaultImport (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun defaultImport (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun genericLambda (Ljava/util/List;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static final fun genericLambda (Ljava/util/List;Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static final fun implicit (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun indexedAccess (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$IndexedAccess;
-	public static final fun infer (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public static final fun intersectBound (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static final fun intersectBound (Lio/outfoxx/typescriptpoet/TypeName;Z)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static final fun intersectionType ([Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Intersection;
-	public static final fun keyOf (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Operator;
-	public static final fun lambda (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static final fun lambda (Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static final fun lambda ([Lkotlin/Pair;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static final fun literal (I)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun literal (J)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun literal (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun literal (Z)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun mapType (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName;
-	public static final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
-	public static final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
-	public static final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
-	public static final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
-	public static final fun namedImport (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun namedImport (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun parameterizedType (Lio/outfoxx/typescriptpoet/TypeName$Standard;[Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Parameterized;
-	public static final fun readOnly (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Operator;
-	public static final fun recordType (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Parameterized;
-	public static final fun setType (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName;
-	public static final fun standard (Lio/outfoxx/typescriptpoet/SymbolSpec;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun standard (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static final fun templateLiteralType ([Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$TemplateLiteral;
-	public static final fun tupleMember (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
-	public static final fun tupleMember (Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
-	public static final fun tupleMember (Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
-	public static final fun tupleMember (Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;ZZ)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
-	public static final fun tupleType (Ljava/util/List;)Lio/outfoxx/typescriptpoet/TypeName$Tuple;
-	public static final fun tupleType ([Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Tuple;
-	public static final fun typeOf (Lio/outfoxx/typescriptpoet/SymbolSpec;)Lio/outfoxx/typescriptpoet/TypeName$Operator;
-	public static final fun typeOf (Lio/outfoxx/typescriptpoet/TypeName$Standard;)Lio/outfoxx/typescriptpoet/TypeName$Operator;
-	public static final fun typeVariable (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public static final fun typeVariable (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public static final fun typeVariable (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;Z)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public static final fun typeVariable (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;ZLjava/util/List;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public static final fun typeVariable (Ljava/lang/String;[Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public static final fun unionBound (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static final fun unionBound (Lio/outfoxx/typescriptpoet/TypeName;Z)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static final fun unionType ([Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Union;
+public abstract class dk/lldata/typescriptpoet/TypeName {
+	public static final field ANY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field ARRAY_BUFFER Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field ATOMICS Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field BIGINT Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field BIGINT_CLASS Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field BIG_INT64_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field BIG_UINT64_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field BOOLEAN Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field BOOLEAN_CLASS Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field Companion Ldk/lldata/typescriptpoet/TypeName$Companion;
+	public static final field DATA_VIEW Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field DATE Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field ERROR Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field FLOAT32_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field FLOAT64_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field FUNCTION Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field GENERATOR Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field INT16_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field INT32_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field INT8_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field JSON Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field MAP Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field MATH Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field NEVER Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field NULL Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field NUMBER Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field NUMBER_CLASS Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field OBJECT Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field OBJECT_CLASS Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field PROMISE Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field RECORD Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field REGEXP Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field SET Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field SHARED_ARRAY_BUFFER Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field STRING Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field STRING_CLASS Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field SYMBOL Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field SYMBOL_CLASS Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field UINT16_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field UINT32_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field UINT8_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field UINT8_CLAMPED_ARRAY Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field UNDEFINED Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field UNIQUE_SYMBOL Ldk/lldata/typescriptpoet/TypeName$Operator;
+	public static final field VOID Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field WEAK_MAP Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final field WEAK_SET Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun anonymousType (Ljava/util/List;)Ldk/lldata/typescriptpoet/TypeName$Anonymous;
+	public static final fun anonymousType ([Lkotlin/Pair;)Ldk/lldata/typescriptpoet/TypeName$Anonymous;
+	public static final fun arrayShorthandType (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$ArrayShorthand;
+	public static final fun arrayType (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName;
+	public static final fun bound (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static final fun bound (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static final fun bound (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static final fun conditionalType (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Conditional;
+	public static final fun constructorType (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun constructorType (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun constructorType (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;Ljava/util/List;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun constructorType (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;Ljava/util/List;Z)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun defaultImport (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun defaultImport (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun genericLambda (Ljava/util/List;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun genericLambda (Ljava/util/List;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun implicit (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun indexedAccess (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$IndexedAccess;
+	public static final fun infer (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public static final fun intersectBound (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static final fun intersectBound (Ldk/lldata/typescriptpoet/TypeName;Z)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static final fun intersectionType ([Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Intersection;
+	public static final fun keyOf (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Operator;
+	public static final fun lambda (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun lambda (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun lambda ([Lkotlin/Pair;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun literal (I)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun literal (J)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun literal (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun literal (Z)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun mapType (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName;
+	public static final fun mappedType (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Mapped;
+	public static final fun mappedType (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Mapped;
+	public static final fun mappedType (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;)Ldk/lldata/typescriptpoet/TypeName$Mapped;
+	public static final fun mappedType (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;)Ldk/lldata/typescriptpoet/TypeName$Mapped;
+	public static final fun namedImport (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun namedImport (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun parameterizedType (Ldk/lldata/typescriptpoet/TypeName$Standard;[Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Parameterized;
+	public static final fun readOnly (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Operator;
+	public static final fun recordType (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Parameterized;
+	public static final fun setType (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName;
+	public static final fun standard (Ldk/lldata/typescriptpoet/SymbolSpec;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun standard (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static final fun templateLiteralType ([Ljava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$TemplateLiteral;
+	public static final fun tupleMember (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
+	public static final fun tupleMember (Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
+	public static final fun tupleMember (Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
+	public static final fun tupleMember (Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;ZZ)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
+	public static final fun tupleType (Ljava/util/List;)Ldk/lldata/typescriptpoet/TypeName$Tuple;
+	public static final fun tupleType ([Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Tuple;
+	public static final fun typeOf (Ldk/lldata/typescriptpoet/SymbolSpec;)Ldk/lldata/typescriptpoet/TypeName$Operator;
+	public static final fun typeOf (Ldk/lldata/typescriptpoet/TypeName$Standard;)Ldk/lldata/typescriptpoet/TypeName$Operator;
+	public static final fun typeVariable (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public static final fun typeVariable (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public static final fun typeVariable (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;Z)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public static final fun typeVariable (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;ZLjava/util/List;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public static final fun typeVariable (Ljava/lang/String;[Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public static final fun unionBound (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static final fun unionBound (Ldk/lldata/typescriptpoet/TypeName;Z)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static final fun unionType ([Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Union;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Anonymous : io/outfoxx/typescriptpoet/TypeName {
+public final class dk/lldata/typescriptpoet/TypeName$Anonymous : dk/lldata/typescriptpoet/TypeName {
 	public final fun component1 ()Ljava/util/List;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getMembers ()Ljava/util/List;
@@ -937,129 +937,129 @@ public final class io/outfoxx/typescriptpoet/TypeName$Anonymous : io/outfoxx/typ
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Anonymous$Member {
-	public fun <init> (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z)V
+public final class dk/lldata/typescriptpoet/TypeName$Anonymous$Member {
+	public fun <init> (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z)V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun component2 ()Ldk/lldata/typescriptpoet/TypeName;
 	public final fun component3 ()Z
-	public final fun copy (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Z)Lio/outfoxx/typescriptpoet/TypeName$Anonymous$Member;
-	public static synthetic fun copy$default (Lio/outfoxx/typescriptpoet/TypeName$Anonymous$Member;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Anonymous$Member;
+	public final fun copy (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
+	public static synthetic fun copy$default (Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getName ()Ljava/lang/String;
 	public final fun getOptional ()Z
-	public final fun getType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$ArrayShorthand : io/outfoxx/typescriptpoet/TypeName {
-	public final fun component1 ()Lio/outfoxx/typescriptpoet/TypeName;
+public final class dk/lldata/typescriptpoet/TypeName$ArrayShorthand : dk/lldata/typescriptpoet/TypeName {
+	public final fun component1 ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getElementType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getElementType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Companion {
-	public final fun anonymousType (Ljava/util/List;)Lio/outfoxx/typescriptpoet/TypeName$Anonymous;
-	public final fun anonymousType ([Lkotlin/Pair;)Lio/outfoxx/typescriptpoet/TypeName$Anonymous;
-	public final fun arrayShorthandType (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$ArrayShorthand;
-	public final fun arrayType (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun bound (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public final fun bound (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public final fun bound (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static synthetic fun bound$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public final fun conditionalType (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Conditional;
-	public final fun constructorType (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public final fun constructorType (Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public final fun constructorType (Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;Ljava/util/List;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public final fun constructorType (Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;Ljava/util/List;Z)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static synthetic fun constructorType$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;Ljava/util/List;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public final fun defaultImport (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun defaultImport (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static synthetic fun defaultImport$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun genericLambda (Ljava/util/List;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public final fun genericLambda (Ljava/util/List;Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static synthetic fun genericLambda$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Ljava/util/List;Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public final fun implicit (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun indexedAccess (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$IndexedAccess;
-	public final fun infer (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public final fun intersectBound (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public final fun intersectBound (Lio/outfoxx/typescriptpoet/TypeName;Z)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static synthetic fun intersectBound$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Lio/outfoxx/typescriptpoet/TypeName;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public final fun intersectionType ([Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Intersection;
-	public final fun keyOf (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Operator;
-	public final fun lambda (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public final fun lambda (Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public final fun lambda ([Lkotlin/Pair;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static synthetic fun lambda$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public static synthetic fun lambda$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;[Lkotlin/Pair;Lio/outfoxx/typescriptpoet/TypeName;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
-	public final fun literal (I)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun literal (J)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun literal (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun literal (Z)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun mapType (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
-	public final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
-	public final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
-	public final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
-	public static synthetic fun mappedType$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
-	public final fun namedImport (Ljava/lang/String;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun namedImport (Ljava/lang/String;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public static synthetic fun namedImport$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun parameterizedType (Lio/outfoxx/typescriptpoet/TypeName$Standard;[Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Parameterized;
-	public final fun readOnly (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Operator;
-	public final fun recordType (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Parameterized;
-	public final fun setType (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun standard (Lio/outfoxx/typescriptpoet/SymbolSpec;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun standard (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun templateLiteralType ([Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$TemplateLiteral;
-	public final fun tupleMember (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
-	public final fun tupleMember (Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
-	public final fun tupleMember (Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;Z)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
-	public final fun tupleMember (Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;ZZ)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
-	public static synthetic fun tupleMember$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;ZZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
-	public final fun tupleType (Ljava/util/List;)Lio/outfoxx/typescriptpoet/TypeName$Tuple;
-	public final fun tupleType ([Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Tuple;
-	public final fun typeOf (Lio/outfoxx/typescriptpoet/SymbolSpec;)Lio/outfoxx/typescriptpoet/TypeName$Operator;
-	public final fun typeOf (Lio/outfoxx/typescriptpoet/TypeName$Standard;)Lio/outfoxx/typescriptpoet/TypeName$Operator;
-	public final fun typeVariable (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public final fun typeVariable (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public final fun typeVariable (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;Z)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public final fun typeVariable (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;ZLjava/util/List;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public final fun typeVariable (Ljava/lang/String;[Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public static synthetic fun typeVariable$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;ZLjava/util/List;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable;
-	public final fun unionBound (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public final fun unionBound (Lio/outfoxx/typescriptpoet/TypeName;Z)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static synthetic fun unionBound$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Lio/outfoxx/typescriptpoet/TypeName;ZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public final fun unionType ([Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Union;
+public final class dk/lldata/typescriptpoet/TypeName$Companion {
+	public final fun anonymousType (Ljava/util/List;)Ldk/lldata/typescriptpoet/TypeName$Anonymous;
+	public final fun anonymousType ([Lkotlin/Pair;)Ldk/lldata/typescriptpoet/TypeName$Anonymous;
+	public final fun arrayShorthandType (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$ArrayShorthand;
+	public final fun arrayType (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName;
+	public final fun bound (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public final fun bound (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public final fun bound (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static synthetic fun bound$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public final fun conditionalType (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Conditional;
+	public final fun constructorType (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun constructorType (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun constructorType (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;Ljava/util/List;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun constructorType (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;Ljava/util/List;Z)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static synthetic fun constructorType$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;Ljava/util/List;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun defaultImport (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun defaultImport (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static synthetic fun defaultImport$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun genericLambda (Ljava/util/List;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun genericLambda (Ljava/util/List;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static synthetic fun genericLambda$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/util/List;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun implicit (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun indexedAccess (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$IndexedAccess;
+	public final fun infer (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public final fun intersectBound (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public final fun intersectBound (Ldk/lldata/typescriptpoet/TypeName;Z)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static synthetic fun intersectBound$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ldk/lldata/typescriptpoet/TypeName;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public final fun intersectionType ([Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Intersection;
+	public final fun keyOf (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Operator;
+	public final fun lambda (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun lambda (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun lambda ([Lkotlin/Pair;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static synthetic fun lambda$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static synthetic fun lambda$default (Ldk/lldata/typescriptpoet/TypeName$Companion;[Lkotlin/Pair;Ldk/lldata/typescriptpoet/TypeName;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun literal (I)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun literal (J)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun literal (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun literal (Z)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun mapType (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName;
+	public final fun mappedType (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Mapped;
+	public final fun mappedType (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Mapped;
+	public final fun mappedType (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;)Ldk/lldata/typescriptpoet/TypeName$Mapped;
+	public final fun mappedType (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;)Ldk/lldata/typescriptpoet/TypeName$Mapped;
+	public static synthetic fun mappedType$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Mapped;
+	public final fun namedImport (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun namedImport (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public static synthetic fun namedImport$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun parameterizedType (Ldk/lldata/typescriptpoet/TypeName$Standard;[Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Parameterized;
+	public final fun readOnly (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Operator;
+	public final fun recordType (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Parameterized;
+	public final fun setType (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName;
+	public final fun standard (Ldk/lldata/typescriptpoet/SymbolSpec;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun standard (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun templateLiteralType ([Ljava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$TemplateLiteral;
+	public final fun tupleMember (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
+	public final fun tupleMember (Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
+	public final fun tupleMember (Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
+	public final fun tupleMember (Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;ZZ)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
+	public static synthetic fun tupleMember$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;ZZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
+	public final fun tupleType (Ljava/util/List;)Ldk/lldata/typescriptpoet/TypeName$Tuple;
+	public final fun tupleType ([Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Tuple;
+	public final fun typeOf (Ldk/lldata/typescriptpoet/SymbolSpec;)Ldk/lldata/typescriptpoet/TypeName$Operator;
+	public final fun typeOf (Ldk/lldata/typescriptpoet/TypeName$Standard;)Ldk/lldata/typescriptpoet/TypeName$Operator;
+	public final fun typeVariable (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public final fun typeVariable (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public final fun typeVariable (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;Z)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public final fun typeVariable (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;ZLjava/util/List;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public final fun typeVariable (Ljava/lang/String;[Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public static synthetic fun typeVariable$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;ZLjava/util/List;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
+	public final fun unionBound (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public final fun unionBound (Ldk/lldata/typescriptpoet/TypeName;Z)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static synthetic fun unionBound$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ldk/lldata/typescriptpoet/TypeName;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public final fun unionType ([Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Union;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Conditional : io/outfoxx/typescriptpoet/TypeName {
-	public final fun component1 ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun component2 ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun component3 ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun component4 ()Lio/outfoxx/typescriptpoet/TypeName;
+public final class dk/lldata/typescriptpoet/TypeName$Conditional : dk/lldata/typescriptpoet/TypeName {
+	public final fun component1 ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun component2 ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun component3 ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun component4 ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getCheckType ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun getExtendsType ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun getFalseType ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun getTrueType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getCheckType ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun getExtendsType ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun getFalseType ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun getTrueType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$IndexedAccess : io/outfoxx/typescriptpoet/TypeName {
-	public final fun component1 ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun component2 ()Lio/outfoxx/typescriptpoet/TypeName;
+public final class dk/lldata/typescriptpoet/TypeName$IndexedAccess : dk/lldata/typescriptpoet/TypeName {
+	public final fun component1 ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun component2 ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getIndexType ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun getObjectType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getIndexType ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun getObjectType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Intersection : io/outfoxx/typescriptpoet/TypeName {
+public final class dk/lldata/typescriptpoet/TypeName$Intersection : dk/lldata/typescriptpoet/TypeName {
 	public final fun component1 ()Ljava/util/List;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getTypeRequirements ()Ljava/util/List;
@@ -1067,10 +1067,10 @@ public final class io/outfoxx/typescriptpoet/TypeName$Intersection : io/outfoxx/
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Lambda : io/outfoxx/typescriptpoet/TypeName {
+public final class dk/lldata/typescriptpoet/TypeName$Lambda : dk/lldata/typescriptpoet/TypeName {
 	public fun <init> ()V
 	public final fun component1 ()Ljava/util/Map;
-	public final fun component2 ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun component2 ()Ldk/lldata/typescriptpoet/TypeName;
 	public final fun component3 ()Ljava/util/List;
 	public final fun component4 ()Z
 	public final fun component5 ()Z
@@ -1078,87 +1078,87 @@ public final class io/outfoxx/typescriptpoet/TypeName$Lambda : io/outfoxx/typesc
 	public final fun getAbstract ()Z
 	public final fun getConstructable ()Z
 	public final fun getParameters ()Ljava/util/Map;
-	public final fun getReturnType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getReturnType ()Ldk/lldata/typescriptpoet/TypeName;
 	public final fun getTypeVariables ()Ljava/util/List;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Mapped : io/outfoxx/typescriptpoet/TypeName {
+public final class dk/lldata/typescriptpoet/TypeName$Mapped : dk/lldata/typescriptpoet/TypeName {
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun component3 ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun component4 ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun component5 ()Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;
-	public final fun component6 ()Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;
+	public final fun component2 ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun component3 ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun component4 ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun component5 ()Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;
+	public final fun component6 ()Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAsClause ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun getConstraint ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getAsClause ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun getConstraint ()Ldk/lldata/typescriptpoet/TypeName;
 	public final fun getKeyName ()Ljava/lang/String;
-	public final fun getOptional ()Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;
-	public final fun getReadonly ()Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;
-	public final fun getValueType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getOptional ()Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;
+	public final fun getReadonly ()Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;
+	public final fun getValueType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Mapped$Change : java/lang/Enum {
-	public static final field ADD Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;
-	public static final field KEEP Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;
-	public static final field REMOVE Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;
+public final class dk/lldata/typescriptpoet/TypeName$Mapped$Change : java/lang/Enum {
+	public static final field ADD Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;
+	public static final field KEEP Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;
+	public static final field REMOVE Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getPrefix ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;
-	public static fun values ()[Lio/outfoxx/typescriptpoet/TypeName$Mapped$Change;
+	public static fun valueOf (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;
+	public static fun values ()[Ldk/lldata/typescriptpoet/TypeName$Mapped$Change;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Operator : io/outfoxx/typescriptpoet/TypeName {
-	public final fun component1 ()Lio/outfoxx/typescriptpoet/TypeName$Operator$Kind;
-	public final fun component2 ()Lio/outfoxx/typescriptpoet/TypeName;
+public final class dk/lldata/typescriptpoet/TypeName$Operator : dk/lldata/typescriptpoet/TypeName {
+	public final fun component1 ()Ldk/lldata/typescriptpoet/TypeName$Operator$Kind;
+	public final fun component2 ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getOperand ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun getOperator ()Lio/outfoxx/typescriptpoet/TypeName$Operator$Kind;
+	public final fun getOperand ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun getOperator ()Ldk/lldata/typescriptpoet/TypeName$Operator$Kind;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Operator$Kind : java/lang/Enum {
-	public static final field KEY_OF Lio/outfoxx/typescriptpoet/TypeName$Operator$Kind;
-	public static final field READONLY Lio/outfoxx/typescriptpoet/TypeName$Operator$Kind;
-	public static final field TYPE_OF Lio/outfoxx/typescriptpoet/TypeName$Operator$Kind;
-	public static final field UNIQUE Lio/outfoxx/typescriptpoet/TypeName$Operator$Kind;
+public final class dk/lldata/typescriptpoet/TypeName$Operator$Kind : java/lang/Enum {
+	public static final field KEY_OF Ldk/lldata/typescriptpoet/TypeName$Operator$Kind;
+	public static final field READONLY Ldk/lldata/typescriptpoet/TypeName$Operator$Kind;
+	public static final field TYPE_OF Ldk/lldata/typescriptpoet/TypeName$Operator$Kind;
+	public static final field UNIQUE Ldk/lldata/typescriptpoet/TypeName$Operator$Kind;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getKeyword ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Operator$Kind;
-	public static fun values ()[Lio/outfoxx/typescriptpoet/TypeName$Operator$Kind;
+	public static fun valueOf (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Operator$Kind;
+	public static fun values ()[Ldk/lldata/typescriptpoet/TypeName$Operator$Kind;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Parameterized : io/outfoxx/typescriptpoet/TypeName {
-	public final fun component1 ()Lio/outfoxx/typescriptpoet/TypeName$Standard;
+public final class dk/lldata/typescriptpoet/TypeName$Parameterized : dk/lldata/typescriptpoet/TypeName {
+	public final fun component1 ()Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public final fun component2 ()Ljava/util/List;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getRawType ()Lio/outfoxx/typescriptpoet/TypeName$Standard;
+	public final fun getRawType ()Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public final fun getTypeArgs ()Ljava/util/List;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Standard : io/outfoxx/typescriptpoet/TypeName {
-	public final fun component1 ()Lio/outfoxx/typescriptpoet/SymbolSpec;
-	public final fun enclosingTypeName ()Lio/outfoxx/typescriptpoet/TypeName$Standard;
+public final class dk/lldata/typescriptpoet/TypeName$Standard : dk/lldata/typescriptpoet/TypeName {
+	public final fun component1 ()Ldk/lldata/typescriptpoet/SymbolSpec;
+	public final fun enclosingTypeName ()Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getBase ()Lio/outfoxx/typescriptpoet/SymbolSpec;
+	public final fun getBase ()Ldk/lldata/typescriptpoet/SymbolSpec;
 	public fun hashCode ()I
 	public final fun isTopLevelTypeName ()Z
-	public final fun nested (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
-	public final fun parameterized ([Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Parameterized;
+	public final fun nested (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
+	public final fun parameterized ([Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Parameterized;
 	public final fun simpleName ()Ljava/lang/String;
 	public final fun simpleNames ()Ljava/util/List;
 	public fun toString ()Ljava/lang/String;
-	public final fun topLevelTypeName ()Lio/outfoxx/typescriptpoet/TypeName$Standard;
+	public final fun topLevelTypeName ()Ldk/lldata/typescriptpoet/TypeName$Standard;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$TemplateLiteral : io/outfoxx/typescriptpoet/TypeName {
+public final class dk/lldata/typescriptpoet/TypeName$TemplateLiteral : dk/lldata/typescriptpoet/TypeName {
 	public final fun component1 ()Ljava/util/List;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getParts ()Ljava/util/List;
@@ -1166,7 +1166,7 @@ public final class io/outfoxx/typescriptpoet/TypeName$TemplateLiteral : io/outfo
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Tuple : io/outfoxx/typescriptpoet/TypeName {
+public final class dk/lldata/typescriptpoet/TypeName$Tuple : dk/lldata/typescriptpoet/TypeName {
 	public final fun component1 ()Ljava/util/List;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getMemberTypes ()Ljava/util/List;
@@ -1175,84 +1175,84 @@ public final class io/outfoxx/typescriptpoet/TypeName$Tuple : io/outfoxx/typescr
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Tuple$Member {
-	public fun <init> (Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;ZZ)V
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Lio/outfoxx/typescriptpoet/TypeName;
+public final class dk/lldata/typescriptpoet/TypeName$Tuple$Member {
+	public fun <init> (Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;ZZ)V
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ldk/lldata/typescriptpoet/TypeName;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Z
 	public final fun component4 ()Z
-	public final fun copy (Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;ZZ)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
-	public static synthetic fun copy$default (Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;Lio/outfoxx/typescriptpoet/TypeName;Ljava/lang/String;ZZILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Tuple$Member;
+	public final fun copy (Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;ZZ)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
+	public static synthetic fun copy$default (Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;Ldk/lldata/typescriptpoet/TypeName;Ljava/lang/String;ZZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Tuple$Member;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getLabel ()Ljava/lang/String;
 	public final fun getOptional ()Z
 	public final fun getRest ()Z
-	public final fun getType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$TypeVariable : io/outfoxx/typescriptpoet/TypeName {
+public final class dk/lldata/typescriptpoet/TypeName$TypeVariable : dk/lldata/typescriptpoet/TypeName {
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/util/List;
-	public final fun component3 ()Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;
+	public final fun component3 ()Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;
 	public final fun component4 ()Z
 	public final fun component5 ()Z
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getBounds ()Ljava/util/List;
 	public final fun getName ()Ljava/lang/String;
-	public final fun getVariance ()Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;
+	public final fun getVariance ()Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;
 	public fun hashCode ()I
 	public final fun isConst ()Z
 	public final fun isInfer ()Z
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound {
-	public fun <init> (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;)V
-	public synthetic fun <init> (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Lio/outfoxx/typescriptpoet/TypeName;
-	public final fun component2 ()Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
-	public final fun component3 ()Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;
-	public final fun copy (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
-	public static synthetic fun copy$default (Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound;
+public final class dk/lldata/typescriptpoet/TypeName$TypeVariable$Bound {
+	public fun <init> (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;)V
+	public synthetic fun <init> (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun component2 ()Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
+	public final fun component3 ()Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;
+	public final fun copy (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
+	public static synthetic fun copy$default (Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getCombiner ()Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
-	public final fun getModifier ()Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;
-	public final fun getType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getCombiner ()Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
+	public final fun getModifier ()Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;
+	public final fun getType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner : java/lang/Enum {
-	public static final field INTERSECT Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
-	public static final field UNION Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
+public final class dk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner : java/lang/Enum {
+	public static final field INTERSECT Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
+	public static final field UNION Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getSymbol ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
-	public static fun values ()[Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
+	public static fun valueOf (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
+	public static fun values ()[Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Combiner;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier : java/lang/Enum {
-	public static final field KEY_OF Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;
+public final class dk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier : java/lang/Enum {
+	public static final field KEY_OF Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getKeyword ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;
-	public static fun values ()[Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;
+	public static fun valueOf (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;
+	public static fun values ()[Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Bound$Modifier;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance : java/lang/Enum {
-	public static final field IN Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;
-	public static final field IN_OUT Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;
-	public static final field OUT Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;
+public final class dk/lldata/typescriptpoet/TypeName$TypeVariable$Variance : java/lang/Enum {
+	public static final field IN Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;
+	public static final field IN_OUT Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;
+	public static final field OUT Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getKeyword ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;
-	public static fun values ()[Lio/outfoxx/typescriptpoet/TypeName$TypeVariable$Variance;
+	public static fun valueOf (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;
+	public static fun values ()[Ldk/lldata/typescriptpoet/TypeName$TypeVariable$Variance;
 }
 
-public final class io/outfoxx/typescriptpoet/TypeName$Union : io/outfoxx/typescriptpoet/TypeName {
+public final class dk/lldata/typescriptpoet/TypeName$Union : dk/lldata/typescriptpoet/TypeName {
 	public final fun component1 ()Ljava/util/List;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getTypeChoices ()Ljava/util/List;
@@ -1260,26 +1260,26 @@ public final class io/outfoxx/typescriptpoet/TypeName$Union : io/outfoxx/typescr
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/outfoxx/typescriptpoet/TypePredicate {
+public final class dk/lldata/typescriptpoet/TypePredicate {
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun component2 ()Ldk/lldata/typescriptpoet/TypeName;
 	public final fun component3 ()Z
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAsserts ()Z
 	public final fun getParameterName ()Ljava/lang/String;
-	public final fun getType ()Lio/outfoxx/typescriptpoet/TypeName;
+	public final fun getType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract class io/outfoxx/typescriptpoet/TypeSpec : io/outfoxx/typescriptpoet/Taggable {
-	protected fun <init> (Lio/outfoxx/typescriptpoet/TypeSpec$Builder;)V
+public abstract class dk/lldata/typescriptpoet/TypeSpec : dk/lldata/typescriptpoet/Taggable {
+	protected fun <init> (Ldk/lldata/typescriptpoet/TypeSpec$Builder;)V
 	public abstract fun getName ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract class io/outfoxx/typescriptpoet/TypeSpec$Builder : io/outfoxx/typescriptpoet/Taggable$Builder {
+public abstract class dk/lldata/typescriptpoet/TypeSpec$Builder : dk/lldata/typescriptpoet/Taggable$Builder {
 	public fun <init> (Ljava/lang/String;)V
-	public abstract fun build ()Lio/outfoxx/typescriptpoet/TypeSpec;
+	public abstract fun build ()Ldk/lldata/typescriptpoet/TypeSpec;
 }
 
