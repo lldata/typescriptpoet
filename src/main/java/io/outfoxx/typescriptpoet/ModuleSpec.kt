@@ -45,17 +45,9 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       codeWriter.emitCode(CodeBlock.of("${kind.keyword} %L {\n", name))
       codeWriter.indent()
 
-      if (members.isNotEmpty()) {
-        codeWriter.emitCode("\n")
-      }
-
       members.forEachIndexed { index, member ->
         if (index > 0) codeWriter.emit("\n")
         codeWriter.emitMember(member)
-      }
-
-      if (members.isNotEmpty()) {
-        codeWriter.emitCode("\n")
       }
 
       codeWriter.unindent()

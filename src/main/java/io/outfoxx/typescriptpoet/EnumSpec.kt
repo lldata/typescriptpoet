@@ -38,11 +38,8 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
         codeWriter.emitCode(" = ")
         codeWriter.emitCode(it)
       }
-      if (i.hasNext()) {
-        codeWriter.emit(",\n")
-      } else {
-        codeWriter.emit("\n")
-      }
+      // Prettier puts a trailing comma on the last constant too.
+      codeWriter.emit(",\n")
     }
 
     codeWriter.unindent()

@@ -41,7 +41,7 @@ class ComputedTypeTests {
       falseType = TypeName.implicit("No"),
     )
 
-    assertThat(conditional.toString(), equalTo("T extends string ? Yes : No"))
+    assertThat(conditional.toString(), emits("T extends string ? Yes : No"))
   }
 
   @Test
@@ -54,7 +54,7 @@ class ComputedTypeTests {
       falseType = TypeName.NEVER,
     )
 
-    assertThat(conditional.toString(), equalTo("T extends Array<infer U> ? U : never"))
+    assertThat(conditional.toString(), emits("T extends Array<infer U> ? U : never"))
   }
 
   @Test
@@ -65,7 +65,7 @@ class ComputedTypeTests {
 
     assertThat(
       outer.toString(),
-      equalTo("T extends string ? A : T extends number ? B : C"),
+      emits("T extends string ? A : T extends number ? B : C"),
     )
   }
 
@@ -78,7 +78,7 @@ class ComputedTypeTests {
       valueType = TypeName.indexedAccess(t, k),
     )
 
-    assertThat(mapped.toString(), equalTo("{ [K in keyof T]: T[K] }"))
+    assertThat(mapped.toString(), emits("{ [K in keyof T]: T[K] }"))
   }
 
   @Test
@@ -92,7 +92,7 @@ class ComputedTypeTests {
       optional = Mapped.Change.KEEP,
     )
 
-    assertThat(mapped.toString(), equalTo("{ readonly [K in keyof T]?: T[K] }"))
+    assertThat(mapped.toString(), emits("{ readonly [K in keyof T]?: T[K] }"))
   }
 
   @Test
@@ -106,7 +106,7 @@ class ComputedTypeTests {
       optional = Mapped.Change.REMOVE,
     )
 
-    assertThat(mapped.toString(), equalTo("{ -readonly [K in keyof T]-?: T[K] }"))
+    assertThat(mapped.toString(), emits("{ -readonly [K in keyof T]-?: T[K] }"))
   }
 
   @Test
@@ -124,7 +124,7 @@ class ComputedTypeTests {
 
     assertThat(
       mapped.toString(),
-      equalTo("{ [K in keyof T as `get\${Capitalize<K>}`]: T[K] }"),
+      emits("{ [K in keyof T as `get\${Capitalize<K>}`]: T[K] }"),
     )
   }
 
@@ -133,7 +133,7 @@ class ComputedTypeTests {
   fun testTemplateLiteral() {
     val template = TypeName.templateLiteralType("on", k, "Changed")
 
-    assertThat(template.toString(), equalTo("`on\${K}Changed`"))
+    assertThat(template.toString(), emits("`on\${K}Changed`"))
   }
 
   @Test
@@ -165,7 +165,7 @@ class ComputedTypeTests {
 
     assertThat(
       out.toString(),
-      equalTo("type Mutable<T> = { -readonly [K in keyof T]: T[K] };\n"),
+      emits("type Mutable<T> = { -readonly [K in keyof T]: T[K] };\n"),
     )
   }
 }

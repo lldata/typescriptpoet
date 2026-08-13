@@ -27,7 +27,8 @@ internal class LineWrapper(private val out: Appendable, private val indent: Stri
   private val buffer = StringBuilder()
 
   /** The number of characters since the most recent newline. Includes both out and the buffer.  */
-  private var column = 0
+  internal var column = 0
+    private set
 
   /** -1 if we have no buffering; otherwise the number of spaces to write after wrapping.  */
   private var indentLevel = -1

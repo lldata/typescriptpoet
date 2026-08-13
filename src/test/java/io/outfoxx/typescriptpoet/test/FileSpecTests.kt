@@ -57,7 +57,7 @@ class FileSpecTests {
       buildString {
         testFile.writeTo(this, Path.of("tester"))
       },
-      equalTo(
+      emits(
         """
           
           export interface Test {
@@ -95,7 +95,7 @@ class FileSpecTests {
       buildString {
         testFile.writeTo(this, Path.of("tester").toAbsolutePath())
       },
-      equalTo(
+      emits(
         """
           
           export interface Test {
@@ -135,7 +135,7 @@ class FileSpecTests {
 
     assertThat(
       testFile.toString(),
-      equalTo(
+      emits(
         """
           // A file header comment that
           // spans multiple lines.
@@ -163,9 +163,9 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
-          import {Observable} from 'rxjs/observable';
+          import { Observable } from "rxjs/observable";
           
           
           type Test = Observable;
@@ -192,9 +192,9 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
-          import {Observable} from '../local/observable';
+          import { Observable } from "../local/observable";
           
           
           type Test = Observable;
@@ -223,9 +223,9 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
-          import * as stuff from 'stuff/types';
+          import * as stuff from "stuff/types";
           
           
           type Test = stuff;
@@ -254,9 +254,9 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
-          import * as stuff from '../stuff/types';
+          import * as stuff from "../stuff/types";
           
           
           type Test = stuff;
@@ -291,10 +291,10 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
-          import {Observable} from 'rxjs/observable';
-          import 'rxjs/operators/flatMap';
+          import { Observable } from "rxjs/observable";
+          import "rxjs/operators/flatMap";
           
           
           type Test1 = Observable;
@@ -326,9 +326,9 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
-          import 'mocha';
+          import "mocha";
           
           
           type Test = describe;
@@ -365,10 +365,10 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
-          import {Another as Another_, Test} from 'test1';
-          import {Test as Test_} from 'test2';
+          import { Another as Another_, Test } from "test1";
+          import { Test as Test_ } from "test2";
           
           
           type LocalTest1 = Test;
@@ -409,10 +409,10 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
-          import {Another as Another_, Test} from '../../1/test';
-          import {Test as Test_} from '../../2/test';
+          import { Another as Another_, Test } from "../../1/test";
+          import { Test as Test_ } from "../../2/test";
           
           
           type LocalTest1 = Test;
@@ -453,10 +453,10 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
-          import {Another as Another_, Test} from 'test1';
-          import {Test as Test_} from 'test2';
+          import { Another as Another_, Test } from "test1";
+          import { Test as Test_ } from "test2";
           
           
           type LocalTest1 = Test;
@@ -497,10 +497,10 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
-          import {Another as Another_, Test} from '../1/test';
-          import {Test as Test_} from '../2/test';
+          import { Another as Another_, Test } from "../1/test";
+          import { Test as Test_ } from "../2/test";
           
           
           type LocalTest1 = Test;
@@ -544,7 +544,7 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
           
           class Test {
@@ -595,7 +595,7 @@ class FileSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
           
           class Test {

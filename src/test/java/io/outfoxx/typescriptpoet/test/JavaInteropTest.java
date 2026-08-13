@@ -125,7 +125,6 @@ class JavaInteropTest {
         "type Template<K> = `get${K}`;\n" +
         "\n" +
         "export class Widget {\n" +
-        "\n" +
         "  id!: string;\n" +
         "\n" +
         "  parse(value: string): string;\n" +
@@ -133,10 +132,9 @@ class JavaInteropTest {
         "  parse(value: string): string {\n" +
         "    return value;\n" +
         "  }\n" +
-        "\n" +
         "}\n" +
         "\n" +
-        "export {Widget as Gadget};\n"
+        "export { Widget as Gadget };\n"
       )
     );
   }

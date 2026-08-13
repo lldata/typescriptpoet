@@ -52,7 +52,7 @@ class DeclarationTests {
       .returns(TypeName.parameterizedType(TypeName.PROMISE, TypeName.STRING))
       .build()
 
-    assertThat(emit(fn), equalTo("async function load(): Promise<string> {\n}\n"))
+    assertThat(emit(fn), emits("async function load(): Promise<string> {\n}\n"))
   }
 
   @Test
@@ -62,7 +62,7 @@ class DeclarationTests {
       .generator()
       .build()
 
-    assertThat(emit(fn), equalTo("function* items() {\n}\n"))
+    assertThat(emit(fn), emits("function* items() {\n}\n"))
   }
 
   @Test
@@ -73,7 +73,7 @@ class DeclarationTests {
       .generator()
       .build()
 
-    assertThat(emit(fn), equalTo("async function* items() {\n}\n"))
+    assertThat(emit(fn), emits("async function* items() {\n}\n"))
   }
 
   @Test
@@ -85,7 +85,7 @@ class DeclarationTests {
 
     assertThat(
       emit(testClass),
-      equalTo("class Test {\n\n  *items() {\n  }\n\n}\n"),
+      emits("class Test {\n\n  *items() {\n  }\n\n}\n"),
     )
   }
 
@@ -97,7 +97,7 @@ class DeclarationTests {
       .returnsIs("value", TypeName.STRING)
       .build()
 
-    assertThat(emit(fn), equalTo("function isString(value: unknown): value is string {\n}\n"))
+    assertThat(emit(fn), emits("function isString(value: unknown): value is string {\n}\n"))
   }
 
   @Test
@@ -110,7 +110,7 @@ class DeclarationTests {
 
     assertThat(
       emit(withType),
-      equalTo("function assertString(value: unknown): asserts value is string {\n}\n"),
+      emits("function assertString(value: unknown): asserts value is string {\n}\n"),
     )
 
     val bare = FunctionSpec.builder("assertDefined")
@@ -120,7 +120,7 @@ class DeclarationTests {
 
     assertThat(
       emit(bare),
-      equalTo("function assertDefined(value: unknown): asserts value {\n}\n"),
+      emits("function assertDefined(value: unknown): asserts value {\n}\n"),
     )
   }
 
@@ -132,7 +132,7 @@ class DeclarationTests {
       .addParameter("event", TypeName.implicit("Event"))
       .build()
 
-    assertThat(emit(fn), equalTo("function handle(this: Window, event: Event) {\n}\n"))
+    assertThat(emit(fn), emits("function handle(this: Window, event: Event) {\n}\n"))
   }
 
   @Test
@@ -148,7 +148,7 @@ class DeclarationTests {
 
     assertThat(
       emit(testClass),
-      equalTo("class Test {\n\n  static override accessor value: number;\n\n}\n"),
+      emits("class Test {\n\n  static override accessor value: number;\n\n}\n"),
     )
   }
 
@@ -159,7 +159,7 @@ class DeclarationTests {
       .addProperty(PropertySpec.builder("#secret", TypeName.STRING).build())
       .build()
 
-    assertThat(emit(testClass), equalTo("class Test {\n\n  #secret: string;\n\n}\n"))
+    assertThat(emit(testClass), emits("class Test {\n\n  #secret: string;\n\n}\n"))
   }
 
   @Test
@@ -181,7 +181,7 @@ class DeclarationTests {
       )
       .build()
 
-    assertThat(emit(testClass), equalTo("class Test {\n\n  value!: string;\n\n}\n"))
+    assertThat(emit(testClass), emits("class Test {\n\n  value!: string;\n\n}\n"))
   }
 
   @Test
@@ -205,7 +205,7 @@ class DeclarationTests {
 
     assertThat(
       emit(testClass),
-      equalTo("class Test {\n\n  static {\n    registry.add(Test);\n  }\n\n}\n"),
+      emits("class Test {\n\n  static {\n    registry.add(Test);\n  }\n\n}\n"),
     )
   }
 
@@ -223,7 +223,7 @@ class DeclarationTests {
 
     assertThat(
       out.toString(),
-      equalTo("export const enum Direction {\n  Up,\n  Down\n}\n"),
+      emits("export const enum Direction {\n  Up,\n  Down,\n}\n"),
     )
   }
 
@@ -252,7 +252,7 @@ class DeclarationTests {
 
     assertThat(
       emit(testClass),
-      equalTo(
+      emits(
         """
             class Test {
 
@@ -302,7 +302,7 @@ class DeclarationTests {
 
     assertThat(
       emit(fn),
-      equalTo("function configure({ host, port: listenPort }: Options) {\n}\n"),
+      emits("function configure({ host, port: listenPort }: Options) {\n}\n"),
     )
   }
 
@@ -319,7 +319,7 @@ class DeclarationTests {
 
     assertThat(
       emit(fn),
-      equalTo("function swap([first, second]: [string, string]) {\n}\n"),
+      emits("function swap([first, second]: [string, string]) {\n}\n"),
     )
   }
 
@@ -330,7 +330,7 @@ class DeclarationTests {
       .restParameter("args", TypeName.arrayShorthandType(TypeName.ANY))
       .build()
 
-    assertThat(emit(fn), equalTo("function log(...args: any[]) {\n}\n"))
+    assertThat(emit(fn), emits("function log(...args: any[]) {\n}\n"))
   }
 
   @Test
@@ -356,7 +356,7 @@ class DeclarationTests {
 
     assertThat(
       emit(testClass),
-      equalTo(
+      emits(
         """
             class Test {
 

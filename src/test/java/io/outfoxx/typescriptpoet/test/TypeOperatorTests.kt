@@ -33,7 +33,7 @@ class TypeOperatorTests {
   @Test
   @DisplayName("Generates keyof")
   fun testKeyOf() {
-    assertThat(TypeName.keyOf(person).toString(), equalTo("keyof Person"))
+    assertThat(TypeName.keyOf(person).toString(), emits("keyof Person"))
   }
 
   @Test
@@ -42,13 +42,13 @@ class TypeOperatorTests {
     // `keyof A | B` parses as `(keyof A) | B`, which is not what was asked for.
     val union = TypeName.unionType(person, TypeName.STRING)
 
-    assertThat(TypeName.keyOf(union).toString(), equalTo("keyof (Person | string)"))
+    assertThat(TypeName.keyOf(union).toString(), emits("keyof (Person | string)"))
   }
 
   @Test
   @DisplayName("Generates typeof")
   fun testTypeOf() {
-    assertThat(TypeName.typeOf(TypeName.implicit("config")).toString(), equalTo("typeof config"))
+    assertThat(TypeName.typeOf(TypeName.implicit("config")).toString(), emits("typeof config"))
   }
 
   @Test
@@ -56,7 +56,7 @@ class TypeOperatorTests {
   fun testIndexedAccess() {
     val access = TypeName.indexedAccess(person, TypeName.implicit("\"name\""))
 
-    assertThat(access.toString(), equalTo("""Person["name"]"""))
+    assertThat(access.toString(), emits("""Person["name"]"""))
   }
 
   @Test
@@ -64,13 +64,13 @@ class TypeOperatorTests {
   fun testIndexedAccessWithKeyOf() {
     val access = TypeName.indexedAccess(person, TypeName.keyOf(person))
 
-    assertThat(access.toString(), equalTo("Person[keyof Person]"))
+    assertThat(access.toString(), emits("Person[keyof Person]"))
   }
 
   @Test
   @DisplayName("Generates the array shorthand")
   fun testArrayShorthand() {
-    assertThat(TypeName.arrayShorthandType(TypeName.STRING).toString(), equalTo("string[]"))
+    assertThat(TypeName.arrayShorthandType(TypeName.STRING).toString(), emits("string[]"))
   }
 
   @Test
@@ -81,7 +81,7 @@ class TypeOperatorTests {
 
     assertThat(
       TypeName.arrayShorthandType(union).toString(),
-      equalTo("(string | number)[]"),
+      emits("(string | number)[]"),
     )
   }
 
@@ -90,18 +90,18 @@ class TypeOperatorTests {
   fun testReadOnly() {
     assertThat(
       TypeName.readOnly(TypeName.arrayShorthandType(TypeName.STRING)).toString(),
-      equalTo("readonly string[]"),
+      emits("readonly string[]"),
     )
     assertThat(
       TypeName.readOnly(TypeName.tupleType(TypeName.NUMBER, TypeName.STRING)).toString(),
-      equalTo("readonly [number, string]"),
+      emits("readonly [number, string]"),
     )
   }
 
   @Test
   @DisplayName("Generates unique symbol")
   fun testUniqueSymbol() {
-    assertThat(TypeName.UNIQUE_SYMBOL.toString(), equalTo("unique symbol"))
+    assertThat(TypeName.UNIQUE_SYMBOL.toString(), emits("unique symbol"))
   }
 
   @Test
@@ -119,7 +119,7 @@ class TypeOperatorTests {
       ),
     )
 
-    assertThat(tuple.toString(), equalTo("[a: string, b?: number, ...rest: boolean[]]"))
+    assertThat(tuple.toString(), emits("[a: string, b?: number, ...rest: boolean[]]"))
   }
 
   @Test
@@ -132,7 +132,7 @@ class TypeOperatorTests {
       ),
     )
 
-    assertThat(tuple.toString(), equalTo("[string, number?]"))
+    assertThat(tuple.toString(), emits("[string, number?]"))
   }
 
   @Test
@@ -144,7 +144,7 @@ class TypeOperatorTests {
       returnType = TypeName.typeVariable("T"),
     )
 
-    assertThat(lambda.toString(), equalTo("<T>(value: T) => T"))
+    assertThat(lambda.toString(), emits("<T>(value: T) => T"))
   }
 
   @Test
@@ -152,18 +152,18 @@ class TypeOperatorTests {
   fun testConstructorType() {
     assertThat(
       TypeName.constructorType(mapOf("value" to TypeName.STRING), person).toString(),
-      equalTo("new (value: string) => Person"),
+      emits("new (value: string) => Person"),
     )
     assertThat(
       TypeName.constructorType(mapOf("value" to TypeName.STRING), person, abstract = true).toString(),
-      equalTo("abstract new (value: string) => Person"),
+      emits("abstract new (value: string) => Person"),
     )
   }
 
   @Test
   @DisplayName("Emits infer only at the use site")
   fun testInfer() {
-    assertThat(TypeName.infer("U").toString(), equalTo("infer U"))
+    assertThat(TypeName.infer("U").toString(), emits("infer U"))
   }
 
   @Test
@@ -176,7 +176,7 @@ class TypeOperatorTests {
       const = true,
     )
 
-    assertThat(typeVar.toString(), equalTo("T"))
+    assertThat(typeVar.toString(), emits("T"))
   }
 
   @Test
@@ -196,7 +196,7 @@ class TypeOperatorTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test {
 
@@ -222,7 +222,7 @@ class TypeOperatorTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test<out T, const U> {
             }

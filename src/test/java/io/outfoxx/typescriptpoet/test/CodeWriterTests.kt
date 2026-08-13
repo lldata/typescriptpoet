@@ -40,7 +40,7 @@ class CodeWriterTests {
 
     MatcherAssert.assertThat(
       testFunc.toString(),
-      CoreMatchers.equalTo(
+      emits(
         """
             function test(): string {
               return X(aaaaa, bbbbb, ccccc, ddddd, eeeee, fffff, ggggg, hhhhh, iiiii, jjjjj, kkkkk, lllll,
@@ -57,7 +57,7 @@ class CodeWriterTests {
   fun testNestedCodeBlockKeepsImports() {
     // Upstream outfoxx/typescriptpoet#27: a CodeBlock passed as a %L argument used to be
     // flattened with toString(), which discarded its format parts, so the %T inside it never
-    // reached the import collector and `import { X } from 'x';` went missing.
+    // reached the import collector and `import {  X  } from \"x\";` went missing.
     val testFunc = FunctionSpec.builder("test")
       .returns(STRING)
       .addStatement("return %L", CodeBlock.of("new %T()", TypeName.namedImport("X", "x")))
@@ -72,9 +72,9 @@ class CodeWriterTests {
 
     MatcherAssert.assertThat(
       out.toString(),
-      CoreMatchers.equalTo(
+      emits(
         """
-            import {X} from 'x';
+            import { X } from "x";
 
 
             function test(): string {

@@ -94,7 +94,7 @@ class ModifierOrderingTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test {
 
@@ -128,7 +128,7 @@ class ModifierOrderingTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             abstract class Test {
 
@@ -161,7 +161,7 @@ class ModifierOrderingTests {
     // remaining two is the point of this case.
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test {
 
@@ -188,7 +188,7 @@ class ModifierOrderingTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             export declare class Test {
             }

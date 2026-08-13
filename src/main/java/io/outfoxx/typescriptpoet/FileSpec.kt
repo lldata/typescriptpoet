@@ -173,17 +173,17 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
             // line (`import D, { a } from 'm'`) is legal but not attempted.
             val keyword = if (import.typeOnly) "import type" else "import"
             codeWriter.emitCode(
-              CodeBlock.of("%[$keyword %L from '%L';\n%]", import.value, sourceImportPath),
+              CodeBlock.of("%[$keyword %L from \"%L\";\n%]", import.value, sourceImportPath),
             )
           }
 
           imports.filterIsInstance<SymbolSpec.ImportsAll>().forEach { import ->
             // Output star imports individually
             val keyword = if (import.typeOnly) "import type" else "import"
-            codeWriter.emitCode(CodeBlock.of("%[$keyword * as %L from '%L';\n%]", import.value, sourceImportPath))
+            codeWriter.emitCode(CodeBlock.of("%[$keyword * as %L from \"%L\";\n%]", import.value, sourceImportPath))
             // Output related augments
             augmentImports[import.value]?.forEach { augment ->
-              codeWriter.emitCode(CodeBlock.of("%[import '%L';\n%]", augment.source))
+              codeWriter.emitCode(CodeBlock.of("%[import \"%L\";\n%]", augment.source))
             }
           }
 
@@ -200,15 +200,15 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
               if (names.isEmpty()) return@let
               // Output named imports as a group
               codeWriter
-                .emitCode("import {")
+                .emitCode("import { ")
                 .indent()
                 .emitCode(names.joinToString(", "))
                 .unindent()
-                .emitCode(CodeBlock.of("} from '%L';\n", sourceImportPath))
+                .emitCode(CodeBlock.of(" } from \"%L\";\n", sourceImportPath))
               // Output related augments
               names.forEach { name ->
                 augmentImports[name]?.forEach { augment ->
-                  codeWriter.emitCode(CodeBlock.of("%[import '%L';\n%]", augment.source))
+                  codeWriter.emitCode(CodeBlock.of("%[import \"%L\";\n%]", augment.source))
                 }
               }
             }
@@ -217,8 +217,6 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       sideEffectImports.forEach {
         codeWriter.emitCode(CodeBlock.of("%[import %S;\n%]", it.key))
       }
-
-      codeWriter.emit("\n")
     }
   }
 

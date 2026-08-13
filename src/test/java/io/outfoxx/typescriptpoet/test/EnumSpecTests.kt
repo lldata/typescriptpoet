@@ -52,7 +52,7 @@ class EnumSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             /**
              * this is a comment
@@ -77,7 +77,7 @@ class EnumSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             export enum Test {
             }
@@ -101,12 +101,12 @@ class EnumSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             enum Test {
               A = 10,
               B = 20,
-              C = 30
+              C = 30,
             }
 
         """.trimIndent(),
@@ -124,7 +124,7 @@ class EnumSpecTests {
       .build()
       .toBuilder()
 
-    assertThat(testEnumBldr.name, equalTo("Test"))
+    assertThat(testEnumBldr.name, emits("Test"))
     assertThat(testEnumBldr.tsDoc.formatParts, hasItems("this is a comment\n"))
     assertThat(testEnumBldr.modifiers, hasItems(Modifier.EXPORT))
     assertThat(testEnumBldr.constants.keys, hasItems("A"))

@@ -22,13 +22,21 @@ import java.util.Stack
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
  * imports, indentation, and deferred variable names.
  */
+private const val PRINT_WIDTH = 80
+
 internal class CodeWriter(
   out: Appendable,
   private val indent: String = "  ",
   val renamedSymbols: Map<SymbolSpec, String> = emptyMap(),
 ) : Closeable {
 
-  private val out = LineWrapper(out, indent, 100)
+  private val out = LineWrapper(out, indent, PRINT_WIDTH)
+
+  /** The column the next character would be written at, for measure-then-break decisions. */
+  val currentColumn: Int get() = out.column
+
+  /** The column at which a line is considered too long. */
+  val printWidth: Int get() = PRINT_WIDTH
   private var indentLevel = 0
 
   private var tsDoc = false
