@@ -51,7 +51,10 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     emitSignature(codeWriter, enclosingName)
 
     val isEmptyConstructor = isConstructor && body.isEmpty()
-    if (Modifier.ABSTRACT in modifiers || isEmptyConstructor) {
+    // Call and index signatures are declarations, never definitions: they have no body in any
+    // context. Interfaces got this for free by forcing ABSTRACT onto their members, but a
+    // class index signature is concrete and would otherwise be emitted with an empty body.
+    if (Modifier.ABSTRACT in modifiers || isEmptyConstructor || isCallable || isIndexable) {
       codeWriter.emit(";\n")
       return
     }

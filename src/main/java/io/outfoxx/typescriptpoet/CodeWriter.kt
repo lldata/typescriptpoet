@@ -123,6 +123,12 @@ internal class CodeWriter constructor(
       emitCode(
         CodeBlock.of(
           buildString {
+            // `const` and variance are declaration-site only; TypeVariable.emit deliberately
+            // omits them so use sites stay bare.
+            if (typeVariable.isConst) {
+              append("const ")
+            }
+            typeVariable.variance?.let { append("${it.keyword} ") }
             append(typeVariable.name)
             if (typeVariable.bounds.isNotEmpty()) {
               val parts = mutableListOf<String>()

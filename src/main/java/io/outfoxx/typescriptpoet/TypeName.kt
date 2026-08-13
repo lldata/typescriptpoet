@@ -27,6 +27,26 @@ sealed class TypeName {
 
   internal abstract fun emit(codeWriter: CodeWriter)
 
+  /**
+   * Whether this type binds loosely enough that it must be parenthesised when it appears as
+   * the operand of a tighter-binding construct.
+   *
+   * `keyof A | B` parses as `(keyof A) | B`, and `A | B[]` as `A | (B[])`, so a union used as
+   * the operand of `keyof` or `[]` has to be wrapped to mean what the caller asked for.
+   */
+  internal open val bindsLoosely: Boolean get() = false
+
+  /** Emits this type, parenthesised if it would otherwise re-associate. See [bindsLoosely]. */
+  internal fun emitAsOperand(codeWriter: CodeWriter) {
+    if (bindsLoosely) {
+      codeWriter.emit("(")
+      emit(codeWriter)
+      codeWriter.emit(")")
+    } else {
+      emit(codeWriter)
+    }
+  }
+
   @ConsistentCopyVisibility
   data class Standard
   internal constructor(val base: SymbolSpec) : TypeName() {
@@ -88,7 +108,21 @@ sealed class TypeName {
 
   @ConsistentCopyVisibility
   data class TypeVariable
-  internal constructor(val name: String, val bounds: List<Bound>) : TypeName() {
+  internal constructor(
+    val name: String,
+    val bounds: List<Bound>,
+    val variance: Variance? = null,
+    val isConst: Boolean = false,
+    val isInfer: Boolean = false,
+  ) : TypeName() {
+
+    /** Declaration-site variance annotation (e.g. `<in T>`, `<out T>`, `<in out T>`). */
+    enum class Variance(val keyword: String) {
+
+      IN("in"),
+      OUT("out"),
+      IN_OUT("in out"),
+    }
 
     data class Bound(val type: TypeName, val combiner: Combiner = UNION, val modifier: Modifier?) {
 
@@ -105,7 +139,69 @@ sealed class TypeName {
     }
 
     override fun emit(codeWriter: CodeWriter) {
+      // `infer T` is a use-site form; variance, `const` and bounds only appear at the
+      // declaration site, which goes through CodeWriter.emitTypeVariables.
+      if (isInfer) {
+        codeWriter.emit("infer ")
+      }
       codeWriter.emit(name)
+    }
+
+    override fun toString() = buildCodeString { emit(this) }
+  }
+
+  /**
+   * A prefix type operator: `keyof T`, `typeof x`, `readonly T[]`, `unique symbol`.
+   */
+  @ConsistentCopyVisibility
+  data class Operator
+  internal constructor(val operator: Kind, val operand: TypeName) : TypeName() {
+
+    enum class Kind(val keyword: String) {
+
+      KEY_OF("keyof"),
+      TYPE_OF("typeof"),
+      READONLY("readonly"),
+      UNIQUE("unique"),
+    }
+
+    override fun emit(codeWriter: CodeWriter) {
+      codeWriter.emit(operator.keyword)
+      codeWriter.emit(" ")
+      operand.emitAsOperand(codeWriter)
+    }
+
+    override fun toString() = buildCodeString { emit(this) }
+  }
+
+  /** An indexed access type: `T[K]`. */
+  @ConsistentCopyVisibility
+  data class IndexedAccess
+  internal constructor(val objectType: TypeName, val indexType: TypeName) : TypeName() {
+
+    override fun emit(codeWriter: CodeWriter) {
+      objectType.emitAsOperand(codeWriter)
+      codeWriter.emit("[")
+      indexType.emit(codeWriter)
+      codeWriter.emit("]")
+    }
+
+    override fun toString() = buildCodeString { emit(this) }
+  }
+
+  /**
+   * The array shorthand, `T[]`.
+   *
+   * Distinct from [arrayType], which emits `Array<T>`. Only the shorthand can carry
+   * `readonly`: `readonly T[]` is valid where `readonly Array<T>` is not.
+   */
+  @ConsistentCopyVisibility
+  data class ArrayShorthand
+  internal constructor(val elementType: TypeName) : TypeName() {
+
+    override fun emit(codeWriter: CodeWriter) {
+      elementType.emitAsOperand(codeWriter)
+      codeWriter.emit("[]")
     }
 
     override fun toString() = buildCodeString { emit(this) }
@@ -139,14 +235,43 @@ sealed class TypeName {
 
   @ConsistentCopyVisibility
   data class Tuple
-  internal constructor(val memberTypes: List<TypeName>) : TypeName() {
+  internal constructor(val members: List<Member>) : TypeName() {
+
+    /**
+     * One tuple element, optionally labelled, optional, or a rest element:
+     * `[a: string, b?: number, ...rest: boolean[]]`.
+     */
+    data class Member(
+      val type: TypeName,
+      val label: String? = null,
+      val optional: Boolean = false,
+      val rest: Boolean = false,
+    )
+
+    /** The element types, discarding labels. Convenience for the common unlabelled case. */
+    val memberTypes: List<TypeName> get() = members.map { it.type }
 
     override fun emit(codeWriter: CodeWriter) {
       codeWriter.emit("[")
-      memberTypes.forEachIndexed { idx, memberType ->
-        memberType.emit(codeWriter)
+      members.forEachIndexed { idx, member ->
+        if (member.rest) {
+          codeWriter.emit("...")
+        }
+        if (member.label != null) {
+          codeWriter.emit(member.label)
+          if (member.optional) {
+            codeWriter.emit("?")
+          }
+          codeWriter.emit(": ")
+          member.type.emit(codeWriter)
+        } else {
+          member.type.emit(codeWriter)
+          if (member.optional) {
+            codeWriter.emit("?")
+          }
+        }
 
-        if (idx != memberTypes.size - 1) {
+        if (idx != members.size - 1) {
           codeWriter.emit(", ")
         }
       }
@@ -159,6 +284,8 @@ sealed class TypeName {
   @ConsistentCopyVisibility
   data class Intersection
   internal constructor(val typeRequirements: List<TypeName>) : TypeName() {
+
+    override val bindsLoosely: Boolean get() = typeRequirements.size > 1
 
     override fun emit(codeWriter: CodeWriter) {
       typeRequirements.forEachIndexed { idx, typeRequirement ->
@@ -177,6 +304,8 @@ sealed class TypeName {
   data class Union
   internal constructor(val typeChoices: List<TypeName>) : TypeName() {
 
+    override val bindsLoosely: Boolean get() = typeChoices.size > 1
+
     override fun emit(codeWriter: CodeWriter) {
       typeChoices.forEachIndexed { idx, typeChoice ->
         typeChoice.emit(codeWriter)
@@ -193,11 +322,23 @@ sealed class TypeName {
   @ConsistentCopyVisibility
   data class Lambda
   internal constructor(
-    private val parameters: Map<String, TypeName> = emptyMap(),
-    private val returnType: TypeName = VOID,
+    val parameters: Map<String, TypeName> = emptyMap(),
+    val returnType: TypeName = VOID,
+    val typeVariables: List<TypeVariable> = emptyList(),
+    val constructable: Boolean = false,
+    val abstract: Boolean = false,
   ) : TypeName() {
 
+    override val bindsLoosely: Boolean get() = true
+
     override fun emit(codeWriter: CodeWriter) {
+      if (abstract) {
+        codeWriter.emit("abstract ")
+      }
+      if (constructable) {
+        codeWriter.emit("new ")
+      }
+      codeWriter.emitTypeVariables(typeVariables)
       codeWriter.emit("(")
       parameters.entries.forEachIndexed { idx, entry ->
         val (name, type) = entry
@@ -404,6 +545,33 @@ sealed class TypeName {
     fun typeVariable(name: String, vararg bounds: Bound): TypeVariable = TypeVariable(name, bounds.toList())
 
     /**
+     * Type variable with a declaration-site variance annotation and/or `const` modifier
+     * (e.g. `<const T>`, `<out T>`, `<in out T extends Base>`).
+     *
+     * @param name The name of the variable as it will be used in the definition
+     * @param variance Variance annotation, or null for none
+     * @param const Whether the type parameter is a `const` type parameter
+     * @param bounds Bound constraints that will be required during instantiation
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun typeVariable(
+      name: String,
+      variance: TypeVariable.Variance? = null,
+      const: Boolean = false,
+      bounds: List<Bound> = emptyList(),
+    ): TypeVariable = TypeVariable(name, bounds, variance, const)
+
+    /**
+     * An `infer` type variable, for use inside the `extends` clause of a conditional type
+     * (e.g. the `U` in `T extends Array<infer U> ? U : never`).
+     *
+     * @param name The name being inferred
+     */
+    @JvmStatic
+    fun infer(name: String): TypeVariable = TypeVariable(name, emptyList(), isInfer = true)
+
+    /**
      * Factory for type variable bounds
      */
     @JvmStatic
@@ -450,7 +618,89 @@ sealed class TypeName {
      * @return Type name representing the tuple type
      */
     @JvmStatic
-    fun tupleType(vararg memberTypes: TypeName): Tuple = Tuple(memberTypes.toList())
+    fun tupleType(vararg memberTypes: TypeName): Tuple = Tuple(memberTypes.map { Tuple.Member(it) })
+
+    /**
+     * Tuple type name with labelled, optional or rest elements
+     * (e.g. `[a: string, b?: number, ...rest: boolean[]]`)
+     *
+     * @param members Each argument represents a distinct member
+     * @return Type name representing the tuple type
+     */
+    @JvmStatic
+    fun tupleType(members: List<Tuple.Member>): Tuple = Tuple(members)
+
+    /**
+     * A single tuple element.
+     *
+     * @param type Element type
+     * @param label Optional element label (e.g. the `a` in `[a: string]`)
+     * @param optional Whether the element is optional (e.g. `[b?: number]`)
+     * @param rest Whether the element is a rest element (e.g. `[...rest: boolean[]]`)
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun tupleMember(
+      type: TypeName,
+      label: String? = null,
+      optional: Boolean = false,
+      rest: Boolean = false,
+    ): Tuple.Member = Tuple.Member(type, label, optional, rest)
+
+    /**
+     * The `keyof` operator (e.g. `keyof Person`)
+     *
+     * @param type Type whose keys are taken
+     */
+    @JvmStatic
+    fun keyOf(type: TypeName): Operator = Operator(Operator.Kind.KEY_OF, type)
+
+    /**
+     * A `typeof` type query (e.g. `typeof config`)
+     *
+     * This queries the type of a *value*, so it takes the value's symbol and the value is
+     * imported like any other reference.
+     *
+     * @param symbol Symbol of the value being queried
+     */
+    @JvmStatic
+    fun typeOf(symbol: SymbolSpec): Operator = Operator(Operator.Kind.TYPE_OF, Standard(symbol))
+
+    /**
+     * A `typeof` type query (e.g. `typeof config`)
+     *
+     * @param type Type name of the value being queried
+     */
+    @JvmStatic
+    fun typeOf(type: Standard): Operator = Operator(Operator.Kind.TYPE_OF, type)
+
+    /**
+     * The `readonly` type operator, valid on array shorthands and tuples
+     * (e.g. `readonly string[]`, `readonly [number, string]`)
+     *
+     * @param type Array shorthand or tuple type to mark readonly
+     */
+    @JvmStatic
+    fun readOnly(type: TypeName): Operator = Operator(Operator.Kind.READONLY, type)
+
+    /**
+     * An indexed access type (e.g. `Person["name"]`)
+     *
+     * @param objectType Type being indexed
+     * @param indexType Index
+     */
+    @JvmStatic
+    fun indexedAccess(objectType: TypeName, indexType: TypeName): IndexedAccess = IndexedAccess(objectType, indexType)
+
+    /**
+     * The array shorthand (e.g. `string[]`)
+     *
+     * Unlike [arrayType], which emits `Array<T>`, this form can carry `readonly`.
+     *
+     * @param elementType Element type of the array
+     */
+    @JvmStatic
+    fun arrayShorthandType(elementType: TypeName): ArrayShorthand = ArrayShorthand(elementType)
 
     /**
      * Intersection type name (e.g. `Person & Serializable & Loggable`)
@@ -478,5 +728,40 @@ sealed class TypeName {
     @JvmStatic
     fun lambda(vararg parameters: Pair<String, TypeName> = emptyArray(), returnType: TypeName) =
       Lambda(parameters.toMap(), returnType)
+
+    /**
+     * A generic function type (e.g. `<T>(value: T) => T`).
+     *
+     * @param typeVariables Type parameters of the function type
+     * @param parameters Parameters of the function type
+     * @param returnType Return type of the function type
+     */
+    @JvmStatic
+    fun genericLambda(
+      typeVariables: List<TypeVariable>,
+      parameters: Map<String, TypeName> = emptyMap(),
+      returnType: TypeName,
+    ) = Lambda(parameters, returnType, typeVariables)
+
+    /**
+     * A construct signature type (e.g. `new (value: string) => Widget`).
+     *
+     * @param parameters Parameters of the constructor
+     * @param returnType Type the constructor produces
+     * @param typeVariables Type parameters of the construct signature
+     * @param abstract Whether this is an `abstract new (...) => T` type
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun constructorType(
+      parameters: Map<String, TypeName> = emptyMap(),
+      returnType: TypeName,
+      typeVariables: List<TypeVariable> = emptyList(),
+      abstract: Boolean = false,
+    ) = Lambda(parameters, returnType, typeVariables, constructable = true, abstract = abstract)
+
+    /** `unique symbol`, as used for well-known symbol declarations. */
+    @JvmField
+    val UNIQUE_SYMBOL: Operator = Operator(Operator.Kind.UNIQUE, SYMBOL)
   }
 }

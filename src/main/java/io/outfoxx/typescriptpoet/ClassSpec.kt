@@ -31,6 +31,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
   val propertySpecs = builder.propertySpecs.toImmutableList()
   val constructor = builder.constructor
   val functionSpecs = builder.functionSpecs.toImmutableList()
+  val indexableSpecs = builder.indexableSpecs.toImmutableList()
   val useConstructorPropertiesAutomatically = builder.useConstructorPropertiesAutomatically
 
   override fun emit(codeWriter: CodeWriter) {
@@ -73,6 +74,12 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
         asStatement = true,
         compactOptionalAllowed = !useConstructorPropertiesAutomatically,
       )
+    }
+
+    // Index signatures.
+    for (funSpec in indexableSpecs) {
+      codeWriter.emit("\n")
+      funSpec.emit(codeWriter, null, setOf(Modifier.PUBLIC))
     }
 
     // Write the constructor manually, allowing the replacement
@@ -169,7 +176,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
           .filterNot { constructorProperties.containsKey(it.name) }
           .forEach { _ -> return false }
       }
-      return constructor == null && functionSpecs.isEmpty()
+      return constructor == null && functionSpecs.isEmpty() && indexableSpecs.isEmpty()
     }
 
   fun toBuilder(): Builder {
@@ -183,6 +190,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     builder.propertySpecs += propertySpecs
     builder.constructor = constructor
     builder.functionSpecs += functionSpecs
+    builder.indexableSpecs += indexableSpecs
     return builder
   }
 
@@ -197,6 +205,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     internal val propertySpecs = mutableListOf<PropertySpec>()
     internal var constructor: FunctionSpec? = null
     internal val functionSpecs = mutableListOf<FunctionSpec>()
+    internal val indexableSpecs = mutableListOf<FunctionSpec>()
     internal var useConstructorPropertiesAutomatically = true
 
     fun addTSDoc(format: String, vararg args: Any) = apply {
@@ -267,6 +276,27 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     fun addFunction(functionSpec: FunctionSpec) = apply {
       require(!functionSpec.isConstructor) { "Use the 'constructor' method for the constructor" }
       this.functionSpecs += functionSpec
+    }
+
+    fun addIndexables(indexableSpecs: Iterable<FunctionSpec>) = apply {
+      indexableSpecs.forEach { addIndexable(it) }
+    }
+
+    /**
+     * Adds an index signature (e.g. `[key: string]: unknown;`).
+     *
+     * Unlike an interface's, a class index signature is a concrete declaration, so ABSTRACT
+     * is rejected rather than required.
+     */
+    fun addIndexable(functionSpec: FunctionSpec) = apply {
+      require(functionSpec.isIndexable) {
+        "expected an index signature but was ${functionSpec.name}; " +
+          "use FunctionSpec.indexableBuilder when building"
+      }
+      require(!functionSpec.modifiers.contains(Modifier.ABSTRACT)) {
+        "Class indexables must not be ABSTRACT"
+      }
+      this.indexableSpecs += functionSpec
     }
 
     fun allowUsingConstructorPropertiesAutomatically(value: Boolean = true) = apply {
