@@ -235,7 +235,13 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
   override fun hashCode() = toString().hashCode()
 
-  override fun toString() = buildCodeString { emit(this, Paths.get("/")) }
+  /**
+   * The file as `writeTo` would write it, imports included.
+   *
+   * This used to call `emit` directly, which defaults `imports` to empty -- so it returned
+   * output that looked complete and silently lacked the import block.
+   */
+  override fun toString() = buildString { writeTo(this) }
 
   /** A builder pre-populated with this spec, for deriving a modified copy. */
   fun toBuilder(): Builder {

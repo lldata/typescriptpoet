@@ -110,6 +110,8 @@ sealed class TypeName {
       }
       codeWriter.emit(">")
     }
+
+    override fun toString() = buildCodeString { emit(this) }
   }
 
   @ConsistentCopyVisibility

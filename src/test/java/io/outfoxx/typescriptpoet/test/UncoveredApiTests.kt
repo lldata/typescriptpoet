@@ -200,4 +200,34 @@ class UncoveredApiTests {
       assertThat("'$sentinel' should be rejected", error is IllegalArgumentException, equalTo(true))
     }
   }
+
+  @Test
+  @DisplayName("TypeName.toString renders parameterized types")
+  fun testParameterizedToString() {
+    // Issue #3: Parameterized was the one variant with no toString override, so it returned
+    // the Kotlin data class representation -- and only for that one kind, which is what made
+    // it survive review.
+    val parameterized = TypeName.parameterizedType(TypeName.ARRAY, TypeName.STRING)
+
+    assertThat(parameterized.toString(), equalTo("Array<string>"))
+  }
+
+  @Test
+  @DisplayName("FileSpec.toString includes the imports writeTo emits")
+  fun testFileSpecToStringIncludesImports() {
+    // Issue #4: toString called emit() with imports defaulted to empty, so it produced
+    // output that looked complete and had no import block.
+    val file = FileSpec.builder("x")
+      .addFunction(
+        FunctionSpec.builder("f")
+          .addStatement("return %T()", TypeName.namedImport("dep", "./dep"))
+          .build(),
+      )
+      .build()
+
+    val written = StringWriter().also { file.writeTo(it) }.toString()
+
+    assertThat(file.toString(), equalTo(written))
+    assertThat(file.toString().contains("import { dep } from \"./dep\";"), equalTo(true))
+  }
 }
