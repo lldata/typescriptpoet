@@ -344,7 +344,20 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     }
 
     fun addEnum(enumSpec: EnumSpec) = apply {
-      checkMemberModifiers(enumSpec.modifiers)
+      // `const enum` is legal at file scope, so CONST is exempt here even though it is a
+      // forbidden modifier for every other kind of member.
+      requireNoneOf(
+        enumSpec.modifiers,
+        Modifier.PUBLIC,
+        Modifier.PROTECTED,
+        Modifier.PRIVATE,
+        Modifier.READONLY,
+        Modifier.GET,
+        Modifier.SET,
+        Modifier.STATIC,
+        Modifier.LET,
+        Modifier.VAR,
+      )
       members += enumSpec
     }
 
