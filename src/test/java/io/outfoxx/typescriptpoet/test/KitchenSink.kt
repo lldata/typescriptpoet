@@ -292,21 +292,21 @@ object KitchenSink {
         .addTSDoc("Narrows an unknown value to %L.\n", "Person")
         .addParameter("value", TypeName.implicit("unknown"))
         .returnsIs("value", person)
-        .addStatement("return typeof value === 'object' && value !== null && 'name' in value")
+        .addStatement("return typeof value === \"object\" && value !== null && \"name\" in value")
         .build(),
     )
     file.addFunction(
       FunctionSpec.builder("assertPerson")
         .addParameter("value", TypeName.implicit("unknown"))
         .returnsAsserts("value", person)
-        .addStatement("if (!isPerson(value)) throw new Error('not a person')")
+        .addStatement("if (!isPerson(value)) throw new Error(\"not a person\")")
         .build(),
     )
     file.addFunction(
       FunctionSpec.builder("assertReady")
         .addParameter("value", TypeName.implicit("unknown"))
         .returnsAsserts("value")
-        .addStatement("if (!value) throw new Error('not ready')")
+        .addStatement("if (!value) throw new Error(\"not ready\")")
         .build(),
     )
     file.addFunction(
@@ -328,7 +328,7 @@ object KitchenSink {
       FunctionSpec.builder("load")
         .addModifiers(Modifier.ASYNC)
         .returns(TypeName.parameterizedType(TypeName.PROMISE, TypeName.STRING))
-        .addStatement("return 'loaded'")
+        .addStatement("return \"loaded\"")
         .build(),
     )
     file.addFunction(
@@ -356,7 +356,7 @@ object KitchenSink {
         .addParameter("name", TypeName.STRING, optional = true)
         .restParameter("extras", TypeName.arrayShorthandType(TypeName.STRING))
         .returns(TypeName.STRING)
-        .addStatement("return [greeting, name, ...extras].join(' ')")
+        .addStatement("return [greeting, name, ...extras].join(\" \")")
         .build(),
     )
     file.addFunction(
@@ -384,7 +384,7 @@ object KitchenSink {
     file.addFunction(
       FunctionSpec.builder("useUtils")
         .returns(TypeName.STRING)
-        .addStatement("return %Q.identity('x')", SymbolSpec.importsAll("utils", "./utils"))
+        .addStatement("return %Q.identity(\"x\")", SymbolSpec.importsAll("utils", "./utils"))
         .build(),
     )
     FunctionSpec.overloads(
@@ -408,7 +408,7 @@ object KitchenSink {
           FunctionSpec.builder("greet")
             .addModifiers(Modifier.PUBLIC)
             .returns(TypeName.STRING)
-            .addStatement("return 'hi'")
+            .addStatement("return \"hi\"")
             .build(),
         )
         .addFunction(
@@ -480,7 +480,7 @@ object KitchenSink {
             .returns(TypeName.implicit("unknown"))
             .build(),
         )
-        .addStaticBlock("Widget.registry.set('widget', 1);\n")
+        .addStaticBlock("Widget.registry.set(\"widget\", 1);\n")
         .addFunction(
           FunctionSpec.builder("greet")
             .addModifiers(Modifier.PUBLIC, Modifier.OVERRIDE)
@@ -493,7 +493,7 @@ object KitchenSink {
           FunctionSpec.builder("describe")
             .addModifiers(Modifier.PROTECTED, Modifier.OVERRIDE)
             .returns(TypeName.STRING)
-            .addStatement("return 'widget'")
+            .addStatement("return \"widget\"")
             .build(),
         )
         .addFunction(

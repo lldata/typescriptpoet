@@ -19,8 +19,8 @@ export interface Person {
 }
 
 export interface Callable {
-
   (value: string): number;
+
   [key: string]: unknown;
 }
 
@@ -88,15 +88,15 @@ const enum Flags {
  * Narrows an unknown value to Person.
  */
 export function isPerson(value: unknown): value is Person {
-  return typeof value === 'object' && value !== null && 'name' in value;
+  return typeof value === "object" && value !== null && "name" in value;
 }
 
 function assertPerson(value: unknown): asserts value is Person {
-  if (!isPerson(value)) throw new Error('not a person');
+  if (!isPerson(value)) throw new Error("not a person");
 }
 
 function assertReady(value: unknown): asserts value {
-  if (!value) throw new Error('not ready');
+  if (!value) throw new Error("not ready");
 }
 
 function pick<const C>(value: C): C {
@@ -108,7 +108,7 @@ function describe(this: Person): string {
 }
 
 async function load(): Promise<string> {
-  return 'loaded';
+  return "loaded";
 }
 
 function* counter(): Generator<number> {
@@ -121,7 +121,7 @@ async function* stream(): AsyncGenerator<number> {
 
 function greet(greeting: string = "hello", name?: string,
     ...extras: string[]): string {
-  return [greeting, name, ...extras].join(' ');
+  return [greeting, name, ...extras].join(" ");
 }
 
 function configure({ verbose: loud }: Options): boolean {
@@ -133,7 +133,7 @@ function swap([first, second]: [string, string]): [string, string] {
 }
 
 function useUtils(): string {
-  return utils.identity('x');
+  return utils.identity("x");
 }
 
 function parse(value: string): string;
@@ -146,7 +146,7 @@ function parse(value: string | number): string | number {
 
 export abstract class Base<S extends string> {
   greet(): string {
-    return 'hi';
+    return "hi";
   }
 
   protected abstract describe(): string;
@@ -178,7 +178,7 @@ export class Widget extends Base<string> implements Identified {
   }
 
   static {
-    Widget.registry.set('widget', 1);
+    Widget.registry.set("widget", 1);
   }
 
   @logged
@@ -187,7 +187,7 @@ export class Widget extends Base<string> implements Identified {
   }
 
   protected override describe(): string {
-    return 'widget';
+    return "widget";
   }
 
   get size(): number {
