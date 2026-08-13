@@ -92,11 +92,11 @@ type TypeOfEngine = typeof Engine;
 
 type Lookup = Record<string, number>;
 
-type Choose<C extends string | number> = (value: C) => void;
-
-type Keyed<P extends keyof Person> = (key: P) => void;
-
-type Merged<W extends Person & Options> = () => W;
+type Constrained<
+  C extends string | number,
+  P extends keyof Person,
+  W extends Person & Options,
+> = (value: C, key: P) => W;
 
 export enum Direction {
   Up = "UP",

@@ -29,7 +29,9 @@ private constructor(builder: Builder) : TypeSpec<TypeAliasSpec, TypeAliasSpec.Bu
     codeWriter.emitTSDoc(tsDoc)
     codeWriter.emitModifiers(modifiers)
     codeWriter.emitCode(CodeBlock.of("type %L", name))
-    codeWriter.emitTypeVariables(typeVariables)
+    // Just the ` =`: the type after it breaks on its own -- that is what the two rungs below
+    // are -- so it does not decide whether the type variables break.
+    codeWriter.emitTypeVariables(typeVariables, trailingWidth = 2)
     // Measure the whole declaration, prefix included, and break the union or intersection
     // only if it does not fit. Prettier does not break either in member or parameter
     // position, so this is deliberately only here.

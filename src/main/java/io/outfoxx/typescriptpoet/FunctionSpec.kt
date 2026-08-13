@@ -91,7 +91,9 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     emitName(codeWriter, enclosingName)
 
     if (typeVariables.isNotEmpty()) {
-      codeWriter.emitTypeVariables(typeVariables)
+      // Just the `(`: the parameter list that follows breaks on its own if it has to, so it
+      // does not decide whether the type variables break.
+      codeWriter.emitTypeVariables(typeVariables, trailingWidth = 1)
     }
 
     val allParameters =

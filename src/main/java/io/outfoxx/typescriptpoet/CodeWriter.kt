@@ -24,6 +24,10 @@ import java.util.Stack
  */
 private const val PRINT_WIDTH = 80
 
+/** The `, ` between two type variables, and the `<` and `>` around the list. */
+private const val SEPARATOR_WIDTH = 2
+private const val BRACKETS_WIDTH = 2
+
 internal class CodeWriter(
   out: Appendable,
   private val indent: String = "  ",
@@ -160,39 +164,62 @@ internal class CodeWriter(
    * Emit type variables with their bounds.
    *
    * This should only be used when declaring type variables; everywhere else bounds are omitted.
+   *
+   * @param trailingWidth how much of what follows the `>` has to fit on the same line. Only
+   *   what cannot break itself counts: a parameter list can, so a function passes the width of
+   *   the `(` alone and lets its parameters break on their own, while a class's `extends`
+   *   clause cannot and so is counted in full.
    */
-  fun emitTypeVariables(typeVariables: List<TypeName.TypeVariable>) {
+  @JvmOverloads
+  fun emitTypeVariables(typeVariables: List<TypeName.TypeVariable>, trailingWidth: Int = 0) {
     if (typeVariables.isEmpty()) return
 
-    emit("<")
-    typeVariables.forEachIndexed { index, typeVariable ->
-      if (index > 0) emit(", ")
-      emitCode(
-        CodeBlock.of(
-          buildString {
-            // `const` and variance are declaration-site only; TypeVariable.emit deliberately
-            // omits them so use sites stay bare.
-            if (typeVariable.isConst) {
-              append("const ")
-            }
-            typeVariable.variance?.let { append("${it.keyword} ") }
-            append(typeVariable.name)
-            if (typeVariable.bounds.isNotEmpty()) {
-              val parts = mutableListOf<String>()
-              parts.add(" extends")
-              typeVariable.bounds.forEachIndexed { index, bound ->
-                if (index > 0) parts.add(bound.combiner.symbol)
-                bound.modifier?.let { parts.add(it.keyword) }
-                parts.add("${bound.type}")
-              }
-              append(parts.joinToString(" "))
-            }
-          },
-          *typeVariable.bounds.map { it.type }.toTypedArray(),
-        ),
-      )
+    // Measure, then break, as for parameters and unions: keep the list on one line if the
+    // declaration fits, otherwise one variable per line with a trailing comma and the `>`
+    // back at the declaration's own indent, where whatever follows continues.
+    val inlineWidth = typeVariables.sumOf { measure { emitTypeVariable(it) }.length } +
+      SEPARATOR_WIDTH * (typeVariables.size - 1) + BRACKETS_WIDTH
+    if (currentColumn + inlineWidth + trailingWidth <= printWidth) {
+      emit("<")
+      typeVariables.forEachIndexed { index, typeVariable ->
+        if (index > 0) emit(", ")
+        emitTypeVariable(typeVariable)
+      }
+      emit(">")
+      return
     }
+
+    emit("<\n")
+    indent()
+    typeVariables.forEach {
+      emitTypeVariable(it)
+      emit(",\n")
+    }
+    unindent()
     emit(">")
+  }
+
+  /** One type variable with its bounds: `const T extends A & keyof B`. */
+  private fun emitTypeVariable(typeVariable: TypeName.TypeVariable) {
+    // `const` and variance are declaration-site only; TypeVariable.emit deliberately
+    // omits them so use sites stay bare.
+    if (typeVariable.isConst) {
+      emit("const ")
+    }
+    typeVariable.variance?.let { emit("${it.keyword} ") }
+    emit(typeVariable.name)
+    if (typeVariable.bounds.isEmpty()) return
+
+    emit(" extends ")
+    typeVariable.bounds.forEachIndexed { index, bound ->
+      if (index > 0) emit(" ${bound.combiner.symbol} ")
+      bound.modifier?.let { emit("${it.keyword} ") }
+      // Through %T, so the writer emits the bound and collects its import. This used to
+      // interpolate the rendered type into the format string, which put the right text in the
+      // file and never told the import collector about it -- `X extends Base` with no
+      // `import { Base }` anywhere.
+      emitCode(CodeBlock.of("%T", bound.type))
+    }
   }
 
   fun emitSymbol(symbolSpec: SymbolSpec) {

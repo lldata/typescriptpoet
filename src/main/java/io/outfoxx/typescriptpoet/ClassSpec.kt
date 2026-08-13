@@ -56,17 +56,20 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     codeWriter.emitModifiers(modifiers, setOf(Modifier.PUBLIC))
     codeWriter.emit("class")
     codeWriter.emitCode(CodeBlock.of(" %L", name))
-    codeWriter.emitTypeVariables(typeVariables)
-
     val superClass = if (superClass != null) CodeBlock.of("extends %T", superClass) else CodeBlock.empty()
     val mixins = mixins.map { CodeBlock.of("%T", it) }.let {
       if (it.isNotEmpty()) it.joinToCode(prefix = "implements ") else CodeBlock.empty()
     }
 
     val parents = (listOf(superClass) + mixins).filter { it.isNotEmpty() }
-    if (parents.any { it.isNotEmpty() }) {
-      codeWriter.emitCode(parents.joinToCode(separator = " ", prefix = " "))
-    }
+    val parentsCode = if (parents.isEmpty()) null else parents.joinToCode(separator = " ", prefix = " ")
+
+    // The `extends`/`implements` clause cannot break, unlike a parameter list, so all of it
+    // has to fit after the `>` and all of it counts. Plus the ` {` that opens the body.
+    val trailing = (parentsCode?.let { codeWriter.measure { emitCode(it) }.length } ?: 0) + 2
+    codeWriter.emitTypeVariables(typeVariables, trailingWidth = trailing)
+
+    parentsCode?.let { codeWriter.emitCode(it) }
 
     // A property promoted into the constructor signature is not written in the body, so a
     // class whose only members are promoted has an empty one.

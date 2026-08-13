@@ -153,7 +153,11 @@ class ClassSpecTests {
       out.toString(),
       emits(
         """
-            class Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {}
+            class Test<
+              X extends Test2,
+              Y extends Test3 & Test4,
+              Z extends Test5 | keyof Test6,
+            > {}
 
         """.trimIndent(),
       ),

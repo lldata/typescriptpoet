@@ -327,25 +327,20 @@ object KitchenSink {
     // separator between bounds, not a prefix -- so `C` reads `string | number` and `W` reads
     // `Person & Options`. `P` carries the other thing a bound can hold, the `keyof` modifier,
     // which is a bound modifier rather than the `keyof` type operator that `PersonKey` uses.
-    // Kept narrow on purpose: a type parameter list does not break on width yet, so a wider
-    // one here would be output Prettier rewrites. See the width issue for that.
+    // Wide enough that the type parameter list has to break, which it also covers.
     file.addTypeAlias(
       TypeAliasSpec.builder(
-        "Choose",
-        TypeName.lambda("value" to TypeName.typeVariable("C"), returnType = TypeName.VOID),
+        "Constrained",
+        TypeName.lambda(
+          "value" to TypeName.typeVariable("C"),
+          "key" to TypeName.typeVariable("P"),
+          returnType = TypeName.typeVariable("W"),
+        ),
       )
         .addTypeVariable(
           TypeName.typeVariable("C", TypeName.unionBound(TypeName.STRING), TypeName.unionBound(TypeName.NUMBER)),
         )
-        .build(),
-    )
-    file.addTypeAlias(
-      TypeAliasSpec.builder("Keyed", TypeName.lambda("key" to TypeName.typeVariable("P"), returnType = TypeName.VOID))
         .addTypeVariable(TypeName.typeVariable("P", TypeName.unionBound(person, keyOf = true)))
-        .build(),
-    )
-    file.addTypeAlias(
-      TypeAliasSpec.builder("Merged", TypeName.lambda(returnType = TypeName.typeVariable("W")))
         .addTypeVariable(TypeName.typeVariable("W", TypeName.bound(person), TypeName.intersectBound(options)))
         .build(),
     )

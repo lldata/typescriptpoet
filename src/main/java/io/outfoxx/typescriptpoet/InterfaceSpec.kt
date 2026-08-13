@@ -42,11 +42,14 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
     codeWriter.emitModifiers(modifiers, setOf())
     codeWriter.emit("interface")
     codeWriter.emitCode(CodeBlock.of(" %L", name))
-    codeWriter.emitTypeVariables(typeVariables)
-
     val superClasses = superInterfaces.map { CodeBlock.of("%T", it) }.let {
       if (it.isNotEmpty()) it.joinToCode(prefix = " extends ") else CodeBlock.empty()
     }
+
+    // As for a class: the `extends` clause cannot break, so all of it counts, plus the ` {`.
+    val trailing = codeWriter.measure { emitCode(superClasses) }.length + 2
+    codeWriter.emitTypeVariables(typeVariables, trailingWidth = trailing)
+
     codeWriter.emitCode(superClasses)
 
     codeWriter.emit(" ")

@@ -63,6 +63,14 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Long parameter lists and mapped types break on width rather than at fixed wrap points,
   matching what Prettier does: measure the construct, and either keep it on one line or put
   every element on its own.
+- A type parameter list breaks on width like a parameter list, one variable per line with a
+  trailing comma and the `>` back at the declaration's indent. What follows the `>` counts
+  only when it cannot break itself: a parameter list can, a class's `extends` clause cannot.
+  ([#11](https://github.com/lldata/typescriptpoet/issues/11))
+- An empty body is emitted as `{}` rather than an opening brace, a newline and a closing one —
+  for a class, interface, namespace, enum, function, method, constructor and arrow alike. A
+  constructor whose parameters are all parameter properties is the common case.
+  ([#12](https://github.com/lldata/typescriptpoet/issues/12))
 - A union type alias too long for one line breaks after the `=` and keeps the union on a
   single indented line, and only splits one choice per line when that is too wide as well —
   the intermediate form Prettier tries first, which is often what a union of literals needs
@@ -83,6 +91,11 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Types referenced only inside a nested `CodeBlock` were not imported, because passing a
   `CodeBlock` as a `%L` argument flattened it to a string and discarded its format parts.
   ([outfoxx/typescriptpoet#27](https://github.com/outfoxx/typescriptpoet/pull/27))
+- A type used as a type-variable bound was not imported. The bound was rendered by
+  interpolating the type's text into a format string, so the name reached the file and never
+  reached the import collector: `class Holder<X extends Base>` with no `import { Base }`
+  anywhere, which does not compile.
+  ([#11](https://github.com/lldata/typescriptpoet/issues/11))
 - Every other kind of `%L` argument was still flattened that way. A spec, an object literal,
   a `TypeName` or a `SymbolSpec` was rendered when the block was built, by a throwaway writer
   with no imports to collect into, no rename map, no scope and no column — so its types were

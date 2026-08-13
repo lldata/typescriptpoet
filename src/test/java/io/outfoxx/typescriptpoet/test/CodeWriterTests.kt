@@ -15,7 +15,9 @@
  */
 package io.outfoxx.typescriptpoet.test
 
+import io.outfoxx.typescriptpoet.ClassSpec
 import io.outfoxx.typescriptpoet.CodeBlock
+import io.outfoxx.typescriptpoet.CodeWriter
 import io.outfoxx.typescriptpoet.FileSpec
 import io.outfoxx.typescriptpoet.FunctionSpec
 import io.outfoxx.typescriptpoet.SymbolSpec
@@ -123,6 +125,95 @@ class CodeWriterTests {
 
         """.trimIndent(),
       ),
+    )
+  }
+
+  @Test
+  @DisplayName("Collects imports for a type used as a type-variable bound")
+  fun testBoundKeepsImports() {
+    // Bounds were rendered by interpolating the type's text into the format string, which put
+    // the right name in the file and never reached the import collector -- `X extends Base`
+    // with no `import { Base }` anywhere, so the file did not compile. Same defect as the %L
+    // flattening above, one place over.
+    val file = FileSpec.builder("Test")
+      .addClass(
+        ClassSpec.builder("Holder")
+          .addTypeVariable(TypeName.typeVariable("X", TypeName.bound(TypeName.namedImport("Base", "./base"))))
+          .build(),
+      )
+      .build()
+
+    val out = StringWriter()
+    file.writeTo(out)
+
+    MatcherAssert.assertThat(
+      out.toString(),
+      emits(
+        """
+            import { Base } from "./base";
+
+
+            class Holder<X extends Base> {}
+
+        """.trimIndent(),
+      ),
+    )
+  }
+
+  @Test
+  @DisplayName("Breaks a type variable list that does not fit, one variable per line")
+  fun testTypeVariablesBreakOnWidth() {
+    // What follows the `>` counts only when it cannot break itself. A parameter list can, so
+    // it does not push the type variables over; a class's `extends` clause cannot, so it does.
+    val fn = FunctionSpec.builder("query")
+      .addTypeVariable(TypeName.typeVariable("TFirstParameter", TypeName.bound(TypeName.STRING)))
+      .addTypeVariable(TypeName.typeVariable("TSecondParameter", TypeName.bound(TypeName.NUMBER)))
+      .addTypeVariable(TypeName.typeVariable("TThirdParameter", TypeName.bound(TypeName.implicit("object"))))
+      .addParameter("value", TypeName.typeVariable("TFirstParameter"))
+      .returns(TypeName.VOID)
+      .build()
+
+    val out = StringWriter()
+    fn.emit(CodeWriter(out), null, setOf())
+
+    assertEmitsExactly(
+      out.toString(),
+      """
+          function query<
+            TFirstParameter extends string,
+            TSecondParameter extends number,
+            TThirdParameter extends object,
+          >(value: TFirstParameter): void {}
+
+      """.trimIndent(),
+    )
+  }
+
+  @Test
+  @DisplayName("Keeps a type variable list inline when only the parameters overflow")
+  fun testTypeVariablesStayInlineWhenParametersBreak() {
+    val fn = FunctionSpec.builder("select")
+      .addTypeVariable(TypeName.typeVariable("TFirst", TypeName.bound(TypeName.STRING)))
+      .addTypeVariable(TypeName.typeVariable("TSecond", TypeName.bound(TypeName.NUMBER)))
+      .addParameter("firstArgument", TypeName.STRING)
+      .addParameter("secondArgument", TypeName.NUMBER)
+      .addParameter("thirdArgument", TypeName.BOOLEAN)
+      .returns(TypeName.VOID)
+      .build()
+
+    val out = StringWriter()
+    fn.emit(CodeWriter(out), null, setOf())
+
+    assertEmitsExactly(
+      out.toString(),
+      """
+          function select<TFirst extends string, TSecond extends number>(
+            firstArgument: string,
+            secondArgument: number,
+            thirdArgument: boolean,
+          ): void {}
+
+      """.trimIndent(),
     )
   }
 

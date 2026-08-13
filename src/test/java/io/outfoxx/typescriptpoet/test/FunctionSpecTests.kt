@@ -170,7 +170,11 @@ class FunctionSpecTests {
       out.toString(),
       emits(
         """
-            function test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6>() {}
+            function test<
+              X extends Test2,
+              Y extends Test3 & Test4,
+              Z extends Test5 | keyof Test6,
+            >() {}
 
         """.trimIndent(),
       ),
