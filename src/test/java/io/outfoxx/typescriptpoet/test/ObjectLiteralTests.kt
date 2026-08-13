@@ -130,6 +130,113 @@ class ObjectLiteralTests {
   }
 
   @Test
+  @DisplayName("Takes a getter as a member")
+  fun testGetterMember() {
+    val obj = CodeBlock.objectLiteral()
+      .addGetter("read", "return %L(%P, config)", "messagesReadNode", "\${path}/read")
+      .build()
+
+    assertEmitsExactly(
+      emit(FunctionSpec.builder("create").addStatement("return %L", obj).build()),
+      """
+          function create() {
+            return {
+              get read() {
+                return messagesReadNode(`${'$'}{path}/read`, config);
+              },
+            };
+          }
+
+      """.trimIndent(),
+    )
+  }
+
+  @Test
+  @DisplayName("Builds a lazily-reached node without hand-formatting")
+  fun testLazyNodeTree() {
+    // The shape #9 was filed for: a factory returning a node whose children are reached on
+    // access. The getter is the member that makes it lazy -- as a property it would build the
+    // whole tree whenever any of it was touched -- and every type in here arrives through a
+    // getter body, an arrow member or a nested literal, which is where the imports used to be
+    // dropped.
+    val requestOptions = TypeName.namedImport("RequestOptions", "./request")
+    val apiRequest = TypeName.namedImport("apiRequest", "./request")
+    val thread = TypeName.namedImport("Thread", "./types")
+
+    val getArrow = FunctionSpec.builder("get")
+      .arrow()
+      .addParameter("options", requestOptions, optional = true)
+      .addStatement(
+        "return %T<%T[]>(%L, options)",
+        apiRequest,
+        thread,
+        CodeBlock.objectLiteral()
+          .addProperty("method", "%S", "GET")
+          .addShorthand("path")
+          .build(),
+      )
+      .build()
+
+    val obj = CodeBlock.objectLiteral()
+      .addGetter("read", "return %L(%P, config)", "messagesReadNode", "\${path}/read")
+      .addProperty("get", "%L", getArrow)
+      .build()
+
+    val fn = FunctionSpec.builder("messagesNode")
+      .addParameter("path", TypeName.STRING)
+      .addParameter("config", TypeName.namedImport("ApiConfig", "./config"))
+      .addStatement("return %L", obj)
+      .build()
+
+    assertEmitsExactly(
+      buildString { FileSpec.builder("messages").addFunction(fn).build().writeTo(this) },
+      """
+          import { ApiConfig } from "./config";
+          import { RequestOptions, apiRequest } from "./request";
+          import { Thread } from "./types";
+
+          function messagesNode(path: string, config: ApiConfig) {
+            return {
+              get read() {
+                return messagesReadNode(`${'$'}{path}/read`, config);
+              },
+              get: (options?: RequestOptions) => {
+                return apiRequest<Thread[]>({ method: "GET", path }, options);
+              },
+            };
+          }
+
+      """.trimIndent(),
+    )
+  }
+
+  @Test
+  @DisplayName("Breaks a literal holding a getter however short it measures")
+  fun testGetterForcesBreak() {
+    // A getter body is a statement list, so it always spans lines, so the literal does too --
+    // no separate rule, just the one a multi-line member already goes by.
+    val obj = CodeBlock.objectLiteral()
+      .addShorthand("id")
+      .addGetter("n", "return 1")
+      .build()
+
+    assertEmitsExactly(
+      emit(FunctionSpec.builder("create").addStatement("return %L", obj).build()),
+      """
+          function create() {
+            return {
+              id,
+              get n() {
+                return 1;
+              },
+            };
+          }
+
+      """.trimIndent(),
+    )
+  }
+
+  @Test
   @DisplayName("Lays out a literal returned by addStatement at the statement's own indent")
   fun testAddStatement() {
     // addStatement is the API for `return { ... };` -- it is one statement, and it owns the

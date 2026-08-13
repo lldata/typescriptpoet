@@ -536,6 +536,8 @@ public final class io/outfoxx/typescriptpoet/ObjectLiteral {
 }
 
 public final class io/outfoxx/typescriptpoet/ObjectLiteral$Builder {
+	public final fun addGetter (Ljava/lang/String;Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
+	public final fun addGetter (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
 	public final fun addProperty (Ljava/lang/String;Lio/outfoxx/typescriptpoet/CodeBlock;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
 	public final fun addProperty (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;
 	public final fun addShorthand (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/ObjectLiteral$Builder;

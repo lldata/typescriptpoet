@@ -423,6 +423,37 @@ object KitchenSink {
         .build(),
     ).forEach { file.addFunction(it) }
 
+    // ---- Object literals -----------------------------------------------------------
+    // All three member kinds at once: a property, shorthand, and a getter. The getter is
+    // what a lazily-reached value is made of -- as a property, `depth` would be computed
+    // where the object is built rather than where it is read -- and it is also why this
+    // literal breaks: a getter body is a statement list, so it spans lines however short it
+    // measures, and a member that spans lines breaks the literal holding it.
+    file.addFunction(
+      FunctionSpec.builder("node")
+        .addModifiers(Modifier.EXPORT)
+        .addParameter("path", TypeName.STRING)
+        .addStatement(
+          "return %L",
+          CodeBlock.objectLiteral()
+            .addProperty("kind", "%S", "node")
+            .addShorthand("path")
+            .addGetter("depth", "return path.split(%S).length", "/")
+            .addProperty(
+              "send",
+              "%L",
+              FunctionSpec.builder("send")
+                .arrow()
+                .addParameter("message", TypeName.STRING)
+                .returns(TypeName.VOID)
+                .addStatement("console.log(message)")
+                .build(),
+            )
+            .build(),
+        )
+        .build(),
+    )
+
     // ---- Classes -------------------------------------------------------------------
     // Base exercises abstract classes and abstract members; Widget exercises everything a
     // concrete class can carry. Note two things that are easy to get wrong:

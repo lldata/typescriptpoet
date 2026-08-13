@@ -21,7 +21,10 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Labelled, optional and rest tuple elements.
 - `CodeBlock.objectLiteral()`, building an object literal expression whose members stay
   structured until the file is written, so the layout is decided against the print width
-  rather than hand-formatted into a `CodeBlock`.
+  rather than hand-formatted into a `CodeBlock`. Members are properties, shorthand, or
+  getters — `addGetter` is what a lazily-reached value needs, since a property is computed
+  where the object is built rather than where it is read.
+  ([#9](https://github.com/lldata/typescriptpoet/issues/9))
 - `literal()`, for literal types: `literal("a")` emits `"a"`, escaped, and there are
   numeric and boolean overloads. Previously the only route was `implicit()` with the caller
   writing the quotes, which emitted an unparseable file if the value contained one.

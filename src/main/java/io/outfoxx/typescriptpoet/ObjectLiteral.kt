@@ -18,12 +18,14 @@ package io.outfoxx.typescriptpoet
 /**
  * An object literal expression: `{ name: n, send: (m: string): void => { ... } }`.
  *
- * Built through [CodeBlock.objectLiteral] and used as a `%L` argument, because an object
- * literal is an expression rather than a declaration:
+ * Members are properties, shorthand, or getters. Built through [CodeBlock.objectLiteral] and
+ * used as a `%L` argument, because an object literal is an expression rather than a
+ * declaration:
  *
  * ```kotlin
  * val obj = CodeBlock.objectLiteral()
  *   .addProperty("name", CodeBlock.of("n"))
+ *   .addGetter("child", "return %L(%P, config)", "childNode", "\${path}/child")
  *   .build()
  *
  * FunctionSpec.builder("create").addStatement("return %L", obj).build()
@@ -37,8 +39,18 @@ package io.outfoxx.typescriptpoet
 class ObjectLiteral
 internal constructor(internal val members: List<Member>) {
 
-  /** One member: `name: value`, or `name` on its own when shorthand. */
-  internal data class Member(val name: String, val value: CodeBlock?)
+  /** One member of the literal. */
+  internal sealed class Member(val name: String) {
+
+    /** `name: value`. */
+    class Property(name: String, val value: CodeBlock) : Member(name)
+
+    /** `name` on its own, where the value is a binding of the same name. */
+    class Shorthand(name: String) : Member(name)
+
+    /** `get name() { ... }`, whose body runs on each access rather than once, here. */
+    class Getter(name: String, val body: CodeBlock) : Member(name)
+  }
 
   internal fun emit(codeWriter: CodeWriter) {
     if (members.isEmpty()) {
@@ -81,10 +93,30 @@ internal constructor(internal val members: List<Member>) {
   }
 
   private fun emitMember(codeWriter: CodeWriter, member: Member) {
-    codeWriter.emit(member.name)
-    member.value?.let {
-      codeWriter.emit(": ")
-      codeWriter.emitCode(it)
+    when (member) {
+      is Member.Shorthand -> codeWriter.emit(member.name)
+
+      is Member.Property -> {
+        codeWriter.emit(member.name)
+        codeWriter.emit(": ")
+        codeWriter.emitCode(member.value)
+      }
+
+      // Written like an arrow function body: the member owns its braces but not the comma
+      // after them, which the literal adds. A getter body is a statement list rather than an
+      // expression, so it always spans lines -- which is what makes a literal holding one
+      // break, by the same rule any multi-line member goes by.
+      is Member.Getter -> {
+        codeWriter.emit("get ")
+        codeWriter.emit(member.name)
+        codeWriter.emit("() {\n")
+        codeWriter.indent()
+        codeWriter.emitCode(member.body)
+        // A body that didn't end its last line, so the brace doesn't land on the end of it.
+        if (codeWriter.currentColumn > 0) codeWriter.emit("\n")
+        codeWriter.unindent()
+        codeWriter.emit("}")
+      }
     }
   }
 
@@ -97,7 +129,7 @@ internal constructor(internal val members: List<Member>) {
 
     /** Adds `name: value`. */
     fun addProperty(name: String, value: CodeBlock) = apply {
-      members += Member(name, value)
+      members += Member.Property(name, value)
     }
 
     /** Adds `name: value`, with the value written as a format string. */
@@ -105,8 +137,27 @@ internal constructor(internal val members: List<Member>) {
 
     /** Adds a shorthand member: `{ name }`, where the value is a binding of the same name. */
     fun addShorthand(name: String) = apply {
-      members += Member(name, null)
+      members += Member.Shorthand(name)
     }
+
+    /**
+     * Adds a getter: `get name() { ... }`.
+     *
+     * [body] is a statement list, as a function body is -- build it with
+     * [CodeBlock.Builder.addStatement], which writes the `;` and the newline.
+     *
+     * The distinction from [addProperty] is when the value is computed. A property is
+     * evaluated once, where the literal is built; a getter runs on each access, which is what
+     * a tree of nodes reached on demand is made of. Rewriting such a getter as a property
+     * would construct the whole tree whenever any of it is touched.
+     */
+    fun addGetter(name: String, body: CodeBlock) = apply {
+      members += Member.Getter(name, body)
+    }
+
+    /** Adds a getter whose body is one statement, terminated here: `get name() { return x; }`. */
+    fun addGetter(name: String, format: String, vararg args: Any?) =
+      addGetter(name, CodeBlock.builder().addStatement(format, *args).build())
 
     fun build() = ObjectLiteral(members.toImmutableList())
   }

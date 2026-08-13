@@ -149,6 +149,19 @@ function parse(value: string | number): string | number {
   return value;
 }
 
+export function node(path: string) {
+  return {
+    kind: "node",
+    path,
+    get depth() {
+      return path.split("/").length;
+    },
+    send: (message: string): void => {
+      console.log(message);
+    },
+  };
+}
+
 export abstract class Base<S extends string> {
   greet(): string {
     return "hi";
