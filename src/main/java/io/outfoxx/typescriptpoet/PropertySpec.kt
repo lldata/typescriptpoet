@@ -152,6 +152,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
   companion object {
 
     @JvmStatic
+    @JvmOverloads
     fun builder(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier): Builder =
       Builder(name, type, optional).addModifiers(*modifiers)
   }

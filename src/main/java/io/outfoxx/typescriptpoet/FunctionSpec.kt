@@ -321,6 +321,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       parameters += parameterSpec
     }
 
+    @JvmOverloads
     fun addParameter(
       name: String,
       type: TypeName,
@@ -336,6 +337,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       ).defaultValue(defaultValue).build(),
     )
 
+    @JvmOverloads
     fun addParameter(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier) =
       addParameter(ParameterSpec.builder(name, type, optional, *modifiers).build())
 

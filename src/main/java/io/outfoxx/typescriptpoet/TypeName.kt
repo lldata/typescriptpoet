@@ -703,6 +703,7 @@ sealed class TypeName {
      * Factory for type variable bounds
      */
     @JvmStatic
+    @JvmOverloads
     fun bound(type: TypeName, combiner: Combiner = UNION, modifier: Bound.Modifier? = null): Bound =
       Bound(type, combiner, modifier)
 
@@ -710,6 +711,7 @@ sealed class TypeName {
      * Factory for type variable bounds
      */
     @JvmStatic
+    @JvmOverloads
     fun unionBound(type: TypeName, keyOf: Boolean = false): Bound =
       bound(type, UNION, if (keyOf) Bound.Modifier.KEY_OF else null)
 
@@ -717,6 +719,7 @@ sealed class TypeName {
      * Factory for type variable bounds
      */
     @JvmStatic
+    @JvmOverloads
     fun intersectBound(type: TypeName, keyOf: Boolean = false): Bound =
       bound(type, Combiner.INTERSECT, if (keyOf) Bound.Modifier.KEY_OF else null)
 
@@ -850,6 +853,7 @@ sealed class TypeName {
 
     /** Returns a lambda type with `returnType` and parameters of listed in `parameters`. */
     @JvmStatic
+    @JvmOverloads
     fun lambda(parameters: Map<String, TypeName> = emptyMap(), returnType: TypeName) = Lambda(parameters, returnType)
 
     /** Returns a lambda type with `returnType` and parameters of listed in `parameters`. */
@@ -865,6 +869,7 @@ sealed class TypeName {
      * @param returnType Return type of the function type
      */
     @JvmStatic
+    @JvmOverloads
     fun genericLambda(
       typeVariables: List<TypeVariable>,
       parameters: Map<String, TypeName> = emptyMap(),

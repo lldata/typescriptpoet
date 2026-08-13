@@ -147,6 +147,7 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
       propertySpecs += propertySpec
     }
 
+    @JvmOverloads
     fun addProperty(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier) =
       addProperty(PropertySpec.builder(name, type, optional, *modifiers).build())
 

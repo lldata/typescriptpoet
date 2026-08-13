@@ -41,6 +41,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
   val indent = builder.indent
 
   @Throws(IOException::class)
+  @JvmOverloads
   fun writeTo(out: Appendable, directory: Path = Paths.get("/")) {
     // First pass: emit the entire file, just to collect the symbols we'll need to import.
     val importsCollector = CodeWriter(NullAppendable, indent)
@@ -408,12 +409,14 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     fun builder(modulePath: String) = Builder(modulePath)
 
     @JvmStatic
+    @JvmOverloads
     fun get(moduleSpec: ModuleSpec, modulePath: String = moduleSpec.name.replace('.', '/').lowercase()): FileSpec =
       builder(modulePath)
         .apply { members.addAll(moduleSpec.members.toMutableList()) }
         .build()
 
     @JvmStatic
+    @JvmOverloads
     fun get(typeSpec: AnyTypeSpec, modulePath: String = typeSpec.name.replace('.', '/').lowercase()): FileSpec =
       builder(modulePath)
         .addType(typeSpec)

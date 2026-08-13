@@ -84,6 +84,13 @@ java {
   withSourcesJar()
 }
 
+// Reproducible archives: without this the jars embed file timestamps and filesystem
+// ordering, so two builds of the same commit produce different bytes.
+tasks.withType<AbstractArchiveTask>().configureEach {
+  isPreserveFileTimestamps = false
+  isReproducibleFileOrder = true
+}
+
 // There is no Java source, but the Kotlin plugin still cross-checks the two compile tasks'
 // targets, so they have to agree.
 tasks.compileJava {

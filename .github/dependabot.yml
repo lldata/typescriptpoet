@@ -1,0 +1,30 @@
+# This project sat unbuildable for four years because its toolchain drifted out from under
+# it: Gradle 6.8.2 stopped starting on modern JDKs, jcenter() was decommissioned, and three
+# build plugins were abandoned. Dependabot is here so that happens as a series of small
+# reviewable PRs instead of one archaeological dig.
+version: 2
+
+updates:
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: gradle
+    directory: "/"
+    schedule:
+      interval: monthly
+    groups:
+      # Kotlin, Dokka and friends move together; one PR per month rather than six.
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin*"
+          - "org.jetbrains.dokka*"
+      test:
+        patterns:
+          - "org.junit*"
+          - "org.hamcrest*"

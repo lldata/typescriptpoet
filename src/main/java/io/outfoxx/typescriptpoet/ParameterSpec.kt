@@ -89,6 +89,7 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
 
   override fun toString() = buildCodeString { emit(this) }
 
+  @JvmOverloads
   fun toBuilder(name: String = this.name, type: TypeName = this.type): Builder {
     val builder = Builder(name, type, optional)
     builder.decorators += decorators
@@ -157,6 +158,7 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
   companion object {
 
     @JvmStatic
+    @JvmOverloads
     fun builder(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier): Builder {
       require(name.isName) { "not a valid name: $name" }
       return Builder(name, type, optional).addModifiers(*modifiers)

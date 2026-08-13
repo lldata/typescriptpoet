@@ -64,10 +64,12 @@ internal constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap())
       this.factory = true
     }
 
+    @JvmOverloads
     fun addParameter(name: String? = null, format: String, vararg args: Any?) = apply {
       parameters += name to CodeBlock.of(format, *args)
     }
 
+    @JvmOverloads
     fun addParameter(name: String? = null, codeBlock: CodeBlock) = apply {
       parameters += name to codeBlock
     }

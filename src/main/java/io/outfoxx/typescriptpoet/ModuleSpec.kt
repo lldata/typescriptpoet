@@ -202,9 +202,11 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
   companion object {
 
     @JvmStatic
+    @JvmOverloads
     fun builder(name: String, kind: Kind = Kind.NAMESPACE) = Builder(name, kind)
 
     @JvmStatic
+    @JvmOverloads
     fun builder(name: TypeName, kind: Kind = Kind.NAMESPACE) = builder("$name", kind)
   }
 }

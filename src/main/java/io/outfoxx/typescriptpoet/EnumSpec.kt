@@ -84,6 +84,7 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
       this.modifiers += modifiers
     }
 
+    @JvmOverloads
     fun addConstant(name: String, initializer: String? = null) =
       addConstant(name, initializer?.let { CodeBlock.of(it) })
 

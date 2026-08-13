@@ -280,6 +280,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
       propertySpecs += propertySpec
     }
 
+    @JvmOverloads
     fun addProperty(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier) =
       addProperty(PropertySpec.builder(name, type, optional, *modifiers).build())
 
@@ -321,6 +322,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     /** Adds a `static { ... }` initializer block. */
     fun addStaticBlock(format: String, vararg args: Any?) = addStaticBlock(CodeBlock.of(format, *args))
 
+    @JvmOverloads
     fun allowUsingConstructorPropertiesAutomatically(value: Boolean = true) = apply {
       this.useConstructorPropertiesAutomatically = value
     }
