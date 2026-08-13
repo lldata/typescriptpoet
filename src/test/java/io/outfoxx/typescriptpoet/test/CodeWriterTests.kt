@@ -40,7 +40,7 @@ class CodeWriterTests {
 
     MatcherAssert.assertThat(
       testFunc.toString(),
-      CoreMatchers.equalTo(
+      emits(
         """
             function test(): string {
               return X(aaaaa, bbbbb, ccccc, ddddd, eeeee, fffff, ggggg, hhhhh, iiiii, jjjjj, kkkkk, lllll,
@@ -72,7 +72,7 @@ class CodeWriterTests {
 
     MatcherAssert.assertThat(
       out.toString(),
-      CoreMatchers.equalTo(
+      emits(
         """
             import {X} from 'x';
 

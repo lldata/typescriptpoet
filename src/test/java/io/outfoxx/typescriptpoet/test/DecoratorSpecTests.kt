@@ -49,7 +49,7 @@ class DecoratorSpecTests {
 
     assertThat(
       testDec.toString(),
-      equalTo(
+      emits(
         """
           @test({
             value: 5
@@ -68,7 +68,7 @@ class DecoratorSpecTests {
 
     assertThat(
       testDec.toString(),
-      equalTo(
+      emits(
         """
           @test(/* value */ 100, /* value2 */ 20)
         """.trimIndent(),
@@ -85,7 +85,7 @@ class DecoratorSpecTests {
 
     assertThat(
       testDec.toString(),
-      equalTo(
+      emits(
         """
           @test(100, 20)
         """.trimIndent(),
@@ -104,7 +104,7 @@ class DecoratorSpecTests {
 
     assertThat(
       testDec.toString(),
-      equalTo(
+      emits(
         """
           @test(100, /* value */ 20, 30, /* value2 */ 40)
         """.trimIndent(),
@@ -123,7 +123,7 @@ class DecoratorSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             @test
         """.trimIndent(),
@@ -143,7 +143,7 @@ class DecoratorSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             @test()
         """.trimIndent(),

@@ -55,7 +55,7 @@ class InterfaceSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             /**
              * this is a comment
@@ -80,7 +80,7 @@ class InterfaceSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             export interface Test {
             }
@@ -118,7 +118,7 @@ class InterfaceSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             interface Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {
             }
@@ -141,7 +141,7 @@ class InterfaceSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             interface Test extends Test2, Test3 {
             }
@@ -172,7 +172,7 @@ class InterfaceSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             interface Test<Y extends Test3 & Test4> extends Test2, Test3, Test4 {
             }
@@ -195,7 +195,7 @@ class InterfaceSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             interface Test {
 
@@ -231,7 +231,7 @@ class InterfaceSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             interface Test {
 
@@ -271,7 +271,7 @@ class InterfaceSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             interface Test {
 
@@ -304,7 +304,7 @@ class InterfaceSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             interface Test {
 
@@ -361,6 +361,6 @@ class InterfaceSpecTests {
     assertThat(testIfaceBlder.propertySpecs.map { it.name }, hasItems("value", "value2"))
     assertThat(testIfaceBlder.functionSpecs.map { it.name }, hasItems("test1"))
     assertThat(testIfaceBlder.indexableSpecs.map { it.name }, hasItems("indexable()"))
-    assertThat(testIfaceBlder.callable?.name, equalTo("callable()"))
+    assertThat(testIfaceBlder.callable?.name, emits("callable()"))
   }
 }

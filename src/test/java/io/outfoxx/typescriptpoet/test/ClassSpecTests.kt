@@ -61,7 +61,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             /**
              * this is a comment
@@ -90,7 +90,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             @decorate(true, /* targetType */ Test2)
             class Test {
@@ -113,7 +113,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             export abstract class Test {
             }
@@ -151,7 +151,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {
             }
@@ -173,7 +173,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test extends Test2 {
             }
@@ -196,7 +196,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test implements Test2, Test3 {
             }
@@ -220,7 +220,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test extends Test2 implements Test3, Test4 {
             }
@@ -251,7 +251,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test<Y extends Test3 & Test4> extends Test2 implements Test3, Test4 {
             }
@@ -277,7 +277,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test {
 
@@ -308,7 +308,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test {
 
@@ -354,7 +354,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test {
 
@@ -418,7 +418,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test {
 
@@ -487,7 +487,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test {
 
@@ -556,7 +556,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test {
 
@@ -609,7 +609,7 @@ class ClassSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             class Test {
 

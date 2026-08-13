@@ -32,7 +32,7 @@ class FileModuleTests {
     val importer = "generated/src/main/impl/Impl"
 
     val path = importPath(Paths.get("/"), importer, import)
-    assertThat(path, equalTo("../api/Api"))
+    assertThat(path, emits("../api/Api"))
   }
 
   @Test
@@ -42,7 +42,7 @@ class FileModuleTests {
     val importer = "generated/src/main/api/Api2"
 
     val path = importPath(Paths.get("/"), importer, import)
-    assertThat(path, equalTo("./Api"))
+    assertThat(path, emits("./Api"))
   }
 
   @Test
@@ -52,7 +52,7 @@ class FileModuleTests {
     val importer = "Api2"
 
     val path = importPath(Paths.get("/"), importer, import)
-    assertThat(path, equalTo("./Api"))
+    assertThat(path, emits("./Api"))
   }
 
   @Test
@@ -62,6 +62,6 @@ class FileModuleTests {
     val importer = "generated/src/main/impl/Impl"
 
     val path = importPath(Paths.get("/"), importer, import)
-    assertThat(path, equalTo("rxjs/Observable"))
+    assertThat(path, emits("rxjs/Observable"))
   }
 }

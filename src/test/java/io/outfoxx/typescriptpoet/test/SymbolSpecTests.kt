@@ -29,7 +29,7 @@ class SymbolSpecTests {
   @DisplayName("Parsing implicitly defined (non-imported) symbols")
   fun testParsingImplicit() {
     val parsed = SymbolSpec.from("Some.Symbol.Depth")
-    assertThat(parsed.value, equalTo("Some.Symbol.Depth"))
+    assertThat(parsed.value, emits("Some.Symbol.Depth"))
   }
 
   @Test
@@ -39,8 +39,8 @@ class SymbolSpecTests {
     assertThat(parsed, instanceOf(SymbolSpec.ImportsName::class.java))
 
     val sym = parsed as SymbolSpec.ImportsName
-    assertThat(sym.value, equalTo("Observable"))
-    assertThat(sym.source, equalTo("rxjs/Observable"))
+    assertThat(sym.value, emits("Observable"))
+    assertThat(sym.source, emits("rxjs/Observable"))
   }
 
   @Test
@@ -50,8 +50,8 @@ class SymbolSpecTests {
     assertThat(parsed, instanceOf(SymbolSpec.ImportsName::class.java))
 
     val sym = parsed as SymbolSpec.ImportsName
-    assertThat(sym.value, equalTo("Api"))
-    assertThat(sym.source, equalTo("!Api"))
+    assertThat(sym.value, emits("Api"))
+    assertThat(sym.source, emits("!Api"))
   }
 
   @Test
@@ -61,8 +61,8 @@ class SymbolSpecTests {
     assertThat(parsed, instanceOf(SymbolSpec.ImportsName::class.java))
 
     val sym = parsed as SymbolSpec.ImportsName
-    assertThat(sym.value, equalTo("BackendService"))
-    assertThat(sym.source, equalTo("./some/local/source/file"))
+    assertThat(sym.value, emits("BackendService"))
+    assertThat(sym.source, emits("./some/local/source/file"))
   }
 
   @Test
@@ -72,8 +72,8 @@ class SymbolSpecTests {
     assertThat(parsed, instanceOf(SymbolSpec.ImportsName::class.java))
 
     val sym = parsed as SymbolSpec.ImportsName
-    assertThat(sym.value, equalTo("BackendService"))
-    assertThat(sym.source, equalTo("../some/local/source/file"))
+    assertThat(sym.value, emits("BackendService"))
+    assertThat(sym.source, emits("../some/local/source/file"))
   }
 
   @Test
@@ -83,8 +83,8 @@ class SymbolSpecTests {
     assertThat(parsed, instanceOf(SymbolSpec.ImportsName::class.java))
 
     val sym = parsed as SymbolSpec.ImportsName
-    assertThat(sym.value, equalTo("SomeOtherSymbolDepth"))
-    assertThat(sym.source, equalTo("rxjs/Observable"))
+    assertThat(sym.value, emits("SomeOtherSymbolDepth"))
+    assertThat(sym.source, emits("rxjs/Observable"))
   }
 
   @Test
@@ -94,8 +94,8 @@ class SymbolSpecTests {
     assertThat(parsed, instanceOf(SymbolSpec.ImportsAll::class.java))
 
     val sym = parsed as SymbolSpec.ImportsAll
-    assertThat(sym.value, equalTo("Observable"))
-    assertThat(sym.source, equalTo("rxjs/Observable"))
+    assertThat(sym.value, emits("Observable"))
+    assertThat(sym.source, emits("rxjs/Observable"))
   }
 
   @Test
@@ -105,8 +105,8 @@ class SymbolSpecTests {
     assertThat(parsed, instanceOf(SymbolSpec.ImportsAll::class.java))
 
     val sym = parsed as SymbolSpec.ImportsAll
-    assertThat(sym.value, equalTo("SomeOther"))
-    assertThat(sym.source, equalTo("rxjs/Observable"))
+    assertThat(sym.value, emits("SomeOther"))
+    assertThat(sym.source, emits("rxjs/Observable"))
   }
 
   @Test
@@ -116,8 +116,8 @@ class SymbolSpecTests {
     assertThat(parsed, instanceOf(SymbolSpec.SideEffect::class.java))
 
     val sym = parsed as SymbolSpec.SideEffect
-    assertThat(sym.value, equalTo("describe"))
-    assertThat(sym.source, equalTo("mocha"))
+    assertThat(sym.value, emits("describe"))
+    assertThat(sym.source, emits("mocha"))
   }
 
   @Test
@@ -127,9 +127,9 @@ class SymbolSpecTests {
     assertThat(parsed, instanceOf(SymbolSpec.Augmented::class.java))
 
     val sym = parsed as SymbolSpec.Augmented
-    assertThat(sym.value, equalTo("toPromise"))
-    assertThat(sym.source, equalTo("rxjs/add/operator/toPromise"))
-    assertThat(sym.augmented, equalTo("Observable"))
+    assertThat(sym.value, emits("toPromise"))
+    assertThat(sym.source, emits("rxjs/add/operator/toPromise"))
+    assertThat(sym.augmented, emits("Observable"))
   }
 
   @Test
@@ -139,8 +139,8 @@ class SymbolSpecTests {
     assertThat(parsed, instanceOf(SymbolSpec.Augmented::class.java))
 
     val sym = parsed as SymbolSpec.Augmented
-    assertThat(sym.value, equalTo("SomeSymbol"))
-    assertThat(sym.source, equalTo("rxjs/add/operator/toPromise"))
-    assertThat(sym.augmented, equalTo("Observable"))
+    assertThat(sym.value, emits("SomeSymbol"))
+    assertThat(sym.source, emits("rxjs/add/operator/toPromise"))
+    assertThat(sym.augmented, emits("Observable"))
   }
 }

@@ -52,7 +52,7 @@ class UncoveredApiTests {
       TypeName.implicit("Loggable"),
     )
 
-    assertThat(intersection.toString(), equalTo("Person & Serializable & Loggable"))
+    assertThat(intersection.toString(), emits("Person & Serializable & Loggable"))
   }
 
   @Test
@@ -65,11 +65,11 @@ class UncoveredApiTests {
 
     assertThat(
       TypeName.arrayShorthandType(intersection).toString(),
-      equalTo("(Person & Serializable)[]"),
+      emits("(Person & Serializable)[]"),
     )
     assertThat(
       TypeName.keyOf(intersection).toString(),
-      equalTo("keyof (Person & Serializable)"),
+      emits("keyof (Person & Serializable)"),
     )
   }
 
@@ -78,14 +78,14 @@ class UncoveredApiTests {
   fun testSingleElementIntersection() {
     val intersection = TypeName.intersectionType(TypeName.implicit("Person"))
 
-    assertThat(TypeName.arrayShorthandType(intersection).toString(), equalTo("Person[]"))
+    assertThat(TypeName.arrayShorthandType(intersection).toString(), emits("Person[]"))
   }
 
   @Test
   @DisplayName("Tags round-trip through every builder that supports them")
   fun testTagExtensions() {
     assertThat(ClassSpec.builder("A").tag(1).build().tag<Int>(), equalTo(1))
-    assertThat(FunctionSpec.builder("a").tag("f").build().tag<String>(), equalTo("f"))
+    assertThat(FunctionSpec.builder("a").tag("f").build().tag<String>(), emits("f"))
     assertThat(FileSpec.builder("a").tag(2).build().tag<Int>(), equalTo(2))
     assertThat(ModuleSpec.builder("a").tag(3).build().tag<Int>(), equalTo(3))
     assertThat(
@@ -113,7 +113,7 @@ class UncoveredApiTests {
     val out = StringWriter()
     file.writeTo(out)
 
-    assertThat(out.toString(), equalTo("\nclass Greeter {\n}\n"))
+    assertThat(out.toString(), emits("\nclass Greeter {\n}\n"))
   }
 
   @Test
@@ -129,7 +129,7 @@ class UncoveredApiTests {
     file.writeTo(out)
 
     // The members are lifted out of the namespace, not nested inside it.
-    assertThat(out.toString(), equalTo("\nclass Circle {\n}\n"))
+    assertThat(out.toString(), emits("\nclass Circle {\n}\n"))
   }
 
   @Test
@@ -145,7 +145,7 @@ class UncoveredApiTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             export namespace Shapes {
 
@@ -163,7 +163,7 @@ class UncoveredApiTests {
     val moduleOut = StringWriter()
     module.emit(CodeWriter(moduleOut))
 
-    assertThat(moduleOut.toString(), equalTo("module Shapes {\n}\n"))
+    assertThat(moduleOut.toString(), emits("module Shapes {\n}\n"))
   }
 
   @Test

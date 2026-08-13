@@ -53,7 +53,7 @@ class TypeAliasSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             /**
              * this is a comment
@@ -77,7 +77,7 @@ class TypeAliasSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             export type Integer = number;
 
@@ -97,7 +97,7 @@ class TypeAliasSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             type Integer = number;
 
@@ -130,7 +130,7 @@ class TypeAliasSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             type StringMap<A extends Test> = Map<string, A>;
 
@@ -156,7 +156,7 @@ class TypeAliasSpecTests {
       .build()
       .toBuilder()
 
-    assertThat(testAliasBldr.name, equalTo("Test"))
+    assertThat(testAliasBldr.name, emits("Test"))
     assertThat(testAliasBldr.type, equalTo(TypeName.NUMBER))
     assertThat(testAliasBldr.tsDoc.formatParts, hasItems("this is a comment\n"))
     assertThat(testAliasBldr.modifiers, hasItems(Modifier.EXPORT))

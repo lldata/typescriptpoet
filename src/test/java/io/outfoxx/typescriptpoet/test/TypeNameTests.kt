@@ -38,8 +38,8 @@ class TypeNameTests {
     val typeName = TypeName.namedImport("This", "!Api").nested("Is.Nested")
 
     val symbol = typeName.base as? SymbolSpec.ImportsName ?: fail("ImportsName symbol expected")
-    assertThat(symbol.value, equalTo("This.Is.Nested"))
-    assertThat(symbol.source, equalTo("!Api"))
+    assertThat(symbol.value, emits("This.Is.Nested"))
+    assertThat(symbol.source, emits("!Api"))
   }
 
   @Test
@@ -55,7 +55,7 @@ class TypeNameTests {
         Member("C", BOOLEAN, false),
       ),
     )
-    assertThat(typeName.toString(), equalTo("{ a: string, b: number, C: boolean }"))
+    assertThat(typeName.toString(), emits("{ a: string, b: number, C: boolean }"))
 
     val typeName2 = TypeName.anonymousType(
       arrayListOf(
@@ -73,6 +73,6 @@ class TypeNameTests {
         Member("c", DATE, true),
       ),
     )
-    assertThat(typeName2.toString(), equalTo("{ a?: number, B: string, c?: Date }"))
+    assertThat(typeName2.toString(), emits("{ a?: number, B: string, c?: Date }"))
   }
 }

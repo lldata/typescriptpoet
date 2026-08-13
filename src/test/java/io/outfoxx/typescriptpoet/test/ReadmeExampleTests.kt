@@ -65,7 +65,7 @@ class ReadmeExampleTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             import {Observable} from 'rxjs/Observable';
 

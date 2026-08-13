@@ -58,7 +58,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             /**
              * this is a comment
@@ -88,7 +88,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             @decorate(true, /* targetType */ Test2)
             function test() {
@@ -112,7 +112,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             export private get function test() {
             }
@@ -134,7 +134,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             private abstract function test();
 
@@ -171,7 +171,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             function test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6>() {
             }
@@ -193,7 +193,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             function test(): Value {
             }
@@ -216,7 +216,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             function test(): void {
             }
@@ -237,7 +237,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             function test() {
             }
@@ -258,7 +258,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             function test() {
             }
@@ -280,7 +280,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             function test(b: string) {
             }
@@ -303,7 +303,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             function test(b: string, ...c: Array<string>) {
             }
@@ -325,7 +325,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             function test(a: number = 10) {
             }
@@ -365,7 +365,7 @@ class FunctionSpecTests {
 
     assertThat(
       out.toString(),
-      equalTo(
+      emits(
         """
             function test(
                 @required @size(/* min */ 10, /* max */ 100) @logged() a: number

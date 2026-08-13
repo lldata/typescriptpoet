@@ -16,7 +16,10 @@
 package io.outfoxx.typescriptpoet.test
 
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.Description
+import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.TypeSafeMatcher
 
 /**
  * Asserts what code was emitted, ignoring how it was laid out.
@@ -45,3 +48,22 @@ fun assertEmitsExactly(actual: String, expected: String) = assertThat(actual, eq
  * agree.
  */
 private fun normaliseWhitespace(source: String) = source.replace(Regex("\\s+"), " ").trim()
+
+/**
+ * Matches emitted code ignoring layout, for use with `assertThat`.
+ *
+ * A drop-in replacement for `equalTo` at assertion sites whose subject is the code rather
+ * than its formatting, which is most of them.
+ */
+fun emits(expected: String): Matcher<String> = object : TypeSafeMatcher<String>() {
+
+  override fun matchesSafely(item: String) = normaliseWhitespace(item) == normaliseWhitespace(expected)
+
+  override fun describeTo(description: Description) {
+    description.appendText("emits (ignoring whitespace)\n").appendText(expected)
+  }
+
+  override fun describeMismatchSafely(item: String, description: Description) {
+    description.appendText("was\n").appendText(item)
+  }
+}
