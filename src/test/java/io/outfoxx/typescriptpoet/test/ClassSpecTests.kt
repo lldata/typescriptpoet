@@ -35,6 +35,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import java.io.StringWriter
 
+// Large by accumulation: one test per case, and a class carries more cases than anything
+// else the library emits. The rule is counting the suite, not a design to split up.
+@Suppress("LargeClass")
 @DisplayName("ClassSpec Tests")
 class ClassSpecTests {
 
@@ -360,7 +363,11 @@ class ClassSpecTests {
 
               value3: boolean | undefined;
 
-              constructor(private value: number, public value2: string, value3: boolean | undefined) {
+              constructor(
+                private value: number,
+                public value2: string,
+                value3: boolean | undefined,
+              ) {
                 val testing = 'need other code';
                 anotherTestStatement();
                 this.value3 = value3 || testing == '';

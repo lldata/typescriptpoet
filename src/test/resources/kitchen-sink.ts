@@ -2,6 +2,7 @@
 //
 import { logged, sealed } from "./decorators";
 import { Engine } from "./engine";
+import "./engine-boost";
 import Logger from "./logger";
 import { type Options } from "./options";
 import * as utils from "./utils";
@@ -26,6 +27,10 @@ export interface Callable {
 
 export interface Identified {
   readonly id: string;
+}
+
+export interface Labelled extends Identified {
+  label: string;
 }
 
 type PersonKey = keyof Person;
@@ -84,6 +89,14 @@ type Getters<T> = {
 };
 
 type TypeOfEngine = typeof Engine;
+
+type Lookup = Record<string, number>;
+
+type Choose<C extends string | number> = (value: C) => void;
+
+type Keyed<P extends keyof Person> = (key: P) => void;
+
+type Merged<W extends Person & Options> = () => W;
 
 export enum Direction {
   Up = "UP",
@@ -158,6 +171,20 @@ function parse(value: string | number): string | number {
   return value;
 }
 
+function classify(value: number): string {
+  if (value > 0) {
+    return "positive";
+  } else if (value < 0) {
+    return "negative";
+  } else {
+    return "zero";
+  }
+}
+
+function boostEngine(engine: Engine) {
+  engine.boost();
+}
+
 export function node(path: string) {
   return {
     kind: "node",
@@ -186,6 +213,7 @@ export abstract class Base<S extends string> {
 export class Widget extends Base<string> implements Identified {
   #secret: string = "s";
 
+  @logged()
   later!: string;
 
   accessor count: number = 0;
@@ -208,7 +236,7 @@ export class Widget extends Base<string> implements Identified {
     Widget.registry.set("widget", 1);
   }
 
-  @logged
+  @logged("greet", /* level */ "info")
   override greet(): string {
     return this.#secret;
   }
@@ -229,14 +257,27 @@ export class Widget extends Base<string> implements Identified {
     yield 1;
   }
 
-  static create(engine: Engine): Widget {
+  static create(@logged engine: Engine): Widget {
     return new Widget(engine);
+  }
+}
+
+export class Pair {
+  constructor(
+    private readonly left: string,
+    private readonly right: string,
+  ) {
+    if (left === right) throw new Error("duplicate");
   }
 }
 
 let defaultLogger: Logger;
 
 const VERSION: string = "2.0.0";
+
+export default class Catalogue {
+  readonly entries: string[] = [];
+}
 
 export * from "./engine";
 
@@ -249,6 +290,12 @@ export { Widget as Gadget };
 export namespace Shapes {
   interface Circle {
     radius: number;
+  }
+}
+
+declare namespace Ambient {
+  interface Host {
+    version: string;
   }
 }
 

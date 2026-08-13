@@ -40,6 +40,9 @@ import java.io.StringWriter
  * and compares against `src/test/resources/kitchen-sink.ts`, then hands the same output to
  * the real `tsc`. Adding a construct to the library means adding it here.
  */
+// Large by construction: it holds one of everything, and grows by one each time the library
+// learns a construct. Splitting it would scatter the order it shares with the golden file.
+@Suppress("LargeClass")
 object KitchenSink {
 
   /** Extra modules the sink imports from, written alongside it so `tsc` can resolve them. */
@@ -49,6 +52,11 @@ object KitchenSink {
     "utils.ts" to "export function identity<T>(value: T): T { return value; }\n",
     "options.ts" to "export interface Options { verbose: boolean }\n",
     "polyfill.ts" to "export {};\ndeclare global { var polyfillLoaded: boolean; }\n",
+    // The module an augment import points at: it adds a member to a type declared elsewhere
+    // and exports nothing of its own, which is why it is imported for its side effect.
+    "engine-boost.ts" to
+      "import \"./engine\";\n" +
+      "declare module \"./engine\" {\n  interface Engine {\n    boost(): void;\n  }\n}\n",
     "decorators.ts" to
       "export function sealed(...args: any[]): any {}\n" +
       "export function logged(...args: any[]): any {}\n",
@@ -125,6 +133,16 @@ object KitchenSink {
             .addModifiers(Modifier.READONLY)
             .build(),
         )
+        .build(),
+    )
+
+    // An interface extending another. Only an interface has this: a class reaches the same
+    // shape through superClass or addMixin, which are different keywords.
+    file.addInterface(
+      InterfaceSpec.builder("Labelled")
+        .addModifiers(Modifier.EXPORT)
+        .addSuperInterface(TypeName.implicit("Identified"))
+        .addProperty("label", TypeName.STRING)
         .build(),
     )
 
@@ -302,6 +320,35 @@ object KitchenSink {
     file.addTypeAlias(
       TypeAliasSpec.builder("TypeOfEngine", TypeName.typeOf(engine)).build(),
     )
+    file.addTypeAlias(
+      TypeAliasSpec.builder("Lookup", TypeName.recordType(TypeName.STRING, TypeName.NUMBER)).build(),
+    )
+    // Bounds with more than one constraint. The first bound's combiner is unused -- it is the
+    // separator between bounds, not a prefix -- so `C` reads `string | number` and `W` reads
+    // `Person & Options`. `P` carries the other thing a bound can hold, the `keyof` modifier,
+    // which is a bound modifier rather than the `keyof` type operator that `PersonKey` uses.
+    // Kept narrow on purpose: a type parameter list does not break on width yet, so a wider
+    // one here would be output Prettier rewrites. See the width issue for that.
+    file.addTypeAlias(
+      TypeAliasSpec.builder(
+        "Choose",
+        TypeName.lambda("value" to TypeName.typeVariable("C"), returnType = TypeName.VOID),
+      )
+        .addTypeVariable(
+          TypeName.typeVariable("C", TypeName.unionBound(TypeName.STRING), TypeName.unionBound(TypeName.NUMBER)),
+        )
+        .build(),
+    )
+    file.addTypeAlias(
+      TypeAliasSpec.builder("Keyed", TypeName.lambda("key" to TypeName.typeVariable("P"), returnType = TypeName.VOID))
+        .addTypeVariable(TypeName.typeVariable("P", TypeName.unionBound(person, keyOf = true)))
+        .build(),
+    )
+    file.addTypeAlias(
+      TypeAliasSpec.builder("Merged", TypeName.lambda(returnType = TypeName.typeVariable("W")))
+        .addTypeVariable(TypeName.typeVariable("W", TypeName.bound(person), TypeName.intersectBound(options)))
+        .build(),
+    )
 
     // ---- Enums ---------------------------------------------------------------------
     // Direction is a string enum, Flags a const enum with a computed value. The initializer
@@ -443,6 +490,33 @@ object KitchenSink {
         .build(),
     ).forEach { file.addFunction(it) }
 
+    // Control flow, which is the one part of a body the library lays out rather than taking
+    // verbatim: the braces, the indent between them and the `}` before `else` are all its.
+    file.addFunction(
+      FunctionSpec.builder("classify")
+        .addParameter("value", TypeName.NUMBER)
+        .returns(TypeName.STRING)
+        .beginControlFlow("if (value > 0)")
+        .addStatement("return %S", "positive")
+        .nextControlFlow("else if (value < 0)")
+        .addStatement("return %S", "negative")
+        .nextControlFlow("else")
+        .addStatement("return %S", "zero")
+        .endControlFlow()
+        .build(),
+    )
+
+    // An augment import: a module imported for a member it adds to a type declared somewhere
+    // else. It carries no binding of its own, so it is emitted next to the import of the
+    // symbol it augments rather than on its own -- the sixth import form, and the reason
+    // `boost` below resolves at all.
+    file.addFunction(
+      FunctionSpec.builder("boostEngine")
+        .addParameter("engine", engine)
+        .addStatement("engine.%Q()", SymbolSpec.augmented("boost", "./engine-boost", "Engine"))
+        .build(),
+    )
+
     // ---- Object literals -----------------------------------------------------------
     // All three member kinds at once: a property, shorthand, and a getter. The getter is
     // what a lazily-reached value is made of -- as a property, `depth` would be computed
@@ -512,7 +586,15 @@ object KitchenSink {
         .superClass(TypeName.parameterizedType(TypeName.implicit("Base"), TypeName.STRING))
         .addMixin(TypeName.implicit("Identified"))
         .addProperty(PropertySpec.builder("#secret", TypeName.STRING).initializer("%S", "s").build())
-        .addProperty(PropertySpec.builder("later", TypeName.STRING).definiteAssignment().build())
+        // A decorator in property position, in the factory form: `@logged()` rather than
+        // `@logged`. The two are different expressions, so which one is emitted is the
+        // caller's to say and not inferred from whether there are parameters.
+        .addProperty(
+          PropertySpec.builder("later", TypeName.STRING)
+            .definiteAssignment()
+            .addDecorator(DecoratorSpec.builder(loggedDecorator).asFactory().build())
+            .build(),
+        )
         .addProperty(
           PropertySpec.builder("count", TypeName.NUMBER)
             .addModifiers(Modifier.ACCESSOR)
@@ -565,10 +647,17 @@ object KitchenSink {
             .build(),
         )
         .addStaticBlock("Widget.registry.set(\"widget\", 1);\n")
+        // Decorator parameters, positional and named. TypeScript has no named arguments, so a
+        // named one is emitted as a comment against the value it labels.
         .addFunction(
           FunctionSpec.builder("greet")
             .addModifiers(Modifier.PUBLIC, Modifier.OVERRIDE)
-            .addDecorator(DecoratorSpec.builder(loggedDecorator).build())
+            .addDecorator(
+              DecoratorSpec.builder(loggedDecorator)
+                .addParameter(null, "%S", "greet")
+                .addParameter("level", "%S", "info")
+                .build(),
+            )
             .returns(TypeName.STRING)
             .addStatement("return this.#secret")
             .build(),
@@ -601,10 +690,15 @@ object KitchenSink {
             .addStatement("yield 1")
             .build(),
         )
+        // A decorator in parameter position, the third place one can appear.
         .addFunction(
           FunctionSpec.builder("create")
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-            .addParameter("engine", engine)
+            .addParameter(
+              ParameterSpec.builder("engine", engine)
+                .addDecorator(DecoratorSpec.builder(loggedDecorator).build())
+                .build(),
+            )
             .returns(TypeName.implicit("Widget"))
             .addStatement("return new Widget(engine)")
             .build(),
@@ -625,14 +719,55 @@ object KitchenSink {
         .build(),
     )
 
+    // Two parameter properties in one constructor, which is the list Prettier breaks whatever
+    // its width -- one on its own, as Widget has, stays inline.
+    file.addClass(
+      ClassSpec.builder("Pair")
+        .addModifiers(Modifier.EXPORT)
+        .addProperty(
+          PropertySpec.builder("left", TypeName.STRING)
+            .addModifiers(Modifier.PRIVATE, Modifier.READONLY)
+            .initializer("left")
+            .build(),
+        )
+        .addProperty(
+          PropertySpec.builder("right", TypeName.STRING)
+            .addModifiers(Modifier.PRIVATE, Modifier.READONLY)
+            .initializer("right")
+            .build(),
+        )
+        .constructor(
+          FunctionSpec.constructorBuilder()
+            .addParameter("left", TypeName.STRING)
+            .addParameter("right", TypeName.STRING)
+            // A body only because an empty one is emitted as `{\n}` where Prettier writes
+            // `{}`, which is its own bug and not this one's to carry.
+            .addStatement("if (left === right) throw new Error(%S)", "duplicate")
+            .build(),
+        )
+        .build(),
+    )
+
+    // `declare`, which says a thing exists without defining it. It is exclusive with `export`
+    // on a module, so it needs one of its own rather than a modifier on Shapes.
+    file.addModule(
+      ModuleSpec.builder("Ambient")
+        .addModifier(Modifier.DECLARE)
+        .addInterface(
+          InterfaceSpec.builder("Host")
+            .addProperty("version", TypeName.STRING)
+            .build(),
+        )
+        .build(),
+    )
+
     // ---- Top-level variables and exports --------------------------------------------
     // A top-level property is a variable declaration, so it must carry exactly one of
     // CONST, LET or VAR -- unlike every other member, where those modifiers are rejected.
     //
     // The four export statements are the forms that are not simply a modifier on a
-    // declaration. `export default` and `export =` are absent on purpose: the first is a
-    // modifier (see Widget), and the second cannot coexist with any ES export in one file,
-    // which FileSpec enforces.
+    // declaration. `export =` is absent on purpose: it cannot coexist with any ES export in
+    // one file, which FileSpec enforces, so it cannot appear here at all.
     file.addProperty(
       PropertySpec.builder("defaultLogger", logger)
         .addModifiers(Modifier.LET)
@@ -642,6 +777,19 @@ object KitchenSink {
       PropertySpec.builder("VERSION", TypeName.STRING)
         .addModifiers(Modifier.CONST)
         .initializer("%S", "2.0.0")
+        .build(),
+    )
+
+    // `export default` is a modifier rather than a statement, and a file may carry one.
+    file.addClass(
+      ClassSpec.builder("Catalogue")
+        .addModifiers(Modifier.EXPORT, Modifier.DEFAULT)
+        .addProperty(
+          PropertySpec.builder("entries", TypeName.arrayShorthandType(TypeName.STRING))
+            .addModifiers(Modifier.READONLY)
+            .initializer("[]")
+            .build(),
+        )
         .build(),
     )
 

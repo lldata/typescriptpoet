@@ -371,7 +371,8 @@ private constructor(internal val formatParts: List<String>, internal val args: L
      */
     fun nextControlFlow(controlFlow: String, vararg args: Any?) = apply {
       unindent()
-      add("}\n$controlFlow {\n", *args)
+      // The continuation shares the closing brace's line: `} else {`, not `}` then `else {`.
+      add("} $controlFlow {\n", *args)
       indent()
     }
 

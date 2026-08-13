@@ -223,12 +223,18 @@ internal fun List<ParameterSpec>.emit(
   // fits; otherwise put every parameter on its own line. This is what Prettier does, and it
   // is all-or-nothing on purpose -- wrapping only the parameters that overflow produces the
   // ragged shape the wrapper used to emit.
-  val decorated = !all { constructorProperties[it.name]?.decorators?.isEmpty() ?: it.decorators.isEmpty() }
+  // The one list Prettier breaks regardless of width: a constructor taking more than one
+  // parameter, at least one of which is a parameter property. One parameter property on its
+  // own stays inline, and so does any number of plain parameters that fit.
+  //
+  // A decorated parameter is not such a case. Decorators used to force the break here, which
+  // split `create(@logged engine: Engine)` across three lines at a quarter of the width.
+  val forcedBreak = params.size > 1 && params.any { constructorProperties.containsKey(it.name) }
   val inlineWidth = params.sumOf { measure(it, constructorProperties).length } + 2 * (params.size - 1)
   // An empty list is always `()`: there is nothing to break onto its own line, and a long
   // signature before it would otherwise split the parens apart.
   val fitsOnOneLine =
-    params.isEmpty() || (!decorated && column + inlineWidth + 2 + trailingWidth <= printWidth)
+    params.isEmpty() || (!forcedBreak && column + inlineWidth + 2 + trailingWidth <= printWidth)
 
   if (fitsOnOneLine) {
     params.forEachIndexed { index, parameter ->
