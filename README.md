@@ -128,6 +128,9 @@ Building
 
 Requires JDK 17, which the Gradle toolchain provisions automatically.
 
+`build` runs the full gate: tests, ktlint and license headers via Spotless, detekt, public
+ABI compatibility, and a coverage floor.
+
 
 License
 -------

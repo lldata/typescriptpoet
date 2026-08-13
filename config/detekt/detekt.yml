@@ -1,0 +1,60 @@
+# Layered on top of detekt's defaults (buildUponDefaultConfig = true), so only the
+# deviations appear here.
+#
+# The theme of these relaxations: this is a code generator. Its shape is a handful of large
+# `emit` methods that walk a spec and write syntax, plus builder classes with one method per
+# thing the generated construct can carry. Both are the design rather than debt, and the
+# repository already reached the same conclusion years ago -- .codebeatsettings raises
+# exactly these thresholds for ARITY, ABC and TOO_MANY_METHODS.
+#
+# Everything not listed keeps detekt's default, which is the point: the rules that earn
+# their place are the ones that found a locale-dependent escape bug and a dead private
+# property in this codebase.
+
+complexity:
+  # ClassSpec.emit is 110 lines of "write the class, then its properties, then its
+  # constructor, then its methods". Splitting it would scatter the emission order.
+  # Test fixtures are exempt: KitchenSink.spec is one deliberately linear 470-line function
+  # that builds every construct in order, and reads better that way than split up.
+  LongMethod:
+    allowedLines: 120
+    excludes: ['**/test/**']
+  CyclomaticComplexMethod:
+    allowedComplexity: 30
+  # Builders expose one method per feature of the construct they build, and TypeName's
+  # companion is the factory for every type the language has: 35 and counting.
+  TooManyFunctions:
+    allowedFunctionsPerFile: 40
+    allowedFunctionsPerClass: 40
+    allowedFunctionsPerInterface: 40
+    allowedFunctionsPerObject: 40
+    allowedFunctionsPerEnum: 40
+  NestedBlockDepth:
+    allowedDepth: 5
+  # FunctionSpec.emit tests five body-less cases at once; naming the disjunction would not
+  # make it clearer than the comment already there.
+  ComplexCondition:
+    allowedConditions: 5
+  LongParameterList:
+    allowedFunctionParameters: 7
+    allowedConstructorParameters: 8
+
+style:
+  # The escape and format-string loops in Utils and CodeBlock use a continue per case, which
+  # is the readable form for a character scanner.
+  LoopWithTooManyJumpStatements:
+    maxJumpCount: 3
+  # Parser-shaped functions return early on each failed match.
+  ReturnCount:
+    max: 6
+  # ktlint already enforces 120 columns through Spotless; two tools reporting the same thing
+  # means fixing it twice.
+  MaxLineLength:
+    active: false
+  MagicNumber:
+    ignoreNumbers: ['-1', '0', '1', '2', '5']
+
+naming:
+  # Utils.kt is a deliberate grab-bag of top-level helpers, not a single-declaration file.
+  MatchingDeclarationName:
+    active: false

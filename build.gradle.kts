@@ -12,6 +12,7 @@ plugins {
 
   id("com.diffplug.spotless") version "8.9.0"
   id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
+  id("dev.detekt") version "2.0.0-alpha.6"
 }
 
 
@@ -192,6 +193,15 @@ val javadocJar = tasks.register<Jar>("javadocJar") {
 //
 // CHECKS
 //
+
+// Runs as part of `check`, gating at zero findings. Thresholds that do not suit a code
+// generator are relaxed in the config rather than suppressed wholesale; see the comments
+// there. No baseline: a baseline reports zero while hiding the debt.
+detekt {
+  buildUponDefaultConfig = true
+  config.setFrom(file("config/detekt/detekt.yml"))
+  basePath.set(rootDir)
+}
 
 spotless {
   kotlin {
