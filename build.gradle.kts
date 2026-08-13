@@ -117,6 +117,9 @@ tasks {
   test {
     useJUnitPlatform()
 
+    // Lets `-Dkitchensink.write=true` reach the test JVM to regenerate the golden file.
+    System.getProperty("kitchensink.write")?.let { systemProperty("kitchensink.write", it) }
+
     finalizedBy(jacocoTestReport)
   }
 

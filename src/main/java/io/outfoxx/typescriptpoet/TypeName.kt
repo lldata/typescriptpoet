@@ -138,6 +138,11 @@ sealed class TypeName {
       }
     }
 
+    // `infer U[]` parses as `infer (U[])`, so an infer variable used as the operand of a
+    // tighter construct has to be parenthesised: `(infer U)[]`. A plain type variable is a
+    // single token and never needs it.
+    override val bindsLoosely: Boolean get() = isInfer
+
     override fun emit(codeWriter: CodeWriter) {
       // `infer T` is a use-site form; variance, `const` and bounds only appear at the
       // declaration site, which goes through CodeWriter.emitTypeVariables.
