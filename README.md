@@ -1,9 +1,12 @@
 TypeScriptPoet
 ==========
 
-[![CI](https://github.com/outfoxx/typescriptpoet/actions/workflows/ci.yml/badge.svg)](https://github.com/outfoxx/typescriptpoet/actions/workflows/ci.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/io.outfoxx/typescriptpoet.svg)][dl]
-[![codebeat badge](https://codebeat.co/badges/70f7939d-185e-42d7-b7a8-ea240840a121)](https://codebeat.co/projects/github-com-outfoxx-typescriptpoet-master)
+[![CI](https://github.com/lldata/typescriptpoet/actions/workflows/ci.yml/badge.svg)](https://github.com/lldata/typescriptpoet/actions/workflows/ci.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/io.outfoxx/typescriptpoet?label=Maven%20Central)][dl]
+[![License](https://img.shields.io/github/license/outfoxx/typescriptpoet?color=blue)](LICENSE.txt)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![JVM](https://img.shields.io/badge/JVM-8%2B-437291?logo=openjdk&logoColor=white)](#download)
+[![TypeScript](https://img.shields.io/badge/emits-TypeScript%205.x-3178C6?logo=typescript&logoColor=white)](#typescript-support)
 
 `TypeScriptPoet` is a Kotlin and Java API for generating `.ts` source files.
 
