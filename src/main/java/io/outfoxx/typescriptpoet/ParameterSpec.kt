@@ -225,7 +225,10 @@ internal fun List<ParameterSpec>.emit(
   // ragged shape the wrapper used to emit.
   val decorated = !all { constructorProperties[it.name]?.decorators?.isEmpty() ?: it.decorators.isEmpty() }
   val inlineWidth = params.sumOf { measure(it, constructorProperties).length } + 2 * (params.size - 1)
-  val fitsOnOneLine = !decorated && column + inlineWidth + 2 + trailingWidth <= printWidth
+  // An empty list is always `()`: there is nothing to break onto its own line, and a long
+  // signature before it would otherwise split the parens apart.
+  val fitsOnOneLine =
+    params.isEmpty() || (!decorated && column + inlineWidth + 2 + trailingWidth <= printWidth)
 
   if (fitsOnOneLine) {
     params.forEachIndexed { index, parameter ->

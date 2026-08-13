@@ -97,7 +97,7 @@ class ModuleExportTests {
     assertThat(
       emit(file),
       equalTo(
-        "import { Beta, type Alpha } from \"lib\";\n\n\nconst a: Alpha;\n\nconst b: Beta;\n",
+        "import { Beta, type Alpha } from \"lib\";\n\nconst a: Alpha;\n\nconst b: Beta;\n",
       ),
     )
   }
@@ -128,7 +128,7 @@ class ModuleExportTests {
 
             export { Gamma, Delta as Renamed } from "./gamma";
 
-            export type {Epsilon} from "./eps";
+            export type { Epsilon } from "./eps";
 
         """.trimIndent(),
       ),

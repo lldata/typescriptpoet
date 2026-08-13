@@ -223,7 +223,7 @@ class DeclarationTests {
 
     assertThat(
       out.toString(),
-      emits("export const enum Direction {\n  Up,\n  Down\n}\n"),
+      emits("export const enum Direction {\n  Up,\n  Down,\n}\n"),
     )
   }
 

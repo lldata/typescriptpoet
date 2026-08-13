@@ -106,7 +106,7 @@ class EnumSpecTests {
             enum Test {
               A = 10,
               B = 20,
-              C = 30
+              C = 30,
             }
 
         """.trimIndent(),

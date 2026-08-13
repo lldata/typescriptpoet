@@ -368,7 +368,7 @@ class FunctionSpecTests {
       emits(
         """
             function test(
-                @required @size(/* min */ 10, /* max */ 100) @logged() a: number
+                @required @size(/* min */ 10, /* max */ 100) @logged() a: number,
             ) {
             }
 

@@ -55,7 +55,7 @@ class TypeNameTests {
         Member("C", BOOLEAN, false),
       ),
     )
-    assertThat(typeName.toString(), emits("{ a: string, b: number, C: boolean }"))
+    assertThat(typeName.toString(), emits("{ a: string; b: number; C: boolean }"))
 
     val typeName2 = TypeName.anonymousType(
       arrayListOf(
@@ -73,6 +73,6 @@ class TypeNameTests {
         Member("c", DATE, true),
       ),
     )
-    assertThat(typeName2.toString(), emits("{ a?: number, B: string, c?: Date }"))
+    assertThat(typeName2.toString(), emits("{ a?: number; B: string; c?: Date }"))
   }
 }

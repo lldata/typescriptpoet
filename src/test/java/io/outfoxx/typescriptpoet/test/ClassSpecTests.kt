@@ -429,9 +429,9 @@ class ClassSpecTests {
               value3: boolean | undefined;
 
               constructor(
-                  @MyDec(/* value */ 'test-value') value: number,
+                  @MyDec(/* value */ "test-value") value: number,
                   value2: string,
-                  @MyDec('test-value') value3: boolean | undefined
+                  @MyDec("test-value") value3: boolean | undefined,
               ) {
                 val testing = 'need other code'; this.value = value
                 anotherTestStatement();
@@ -494,10 +494,10 @@ class ClassSpecTests {
               value3: boolean | undefined;
 
               constructor(
-                  @MyDec(/* value */ 'test-value')
+                  @MyDec(/* value */ "test-value")
                   private value: number,
                   public value2: string,
-                  value3: boolean | undefined
+                  value3: boolean | undefined,
               ) {
                 val testing = 'need other code';
                 anotherTestStatement();
