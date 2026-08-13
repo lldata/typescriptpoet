@@ -54,6 +54,9 @@ object KitchenSink {
       "export function logged(...args: any[]): any {}\n",
   )
 
+  // One deliberately linear function: it builds every construct in the order they appear in
+  // the golden file, and splitting it would scatter that order across helpers.
+  @Suppress("LongMethod")
   fun spec(): FileSpec {
     val t = TypeName.typeVariable("T")
     val k = TypeName.typeVariable("K")

@@ -263,6 +263,8 @@ internal class CodeWriter constructor(
    * [CodeWriter.out] does it through here, since we emit indentation lazily in order to avoid
    * unnecessary trailing whitespace.
    */
+  // Indentation and line-wrapping interact per character; flattening it splits that logic.
+  @Suppress("NestedBlockDepth")
   fun emit(s: String) = apply {
     var first = true
     for (line in s.split('\n')) {

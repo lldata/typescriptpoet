@@ -158,6 +158,8 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     }
   }
 
+  // Imports are grouped by module, then by kind, then by name.
+  @Suppress("NestedBlockDepth")
   private fun emitImports(codeWriter: CodeWriter, directory: Path, imports: Set<SymbolSpec.Imported>) {
     val augmentImports = imports
       .filterIsInstance<SymbolSpec.Augmented>()

@@ -107,6 +107,8 @@ internal fun characterLiteralWithoutDoubleQuotes(c: Char) = when {
 }
 
 /** Returns the string literal representing `value`, including wrapping double quotes.  */
+// A character scanner: one continue per escape case is the readable form.
+@Suppress("LoopWithTooManyJumpStatements")
 internal fun stringLiteralWithQuotes(value: String, multiLineIndent: String): String =
   value.split("\n").joinToString(" +\n$multiLineIndent") { line ->
     val result = StringBuilder(line.length + 32)
@@ -136,6 +138,8 @@ internal fun stringLiteralWithQuotes(value: String, multiLineIndent: String): St
   }
 
 /** Returns the string template literal representing `value`, including wrapping backticks.  */
+// A character scanner: one continue per escape case is the readable form.
+@Suppress("LoopWithTooManyJumpStatements")
 internal fun stringTemplateLiteralWithBackticks(value: String, multiLineIndent: String): String =
   value.split("\n").joinToString("\n$multiLineIndent", prefix = "`", postfix = "`") { line ->
     val result = StringBuilder(line.length + 32)

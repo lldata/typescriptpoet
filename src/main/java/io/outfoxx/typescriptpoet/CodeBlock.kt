@@ -227,6 +227,8 @@ private constructor(internal val formatParts: List<String>, internal val args: L
      * Mixing relative and positional arguments in a call to add is invalid and will result in an
      * error.
      */
+    // A format-string scanner: one continue per placeholder kind is the readable form.
+    @Suppress("LoopWithTooManyJumpStatements")
     fun add(format: String, vararg args: Any?) = apply {
       var hasRelative = false
       var hasIndexed = false

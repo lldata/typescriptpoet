@@ -199,6 +199,9 @@ class ParameterSpec private constructor(builder: Builder) : Taggable(builder.tag
   }
 }
 
+/** Above this many parameters, the list is wrapped one-per-line instead of inlined. */
+private const val MAX_PARAMETERS_ON_ONE_LINE = 5
+
 internal fun List<ParameterSpec>.emit(
   codeWriter: CodeWriter,
   enclosed: Boolean = true,
@@ -211,7 +214,9 @@ internal fun List<ParameterSpec>.emit(
 ) = with(codeWriter) {
   val params = this@emit + if (rest != null) listOf(rest) else emptyList()
   if (enclosed) emit("(")
-  if (size < 5 && all { constructorProperties[it.name]?.decorators?.isEmpty() ?: it.decorators.isEmpty() }) {
+  if (size < MAX_PARAMETERS_ON_ONE_LINE &&
+    all { constructorProperties[it.name]?.decorators?.isEmpty() ?: it.decorators.isEmpty() }
+  ) {
     params.forEachIndexed { index, parameter ->
       val optionalAllowed = subList(min(index + 1, size), size).all { it.optional }
       if (index > 0) emitCode(",%W")

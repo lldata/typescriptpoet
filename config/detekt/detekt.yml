@@ -9,18 +9,20 @@
 # whose badge had been dead for years, so that file is gone and this one is the single
 # place static-analysis thresholds are set.
 #
-# Everything not listed keeps detekt's default, which is the point: the rules that earn
-# their place are the ones that found a locale-dependent escape bug and a dead private
-# property in this codebase.
+# Only three rules are relaxed globally, and only because they fire across five to nine
+# sites each and describe the architecture rather than any one method. Everything else that
+# fired was either fixed in the code or suppressed at the single site with a reason, so the
+# rule keeps working everywhere else -- a global threshold is a blind spot, not a fix.
+#
+# The thresholds below carry deliberate headroom over the current worst case (110/26/35), so
+# they are a ceiling rather than a line drawn under the existing code. If a new method needs
+# them raised again, that is a signal worth reading, not a number to bump.
 
 complexity:
   # ClassSpec.emit is 110 lines of "write the class, then its properties, then its
   # constructor, then its methods". Splitting it would scatter the emission order.
-  # Test fixtures are exempt: KitchenSink.spec is one deliberately linear 470-line function
-  # that builds every construct in order, and reads better that way than split up.
   LongMethod:
     allowedLines: 120
-    excludes: ['**/test/**']
   CyclomaticComplexMethod:
     allowedComplexity: 30
   # Builders expose one method per feature of the construct they build, and TypeName's
@@ -31,30 +33,17 @@ complexity:
     allowedFunctionsPerInterface: 40
     allowedFunctionsPerObject: 40
     allowedFunctionsPerEnum: 40
-  NestedBlockDepth:
-    allowedDepth: 5
-  # FunctionSpec.emit tests five body-less cases at once; naming the disjunction would not
-  # make it clearer than the comment already there.
-  ComplexCondition:
-    allowedConditions: 5
-  LongParameterList:
-    allowedFunctionParameters: 7
-    allowedConstructorParameters: 8
 
 style:
-  # The escape and format-string loops in Utils and CodeBlock use a continue per case, which
-  # is the readable form for a character scanner.
-  LoopWithTooManyJumpStatements:
-    maxJumpCount: 3
-  # Parser-shaped functions return early on each failed match.
+  # Off by preference, not by threshold. An early return per failed check reads better than
+  # nesting the success path inside a long conditional, so counting returns measures the
+  # style this project wants rather than a problem with it.
   ReturnCount:
-    max: 6
+    active: false
   # ktlint already enforces 120 columns through Spotless; two tools reporting the same thing
   # means fixing it twice.
   MaxLineLength:
     active: false
-  MagicNumber:
-    ignoreNumbers: ['-1', '0', '1', '2', '5']
 
 naming:
   # Utils.kt is a deliberate grab-bag of top-level helpers, not a single-declaration file.
