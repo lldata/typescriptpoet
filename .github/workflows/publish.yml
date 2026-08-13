@@ -9,6 +9,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
+    # Only the canonical repository holds the publishing secrets.
+    if: github.repository == 'outfoxx/typescriptpoet'
+
     permissions:
       contents: write
 

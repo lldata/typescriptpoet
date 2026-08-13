@@ -44,7 +44,10 @@ jobs:
 
     needs: [ build-test ]
 
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Only the canonical repository holds the publishing secrets; forks would fail here.
+    if: >-
+      github.event_name == 'push' && github.ref == 'refs/heads/main'
+      && github.repository == 'outfoxx/typescriptpoet'
 
     steps:
 
