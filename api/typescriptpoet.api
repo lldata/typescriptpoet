@@ -878,6 +878,10 @@ public abstract class io/outfoxx/typescriptpoet/TypeName {
 	public static final fun lambda (Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
 	public static final fun lambda (Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
 	public static final fun lambda ([Lkotlin/Pair;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
+	public static final fun literal (I)Lio/outfoxx/typescriptpoet/TypeName$Standard;
+	public static final fun literal (J)Lio/outfoxx/typescriptpoet/TypeName$Standard;
+	public static final fun literal (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
+	public static final fun literal (Z)Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public static final fun mapType (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName;
 	public static final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
 	public static final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
@@ -975,6 +979,10 @@ public final class io/outfoxx/typescriptpoet/TypeName$Companion {
 	public final fun lambda ([Lkotlin/Pair;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
 	public static synthetic fun lambda$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;Ljava/util/Map;Lio/outfoxx/typescriptpoet/TypeName;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
 	public static synthetic fun lambda$default (Lio/outfoxx/typescriptpoet/TypeName$Companion;[Lkotlin/Pair;Lio/outfoxx/typescriptpoet/TypeName;ILjava/lang/Object;)Lio/outfoxx/typescriptpoet/TypeName$Lambda;
+	public final fun literal (I)Lio/outfoxx/typescriptpoet/TypeName$Standard;
+	public final fun literal (J)Lio/outfoxx/typescriptpoet/TypeName$Standard;
+	public final fun literal (Ljava/lang/String;)Lio/outfoxx/typescriptpoet/TypeName$Standard;
+	public final fun literal (Z)Lio/outfoxx/typescriptpoet/TypeName$Standard;
 	public final fun mapType (Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName;
 	public final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;
 	public final fun mappedType (Ljava/lang/String;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;Lio/outfoxx/typescriptpoet/TypeName;)Lio/outfoxx/typescriptpoet/TypeName$Mapped;

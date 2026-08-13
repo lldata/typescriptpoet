@@ -677,6 +677,33 @@ sealed class TypeName {
     )
 
     /**
+     * A string literal type (e.g. `"active"`).
+     *
+     * Takes the *unquoted* value and spells it, so the quoting and escaping are the
+     * library's job rather than the caller's. That is the point: passing pre-quoted text to
+     * [implicit] emits a file that does not parse the moment the value contains a quote or a
+     * backslash, and does so silently, which matters most when the value comes from data
+     * rather than from source.
+     *
+     * Escaped by the same routine as `%S`, so a literal type and a string constant with the
+     * same value are spelled identically.
+     */
+    @JvmStatic
+    fun literal(value: String): Standard = implicit(stringLiteralWithQuotes(value, ""))
+
+    /** A numeric literal type (e.g. `42`). */
+    @JvmStatic
+    fun literal(value: Int): Standard = implicit(value.toString())
+
+    /** A numeric literal type (e.g. `42`). */
+    @JvmStatic
+    fun literal(value: Long): Standard = implicit(value.toString())
+
+    /** A boolean literal type (`true` or `false`). */
+    @JvmStatic
+    fun literal(value: Boolean): Standard = implicit(value.toString())
+
+    /**
      * The `Record<K, V>` utility type (e.g. `Record<string, number>`)
      *
      * Distinct from [mapType], which spells `Map<K, V>`. `Map` is a runtime class, accessed

@@ -246,4 +246,18 @@ class TypeOperatorTests {
       equalTo("Map<string, number>"),
     )
   }
+
+  @Test
+  @DisplayName("Generates literal types, escaping string values")
+  fun testLiteralTypes() {
+    // Issue #2: the only route was implicit() with the caller writing the quotes, which
+    // emits an unparseable file the moment the value contains a quote or a backslash.
+    assertThat(TypeName.literal("a").toString(), equalTo("\"a\""))
+    assertThat(TypeName.literal(42).toString(), equalTo("42"))
+    assertThat(TypeName.literal(true).toString(), equalTo("true"))
+
+    val union = TypeName.unionType(TypeName.literal("a"), TypeName.literal("say \"hi\""))
+
+    assertThat(union.toString(), equalTo("\"a\" | \"say \\\"hi\\\"\""))
+  }
 }
