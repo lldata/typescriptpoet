@@ -4,61 +4,70 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    types: [ opened, synchronize, reopened, closed ]
     branches: [ main ]
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        # The Gradle toolchain pins compilation to JDK 17; this matrix checks the build
+        # itself runs on each supported JDK.
+        java: [ '17', '21', '25' ]
+
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v5
 
-    - uses: actions/setup-java@v1
+    - uses: actions/setup-java@v5
       with:
-        java-version: '11'
+        distribution: 'temurin'
+        java-version: ${{ matrix.java }}
+
+    - uses: gradle/actions/setup-gradle@v4
 
     - name: Build & Test
-      uses: burrunan/gradle-cache-action@v1
-      with:
-        job-id: jdk8-build-test
-        arguments: build
+      run: ./gradlew build
 
-    - name: Updload Reports
-      uses: actions/upload-artifact@v2
+    - name: Upload Reports
+      if: always()
+      uses: actions/upload-artifact@v4
       with:
-        name: reports
+        name: reports-jdk${{ matrix.java }}
         path: build/reports
 
 
-  publish:
+  publish-snapshot:
     runs-on: ubuntu-latest
 
-    needs: [build-test]
+    needs: [ build-test ]
 
-    if: github.event.pull_request.merged || github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
-    - uses: actions/checkout@v2
 
-    - name: Build
-      uses: burrunan/gradle-cache-action@v1
+    - uses: actions/checkout@v5
+
+    - uses: actions/setup-java@v5
       with:
-        job-id: jdk8-build-test
-        arguments: build -x test
+        distribution: 'temurin'
+        java-version: '17'
+
+    - uses: gradle/actions/setup-gradle@v4
 
     - name: Publish Maven (Snapshot)
-      uses: burrunan/gradle-cache-action@v1
-      with:
-        job-id: jdk8-build-test
-        arguments: publishMavenRelease
-        properties: |
-          ossrhUsername=${{ secrets.OSSRH_USER }}
-          ossrhPassword=${{ secrets.OSSRH_PASS }}
+      run: >-
+        ./gradlew publishMavenRelease
+        -PossrhUsername=${{ secrets.OSSRH_USER }}
+        -PossrhPassword=${{ secrets.OSSRH_PASS }}
+
+    - name: Build Documentation
+      run: ./gradlew dokkaGeneratePublicationHtml
 
     - name: Publish Documentation
-      uses: JamesIves/github-pages-deploy-action@4.0.0
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
         clean: false

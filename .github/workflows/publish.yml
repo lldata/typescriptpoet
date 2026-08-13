@@ -9,45 +9,52 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v5
 
-    - uses: actions/setup-java@v1
+    - uses: actions/setup-java@v5
       with:
-        java-version: '11'
+        distribution: 'temurin'
+        java-version: '17'
 
-    - uses: olegtarasov/get-tag@v2.1
-      id: tagName
-      with:
-        tagRegex: "v(.*)"
+    - uses: gradle/actions/setup-gradle@v4
+
+    - name: Resolve Version
+      id: version
+      run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+    - name: Build
+      run: ./gradlew build -PreleaseVersion=${{ steps.version.outputs.version }}
 
     - name: Publish Maven
-      uses: burrunan/gradle-cache-action@v1
       env:
         ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-      with:
-        job-id: jdk8-build-test
-        arguments: >-
-          build
-          publishRelease
-          -x test
-        properties: |
-          releaseVersion=${{ steps.tagName.outputs.tag }}
-          ossrhUsername=${{ secrets.OSSRH_USER }}
-          ossrhPassword=${{ secrets.OSSRH_PASS }}
-          github.token=${{ secrets.GITHUB_TOKEN }}
+      run: >-
+        ./gradlew publishMavenRelease
+        -PreleaseVersion=${{ steps.version.outputs.version }}
+        -PossrhUsername=${{ secrets.OSSRH_USER }}
+        -PossrhPassword=${{ secrets.OSSRH_PASS }}
 
-    - name: Build Docs
-      uses: burrunan/gradle-cache-action@v1
-      with:
-        job-id: jdk8-build-test
-        arguments: dokkaHtml
+    - name: GitHub Release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: >-
+        gh release create "$GITHUB_REF_NAME"
+        --draft
+        --title "🎉 ${{ steps.version.outputs.version }} Release"
+        build/libs/*.jar
+
+    - name: Build Documentation
+      run: ./gradlew dokkaGeneratePublicationHtml -PreleaseVersion=${{ steps.version.outputs.version }}
 
     - name: Publish Documentation
-      uses: JamesIves/github-pages-deploy-action@4.0.0
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
         clean: false

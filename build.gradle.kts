@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
   `java-library`
@@ -6,12 +6,10 @@ plugins {
   `maven-publish`
   signing
 
-  kotlin("jvm") version "1.4.32"
-  id("org.jetbrains.dokka") version "1.4.32"
+  kotlin("jvm") version "2.4.10"
+  id("org.jetbrains.dokka") version "2.2.0"
 
-  id("net.minecrell.licenser") version "0.4.1"
-  id("org.jmailen.kotlinter") version "3.3.0"
-  id("com.github.breadmoirai.github-release") version "2.2.12"
+  id("com.diffplug.spotless") version "8.9.0"
 }
 
 
@@ -30,39 +28,25 @@ description = "A Kotlin/Java API for generating .ts source files."
 
 // Versions
 
-val guavaVersion = "22.0"
-val junitJupiterVersion = "5.6.2"
-val hamcrestVersion = "1.3"
+val junitVersion = "6.1.3"
+val hamcrestVersion = "3.0"
 
 repositories {
   mavenCentral()
-  jcenter()
 }
 
 dependencies {
-
-  //
-  // LANGUAGES
-  //
-
-  // kotlin
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  implementation("org.jetbrains.kotlin:kotlin-reflect")
-
-  //
-  // MISCELLANEOUS
-  //
-
-  implementation("com.google.guava:guava:$guavaVersion")
 
   //
   // TESTING
   //
 
   // junit
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
-  testImplementation("org.hamcrest:hamcrest-all:$hamcrestVersion")
+  testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+  testImplementation("org.junit.jupiter:junit-jupiter")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+  testImplementation("org.hamcrest:hamcrest:$hamcrestVersion")
 
 }
 
@@ -71,22 +55,18 @@ dependencies {
 // COMPILE
 //
 
-val javaVersion = JavaVersion.VERSION_1_8
+val javaVersion = 17
 
-java {
-  sourceCompatibility = javaVersion
-  targetCompatibility = javaVersion
+kotlin {
+  jvmToolchain(javaVersion)
 
-  withSourcesJar()
-  withJavadocJar()
+  compilerOptions {
+    jvmTarget = JvmTarget.JVM_17
+  }
 }
 
-tasks {
-  withType<KotlinCompile> {
-    kotlinOptions {
-      jvmTarget = "$javaVersion"
-    }
-  }
+java {
+  withSourcesJar()
 }
 
 
@@ -95,7 +75,7 @@ tasks {
 //
 
 jacoco {
-  toolVersion = "0.8.5"
+  toolVersion = "0.8.15"
 }
 
 tasks {
@@ -103,7 +83,6 @@ tasks {
     useJUnitPlatform()
 
     finalizedBy(jacocoTestReport)
-    jacoco {}
   }
 
   jacocoTestReport {
@@ -116,14 +95,17 @@ tasks {
 // DOCS
 //
 
-tasks {
-  dokkaHtml {
-    outputDirectory.set(file("$buildDir/javadoc/$releaseVersion"))
+dokka {
+  dokkaPublications.html {
+    outputDirectory.set(layout.buildDirectory.dir("javadoc/$releaseVersion"))
   }
+}
 
-  javadoc {
-    dependsOn(dokkaHtml)
-  }
+// Maven Central requires a `-javadoc` artifact; Dokka's HTML output stands in for it,
+// because `java { withJavadocJar() }` produces an empty jar for a Kotlin-only source set.
+val javadocJar by tasks.registering(Jar::class) {
+  archiveClassifier.set("javadoc")
+  from(tasks.named("dokkaGeneratePublicationHtml"))
 }
 
 
@@ -131,13 +113,11 @@ tasks {
 // CHECKS
 //
 
-kotlinter {
-  indentSize = 2
-}
-
-license {
-  header = file("HEADER.txt")
-  include("**/*.kt")
+spotless {
+  kotlin {
+    ktlint()
+    licenseHeaderFile(rootProject.file("HEADER.txt"))
+  }
 }
 
 
@@ -151,6 +131,7 @@ publishing {
 
     create<MavenPublication>("library") {
       from(components["java"])
+      artifact(javadocJar)
 
       pom {
 
@@ -171,7 +152,7 @@ publishing {
         licenses {
           license {
             name.set("Apache License 2.0")
-            url.set("https://raw.githubusercontent.com/outfoxx/typescriptpoet/master/LICENSE.txt")
+            url.set("https://raw.githubusercontent.com/outfoxx/typescriptpoet/main/LICENSE.txt")
             distribution.set("repo")
           }
         }
@@ -197,10 +178,11 @@ publishing {
 
   repositories {
 
+    // OSSRH (oss.sonatype.org) was retired in 2025; these are the Central Portal endpoints.
     maven {
       name = "MavenCentral"
-      val snapshotUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-      val releaseUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+      val snapshotUrl = "https://central.sonatype.com/repository/maven-snapshots/"
+      val releaseUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
       url = uri(if (isSnapshot) snapshotUrl else releaseUrl)
 
       credentials {
@@ -215,10 +197,11 @@ publishing {
 
 signing {
   if (!hasProperty("signing.keyId")) {
-    val signingKeyId: String? by project
-    val signingKey: String? by project
-    val signingPassword: String? by project
-    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    useInMemoryPgpKeys(
+      project.findProperty("signingKeyId")?.toString(),
+      project.findProperty("signingKey")?.toString(),
+      project.findProperty("signingPassword")?.toString()
+    )
   }
   sign(publishing.publications["library"])
 }
@@ -232,33 +215,11 @@ tasks.withType<Sign>().configureEach {
 // RELEASING
 //
 
-githubRelease {
-  owner("outfoxx")
-  repo(name)
-  tagName("v$releaseVersion")
-  targetCommitish("main")
-  releaseName("🎉 $releaseVersion Release")
-  draft(true)
-  prerelease(!releaseVersion.matches("""^\d+\.\d+\.\d+$""".toRegex()))
-  releaseAssets(
-    files("$buildDir/libs/${name}-${releaseVersion}*.jar")
-  )
-  overwrite(true)
-  token(project.findProperty("github.token") as String? ?: System.getenv("GITHUB_TOKEN"))
-}
-
 tasks {
 
   register("publishMavenRelease") {
     dependsOn(
       "publishAllPublicationsToMavenCentralRepository"
-    )
-  }
-
-  register("publishRelease") {
-    dependsOn(
-      "publishMavenRelease",
-      "githubRelease"
     )
   }
 
