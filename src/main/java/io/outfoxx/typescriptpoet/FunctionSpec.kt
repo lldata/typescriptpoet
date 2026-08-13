@@ -107,6 +107,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       codeWriter,
       enclosed = !isIndexable,
       rest = restParameter,
+      trailingWidth = trailingWidth(),
     ) { param, isRest, optionalAllowed ->
       param.emit(codeWriter, isRest = isRest, optionalAllowed = optionalAllowed)
     }
@@ -116,6 +117,12 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     }
 
     emitReturnType(codeWriter)
+  }
+
+  /** How much this signature writes after the closing paren: a return type, and ` {`. */
+  private fun trailingWidth(): Int {
+    val returns = buildCodeString { emitReturnType(this) }.length
+    return returns + if (isSignatureOnly || Modifier.ABSTRACT in modifiers) 1 else 2
   }
 
   /** The leading keyword and name, which differ per kind of function. */

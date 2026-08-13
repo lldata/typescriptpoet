@@ -207,31 +207,57 @@ internal fun List<ParameterSpec>.emit(
   enclosed: Boolean = true,
   rest: ParameterSpec? = null,
   constructorProperties: Map<String, PropertySpec> = emptyMap(),
+  // What follows the closing paren on the same line -- a return type, ` {`. The list only
+  // fits if the whole line does, so the caller has to say how much more it will write.
+  trailingWidth: Int = 0,
   emitBlock: (ParameterSpec, Boolean, Boolean) -> Unit =
     { param, isRest, optionalAllowed ->
       param.emit(codeWriter, optionalAllowed = optionalAllowed, isRest = isRest)
     },
 ) = with(codeWriter) {
   val params = this@emit + if (rest != null) listOf(rest) else emptyList()
+  val column = currentColumn
   if (enclosed) emit("(")
-  if (size < MAX_PARAMETERS_ON_ONE_LINE &&
-    all { constructorProperties[it.name]?.decorators?.isEmpty() ?: it.decorators.isEmpty() }
-  ) {
+
+  // Measure, then break. Render the inline form first and keep it only if the whole list
+  // fits; otherwise put every parameter on its own line. This is what Prettier does, and it
+  // is all-or-nothing on purpose -- wrapping only the parameters that overflow produces the
+  // ragged shape the wrapper used to emit.
+  val decorated = !all { constructorProperties[it.name]?.decorators?.isEmpty() ?: it.decorators.isEmpty() }
+  val inlineWidth = params.sumOf { measure(it, constructorProperties).length } + 2 * (params.size - 1)
+  val fitsOnOneLine = !decorated && column + inlineWidth + 2 + trailingWidth <= printWidth
+
+  if (fitsOnOneLine) {
     params.forEachIndexed { index, parameter ->
       val optionalAllowed = subList(min(index + 1, size), size).all { it.optional }
       if (index > 0) emitCode(",%W")
       emitBlock(parameter, rest === parameter, optionalAllowed)
     }
   } else {
+    // One per line, indented one level, with the closing paren back at the caller's indent.
     emit("\n")
-    indent(2)
+    indent()
     params.forEachIndexed { index, parameter ->
       val optionalAllowed = subList(min(index + 1, size), size).all { it.optional }
-      if (index > 0) emit(",\n")
       emitBlock(parameter, rest === parameter, optionalAllowed)
+      // A trailing comma after a rest parameter is a syntax error, so the last one is bare
+      // when it is the rest parameter.
+      val isLast = index == params.size - 1
+      emit(if (isLast && rest === parameter) "\n" else ",\n")
     }
-    unindent(2)
-    emit("\n")
+    unindent()
   }
   if (enclosed) emit(")")
 }
+
+/** The width one parameter renders to, for the fits-on-one-line decision. */
+private fun measure(parameter: ParameterSpec, constructorProperties: Map<String, PropertySpec>): String =
+  buildCodeString {
+    val property = constructorProperties[parameter.name]
+    if (property != null) {
+      property.emit(this, setOf(), compactOptionalAllowed = false, withInitializer = false)
+      parameter.emitDefaultValue(this)
+    } else {
+      parameter.emit(this, optionalAllowed = true, isRest = false)
+    }
+  }

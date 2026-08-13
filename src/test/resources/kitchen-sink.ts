@@ -119,8 +119,11 @@ async function* stream(): AsyncGenerator<number> {
   yield 1;
 }
 
-function greet(greeting: string = "hello", name?: string,
-    ...extras: string[]): string {
+function greet(
+  greeting: string = "hello",
+  name?: string,
+  ...extras: string[]
+): string {
   return [greeting, name, ...extras].join(" ");
 }
 

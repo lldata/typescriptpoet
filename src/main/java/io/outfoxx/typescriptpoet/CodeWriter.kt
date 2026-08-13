@@ -31,6 +31,12 @@ internal class CodeWriter(
 ) : Closeable {
 
   private val out = LineWrapper(out, indent, PRINT_WIDTH)
+
+  /** The column the next character would be written at, for measure-then-break decisions. */
+  val currentColumn: Int get() = out.column
+
+  /** The column at which a line is considered too long. */
+  val printWidth: Int get() = PRINT_WIDTH
   private var indentLevel = 0
 
   private var tsDoc = false
