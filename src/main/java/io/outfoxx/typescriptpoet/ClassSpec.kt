@@ -181,7 +181,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
 
   /** Returns the properties that can be declared inline as constructor parameters. */
   private fun constructorProperties(): Map<String, PropertySpec> =
-    propertySpecs.filter { it.name == it.initializer?.toString() }.associate { it.name to it }
+    propertySpecs.filter { it.name == it.initializer?.toString() }.associateBy { it.name }
 
   private val hasNoBody: Boolean
     get() {
