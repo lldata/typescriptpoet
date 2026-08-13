@@ -59,6 +59,11 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Long parameter lists and mapped types break on width rather than at fixed wrap points,
   matching what Prettier does: measure the construct, and either keep it on one line or put
   every element on its own.
+- A union type alias too long for one line breaks after the `=` and keeps the union on a
+  single indented line, and only splits one choice per line when that is too wide as well —
+  the intermediate form Prettier tries first, which is often what a union of literals needs
+  once its `export type Name = ` prefix is counted.
+  ([#8](https://github.com/lldata/typescriptpoet/issues/8))
 
 **Project**
 - A golden-file integration test covering every construct once, type-checked with the real

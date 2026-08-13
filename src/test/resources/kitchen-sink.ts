@@ -46,6 +46,15 @@ type Rest = [string, ...rest: number[]];
 
 type Choice = string | number | null;
 
+export type LocationLabelKind =
+  "MARKETPLACE" | "DISTRICT" | "COUNTRY" | "UNKNOWN";
+
+type Verbose =
+  | "PARTITION_KEY_CANDIDATE_1"
+  | "PARTITION_KEY_CANDIDATE_2"
+  | "PARTITION_KEY_CANDIDATE_3"
+  | "PARTITION_KEY_CANDIDATE_4";
+
 type Both = Person & Options;
 
 type Anon = { label: string; hint?: string };

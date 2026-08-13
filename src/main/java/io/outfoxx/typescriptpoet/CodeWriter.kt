@@ -37,6 +37,9 @@ internal class CodeWriter(
 
   /** The column at which a line is considered too long. */
   val printWidth: Int get() = PRINT_WIDTH
+
+  /** The column a line one level deeper than the current one starts at. */
+  val nextIndentColumn: Int get() = (indentLevel + 1) * indent.length
   private var indentLevel = 0
 
   private var tsDoc = false

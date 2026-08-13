@@ -33,12 +33,26 @@ private constructor(builder: Builder) : TypeSpec<TypeAliasSpec, TypeAliasSpec.Bu
     // Measure the whole declaration, prefix included, and break the union or intersection
     // only if it does not fit. Prettier does not break either in member or parameter
     // position, so this is deliberately only here.
-    val rendered = buildCodeString { emitCode(CodeBlock.of("%T", type)) }
-    val fits = codeWriter.currentColumn + 3 + rendered.length + 1 <= codeWriter.printWidth
+    val rendered = codeWriter.measure { emitCode(CodeBlock.of("%T", type)) }
+    // ` = ` and the `;`, which have to fit on the line too.
+    val fitsOnOneLine = codeWriter.currentColumn + 3 + rendered.length + 1 <= codeWriter.printWidth
+    val fitsIndented = codeWriter.nextIndentColumn + rendered.length + 1 <= codeWriter.printWidth
 
     codeWriter.emit(" =")
     when {
-      fits -> codeWriter.emitCode(CodeBlock.of(" %T", type))
+      fitsOnOneLine -> codeWriter.emitCode(CodeBlock.of(" %T", type))
+
+      // Prettier tries an intermediate form before splitting a union: break after the `=` and
+      // keep the whole union on one indented line, which often fits when the declaration with
+      // its `export type Name<T> = ` prefix does not. Only when this is too wide as well does
+      // it go one member per line. An intersection has no such form -- it breaks after the
+      // operator, keeping the first member on the `=` line -- so this is unions only.
+      type is TypeName.Union && fitsIndented -> {
+        codeWriter.emit("\n")
+        codeWriter.indent()
+        codeWriter.emitCode(CodeBlock.of("%T", type))
+        codeWriter.unindent()
+      }
 
       type is TypeName.Union -> type.emitBroken(codeWriter)
 

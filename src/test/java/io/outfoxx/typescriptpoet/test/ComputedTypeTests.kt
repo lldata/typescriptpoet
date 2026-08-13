@@ -16,6 +16,7 @@
 package io.outfoxx.typescriptpoet.test
 
 import io.outfoxx.typescriptpoet.CodeWriter
+import io.outfoxx.typescriptpoet.Modifier
 import io.outfoxx.typescriptpoet.TypeAliasSpec
 import io.outfoxx.typescriptpoet.TypeName
 import io.outfoxx.typescriptpoet.TypeName.Mapped
@@ -191,6 +192,38 @@ class ComputedTypeTests {
               | "AAAAAAAAAAAAAAAAAA2"
               | "AAAAAAAAAAAAAAAAAA3"
               | "AAAAAAAAAAAAAAAAAA4";
+
+        """.trimIndent(),
+      ),
+    )
+  }
+
+  @Test
+  @DisplayName("Keeps a union on one indented line when only the declaration is too long")
+  fun testUnionAliasBreaksAfterEqualsFirst() {
+    // Issue #8: wrapping went straight to one choice per line. Prettier tries this rung
+    // first -- break after the `=`, keep the union on one indented line -- and only splits
+    // per choice when that is too wide as well. Here the declaration is 82 columns and the
+    // indented union is 52, so the middle form is the one that fits.
+    val alias = TypeAliasSpec.builder(
+      "LocationLabelKind",
+      TypeName.unionType(
+        TypeName.literal("MARKETPLACE"),
+        TypeName.literal("DISTRICT"),
+        TypeName.literal("COUNTRY"),
+        TypeName.literal("UNKNOWN"),
+      ),
+    ).addModifiers(Modifier.EXPORT).build()
+
+    val out = StringWriter()
+    alias.emit(CodeWriter(out))
+
+    assertThat(
+      out.toString(),
+      equalTo(
+        """
+            export type LocationLabelKind =
+              "MARKETPLACE" | "DISTRICT" | "COUNTRY" | "UNKNOWN";
 
         """.trimIndent(),
       ),

@@ -179,6 +179,26 @@ object KitchenSink {
     file.addTypeAlias(
       TypeAliasSpec.builder("Choice", TypeName.unionType(TypeName.STRING, TypeName.NUMBER, TypeName.NULL)).build(),
     )
+    // The two wrapped forms a union takes, which exist to be checked by Prettier rather than
+    // only asserted in a test: LocationLabelKind is too long as a declaration but fits on
+    // one indented line, and Verbose does not fit even there, so it goes one per line.
+    file.addTypeAlias(
+      TypeAliasSpec.builder(
+        "LocationLabelKind",
+        TypeName.unionType(
+          TypeName.literal("MARKETPLACE"),
+          TypeName.literal("DISTRICT"),
+          TypeName.literal("COUNTRY"),
+          TypeName.literal("UNKNOWN"),
+        ),
+      ).addModifiers(Modifier.EXPORT).build(),
+    )
+    file.addTypeAlias(
+      TypeAliasSpec.builder(
+        "Verbose",
+        TypeName.unionType(*(1..4).map { TypeName.literal("PARTITION_KEY_CANDIDATE_$it") }.toTypedArray()),
+      ).build(),
+    )
     file.addTypeAlias(
       TypeAliasSpec.builder("Both", TypeName.intersectionType(person, options)).build(),
     )
