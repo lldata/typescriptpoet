@@ -71,6 +71,13 @@ For everything else, the integration test is the worked reference:
 [`kitchen-sink.ts`][sink-out] is the exact output it produces. That file is type-checked with
 the real `tsc` on every build, so both sides stay honest.
 
+Emitted code tries to do a decent job of looking like it has already been through Prettier
+with default settings — double quotes, trailing commas, brace spacing, an 80-column width,
+and constructs that break onto several lines when they do not fit. That is an aim rather than
+a promise: Prettier decides where to break by laying out a whole document and reconsidering,
+while this library decides as it writes, so an unusual shape can still come out differently.
+Run Prettier over the output if you need it to match exactly.
+
 The [KDoc][kdoc] catalogs the complete API, which is inspired by [JavaPoet][javapoet]. Each
 entry shows the TypeScript it emits.
 

@@ -51,11 +51,15 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   standalone export lists, `export default`, and `export =`.
 
 **Formatting**
-- Emitted output is Prettier-formatted with Prettier's default settings, verified by a
-  `prettier --check` test: double quotes, brace spacing in import and export specifiers, `;`
-  separators in type literals, trailing commas, no blank lines against braces, and an
-  80-column print width. Generated files no longer churn the first time Prettier is run over
-  a repository. **This changes emitted formatting for every 1.x user**; no API changed.
+- Emitted output aims to look like it has already been through Prettier with default
+  settings: double quotes, brace spacing in import and export specifiers, `;` separators in
+  type literals, trailing commas, no blank lines against braces, and an 80-column print
+  width. A `prettier --check` test over the golden file keeps that honest for the constructs
+  the library emits, so generated files should no longer churn the first time Prettier is run
+  over a repository. It is an aim rather than a guarantee — Prettier decides breaks by laying
+  out a whole document, this emitter decides them as it writes, and an unusual shape can
+  still differ. Run Prettier over the output if you need it exact.
+  **This changes emitted formatting for every 1.x user**; no API changed.
 - Long parameter lists and mapped types break on width rather than at fixed wrap points,
   matching what Prettier does: measure the construct, and either keep it on one line or put
   every element on its own.

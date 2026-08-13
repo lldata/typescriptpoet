@@ -29,10 +29,10 @@ import org.hamcrest.TypeSafeMatcher
  * asserting it means every formatting change reads as dozens of behaviour failures -- which
  * is exactly what happened when the emitter moved to Prettier's defaults.
  *
- * Layout is not therefore unchecked. It is checked in one place that is about layout:
- * [KitchenSinkTests] compares a whole generated file against a golden file and hands it to
- * `prettier --check`, and the tests in FormattingTests assert specific layout rules. Use
- * [assertEmitsExactly] for a case where the layout *is* the point.
+ * Layout is not therefore unchecked. [KitchenSinkTests] compares a whole generated file
+ * against a golden file and hands it to `prettier --check`, and the tests whose subject is a
+ * layout rule assert it exactly -- how a union alias wraps, how an object literal breaks, how
+ * a statement indents. Use [assertEmitsExactly] for a case where the layout *is* the point.
  */
 fun assertEmits(actual: String, expected: String) =
   assertThat(normaliseWhitespace(actual), equalTo(normaliseWhitespace(expected)))
