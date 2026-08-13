@@ -8,7 +8,10 @@ on:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest
+    # Defaults to GitHub's hosted runners. A fork can point this at its own runner by
+    # setting the CI_RUNNER repository variable (e.g. to `self-hosted`), without the
+    # workflow itself hard-coding anything the upstream repository cannot use.
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
 
     strategy:
       fail-fast: false

@@ -122,6 +122,11 @@ tasks {
 
   jacocoTestReport {
     dependsOn(test)
+    reports {
+      // XML is what coverage services and CI summaries consume; HTML is for humans.
+      xml.required.set(true)
+      html.required.set(true)
+    }
   }
 }
 
