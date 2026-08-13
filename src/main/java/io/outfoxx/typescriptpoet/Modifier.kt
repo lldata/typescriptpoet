@@ -19,6 +19,7 @@ package io.outfoxx.typescriptpoet
 enum class Modifier {
 
   EXPORT,
+  DEFAULT,
   PUBLIC,
   PROTECTED,
   PRIVATE,
@@ -50,6 +51,7 @@ enum class Modifier {
  */
 private val MODIFIER_EMIT_ORDER = listOf(
   Modifier.EXPORT,
+  Modifier.DEFAULT,
   Modifier.DECLARE,
   Modifier.PUBLIC,
   Modifier.PROTECTED,

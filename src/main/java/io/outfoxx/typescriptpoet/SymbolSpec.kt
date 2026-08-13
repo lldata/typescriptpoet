@@ -38,7 +38,7 @@ sealed class SymbolSpec(open val value: String) {
     private val identPattern =
       """(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))""".toRegex()
     private val importPattern =
-      """($identPattern)?([*@+])($modulePattern)(?:#($identPattern))?""".toRegex()
+      """($identPattern)?([*@+=])($modulePattern)(?:#($identPattern))?""".toRegex()
 
     /**
      * Parses a symbol reference pattern to create a symbol. The pattern
@@ -61,6 +61,8 @@ sealed class SymbolSpec(open val value: String) {
      *        `*` = Import all symbols from module (e.g. `import * from '<module_name>'`)
      *
      *        `+` = Symbol is declared implicitly via import of the module (e.g. `import '<module_name>'`)
+     *
+     *        `=` = Import the module's default export (e.g. `import <symbol_name> from '<module_name>'`)
      *
      * * module_path = `!<filename> | <filename>(/<filename)*`
      *
@@ -96,6 +98,8 @@ sealed class SymbolSpec(open val value: String) {
 
           "@" -> importsName(symbolName, modulePath)
 
+          "=" -> importsDefault(symbolName, modulePath)
+
           "+" -> if (targetName == null) {
             sideEffect(symbolName, modulePath)
           } else {
@@ -123,7 +127,23 @@ sealed class SymbolSpec(open val value: String) {
      * @param from The module the symbol is exported from
      */
     @JvmStatic
-    fun importsName(exportedName: String, from: String): SymbolSpec = ImportsName(exportedName, from)
+    @JvmOverloads
+    fun importsName(exportedName: String, from: String, typeOnly: Boolean = false): SymbolSpec =
+      ImportsName(exportedName, from, typeOnly)
+
+    /**
+     * Creates an import of a module's default export.
+     *
+     * e.g. `import Engine from 'templates';`
+     *
+     * @param localName Name to bind the default export to
+     * @param from Module to import from
+     * @param typeOnly Whether to emit `import type`
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun importsDefault(localName: String, from: String, typeOnly: Boolean = false): SymbolSpec =
+      ImportsDefault(localName, from, typeOnly)
 
     /**
      * Creates an import of all the modules exported symbols as a single
@@ -135,7 +155,9 @@ sealed class SymbolSpec(open val value: String) {
      * @param from The module to import the symbols from
      */
     @JvmStatic
-    fun importsAll(localName: String, from: String): SymbolSpec = ImportsAll(localName, from)
+    @JvmOverloads
+    fun importsAll(localName: String, from: String, typeOnly: Boolean = false): SymbolSpec =
+      ImportsAll(localName, from, typeOnly)
 
     /**
      * Creates a symbol that is brought in by a whole module import
@@ -186,7 +208,29 @@ sealed class SymbolSpec(open val value: String) {
   /**
    * Common base class for imported symbols
    */
-  abstract class Imported(override val value: String, open val source: String) : SymbolSpec(value)
+  abstract class Imported(override val value: String, open val source: String) : SymbolSpec(value) {
+
+    /** Whether this symbol is imported with TypeScript's type-only `import type` form. */
+    open val typeOnly: Boolean get() = false
+  }
+
+  /**
+   * Imports a module's default export.
+   *
+   * e.g. `import Engine from 'templates';`
+   */
+  @ConsistentCopyVisibility
+  data class ImportsDefault
+  internal constructor(
+    override val value: String,
+    override val source: String,
+    override val typeOnly: Boolean = false,
+  ) : Imported(value, source) {
+
+    override fun nested(name: String) = ImportsDefault("$value.$name", source, typeOnly)
+    override fun enclosing() = value.parentSegment()?.let { ImportsDefault(it, source, typeOnly) }
+    override fun topLevel() = ImportsDefault(value.topLevelSegment(), source, typeOnly)
+  }
 
   /**
    * Imports a single named symbol from the module's exported
@@ -196,12 +240,15 @@ sealed class SymbolSpec(open val value: String) {
    */
   @ConsistentCopyVisibility
   data class ImportsName
-  internal constructor(override val value: String, override val source: String) :
-    Imported(value, source) {
+  internal constructor(
+    override val value: String,
+    override val source: String,
+    override val typeOnly: Boolean = false,
+  ) : Imported(value, source) {
 
-    override fun nested(name: String) = ImportsName("$value.$name", source)
-    override fun enclosing() = value.parentSegment()?.let { ImportsName(it, source) }
-    override fun topLevel() = ImportsName(value.topLevelSegment(), source)
+    override fun nested(name: String) = ImportsName("$value.$name", source, typeOnly)
+    override fun enclosing() = value.parentSegment()?.let { ImportsName(it, source, typeOnly) }
+    override fun topLevel() = ImportsName(value.topLevelSegment(), source, typeOnly)
   }
 
   /**
@@ -212,12 +259,15 @@ sealed class SymbolSpec(open val value: String) {
    */
   @ConsistentCopyVisibility
   data class ImportsAll
-  internal constructor(override val value: String, override val source: String) :
-    Imported(value, source) {
+  internal constructor(
+    override val value: String,
+    override val source: String,
+    override val typeOnly: Boolean = false,
+  ) : Imported(value, source) {
 
-    override fun nested(name: String) = ImportsAll("$value.$name", source)
-    override fun enclosing() = value.parentSegment()?.let { ImportsAll(it, source) }
-    override fun topLevel() = ImportsAll(value.topLevelSegment(), source)
+    override fun nested(name: String) = ImportsAll("$value.$name", source, typeOnly)
+    override fun enclosing() = value.parentSegment()?.let { ImportsAll(it, source, typeOnly) }
+    override fun topLevel() = ImportsAll(value.topLevelSegment(), source, typeOnly)
   }
 
   /**

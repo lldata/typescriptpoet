@@ -139,6 +139,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
         is FunctionSpec -> member.emit(codeWriter, null, setOf(Modifier.PUBLIC))
         is PropertySpec -> member.emit(codeWriter, setOf(Modifier.PUBLIC), asStatement = true)
         is TypeAliasSpec -> member.emit(codeWriter)
+        is ExportSpec -> member.emit(codeWriter)
         is CodeBlock -> codeWriter.emitCode(member)
         else -> throw AssertionError()
       }
@@ -174,9 +175,19 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
         .toSortedMap()
         .forEach { (sourceImportPath, imports) ->
 
+          imports.filterIsInstance<SymbolSpec.ImportsDefault>().forEach { import ->
+            // Default imports each get their own statement. Merging them onto a named-import
+            // line (`import D, { a } from 'm'`) is legal but not attempted.
+            val keyword = if (import.typeOnly) "import type" else "import"
+            codeWriter.emitCode(
+              CodeBlock.of("%[$keyword %L from '%L';\n%]", import.value, sourceImportPath),
+            )
+          }
+
           imports.filterIsInstance<SymbolSpec.ImportsAll>().forEach { import ->
             // Output star imports individually
-            codeWriter.emitCode(CodeBlock.of("%[import * as %L from '%L';\n%]", import.value, sourceImportPath))
+            val keyword = if (import.typeOnly) "import type" else "import"
+            codeWriter.emitCode(CodeBlock.of("%[$keyword * as %L from '%L';\n%]", import.value, sourceImportPath))
             // Output related augments
             augmentImports[import.value]?.forEach { augment ->
               codeWriter.emitCode(CodeBlock.of("%[import '%L';\n%]", augment.source))
@@ -185,8 +196,11 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
           imports.filterIsInstance<SymbolSpec.ImportsName>()
             .map {
-              val renamed = codeWriter.renamedSymbols[it] ?: return@map it.value
-              "${it.value} as $renamed"
+              // A type-only name inside an otherwise ordinary import uses the inline `type`
+              // form, so value and type imports from one module stay on one statement.
+              val prefix = if (it.typeOnly) "type " else ""
+              val renamed = codeWriter.renamedSymbols[it] ?: return@map "$prefix${it.value}"
+              "$prefix${it.value} as $renamed"
             }
             .toSortedSet()
             .let { names ->
@@ -264,8 +278,55 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       )
     }
 
+    /**
+     * Top-level properties are variable declarations, so unlike other members they *must*
+     * carry exactly one of `const`, `let` or `var`. Checking them with
+     * [checkMemberModifiers], which forbids all three, made every top-level property throw.
+     */
+    private fun checkPropertyModifiers(modifiers: Set<Modifier>) {
+      requireExactlyOneOf(
+        modifiers,
+        Modifier.CONST,
+        Modifier.LET,
+        Modifier.VAR,
+      )
+      requireNoneOf(
+        modifiers,
+        Modifier.PUBLIC,
+        Modifier.PROTECTED,
+        Modifier.PRIVATE,
+        Modifier.READONLY,
+        Modifier.GET,
+        Modifier.SET,
+        Modifier.STATIC,
+      )
+    }
+
     fun addComment(format: String, vararg args: Any) = apply {
       comment.add(format, *args)
+    }
+
+    /**
+     * Adds a module-level `export` statement: a re-export, a standalone export list,
+     * `export default <expr>`, or `export = <expr>`.
+     */
+    fun addExport(exportSpec: ExportSpec) = apply {
+      if (exportSpec.kind == ExportSpec.Kind.EQUALS) {
+        require(members.none { it is ExportSpec }) {
+          "`export =` cannot be combined with any other export in the same file"
+        }
+      } else {
+        require(members.none { it is ExportSpec && it.kind == ExportSpec.Kind.EQUALS }) {
+          "`export =` cannot be combined with any other export in the same file"
+        }
+      }
+      require(
+        exportSpec.kind != ExportSpec.Kind.DEFAULT ||
+          members.none { it is ExportSpec && it.kind == ExportSpec.Kind.DEFAULT },
+      ) {
+        "a module can have only one default export"
+      }
+      members += exportSpec
     }
 
     fun addModule(moduleSpec: ModuleSpec) = apply {
@@ -304,14 +365,8 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     }
 
     fun addProperty(propertySpec: PropertySpec) = apply {
-      requireExactlyOneOf(
-        propertySpec.modifiers,
-        Modifier.CONST,
-        Modifier.LET,
-        Modifier.VAR,
-      )
       require(propertySpec.decorators.isEmpty()) { "decorators on file properties are not allowed" }
-      checkMemberModifiers(propertySpec.modifiers)
+      checkPropertyModifiers(propertySpec.modifiers)
       members += propertySpec
     }
 

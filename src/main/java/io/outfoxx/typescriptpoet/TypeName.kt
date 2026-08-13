@@ -566,7 +566,21 @@ sealed class TypeName {
      * @param from The module the that `exportedName` is exported from
      */
     @JvmStatic
-    fun namedImport(exportedName: String, from: String): Standard = Standard(SymbolSpec.importsName(exportedName, from))
+    @JvmOverloads
+    fun namedImport(exportedName: String, from: String, typeOnly: Boolean = false): Standard =
+      Standard(SymbolSpec.importsName(exportedName, from, typeOnly))
+
+    /**
+     * A type imported as a module's default export
+     *
+     * @param localName Name to bind the default export to
+     * @param from The module it is imported from
+     * @param typeOnly Whether to emit `import type`
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun defaultImport(localName: String, from: String, typeOnly: Boolean = false): Standard =
+      Standard(SymbolSpec.importsDefault(localName, from, typeOnly))
 
     /**
      * Any class/enum/primitive/etc type name
