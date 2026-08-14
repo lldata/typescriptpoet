@@ -228,6 +228,7 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     return builder
   }
 
+  @TypeScriptPoetDsl
   class Builder(name: String) : TypeSpec.Builder<ClassSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()

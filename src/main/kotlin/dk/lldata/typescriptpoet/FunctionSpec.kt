@@ -213,6 +213,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     return builder
   }
 
+  @TypeScriptPoetDsl
   class Builder internal constructor(internal val name: String) : Taggable.Builder<Builder>() {
 
     internal val tsDoc = CodeBlock.builder()

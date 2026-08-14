@@ -50,6 +50,22 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Re-exports (`export * from`, `export * as ns from`, `export { a, b as c } from`),
   standalone export lists, `export default`, and `export =`.
 
+**Kotlin DSL**
+- A `dsl` package naming each construct after the TypeScript it emits — `clazz`, `interfaze`,
+  `type`, `namespace`, `enum`, `function`, `constructor`, `property`, `parameter`, `index`,
+  `call`, `extends`, `implements`, `static`, `decorator`, `overloads` — over the same builders,
+  which stay the whole API. Every declaration is `@JvmSynthetic`, so Java sees the builders and
+  never the DSL.
+- Statements live in a `body { }` whose receiver offers only statements, so a `parameter` cannot
+  be written inside a body and a `statement` cannot be written beside a signature.
+- TypeScript's twelve primitive types and seventeen modifiers as lowercase values — `string`,
+  `number`, `public`, `readonly` — with a trailing underscore only where the word is a Kotlin
+  keyword: `null_`, `object_`, `var_`.
+- `or` and `and` for unions and intersections, `union(…)` for a computed list, and
+  `anonymous(member(…), optionalMember(…))` for object literal types.
+- Passing Kotlin's `null` where TypeScript's `null` type was meant is a compile error naming
+  `null_`, rather than the compiler's generic "Null cannot be a value of a non-null type".
+
 **Formatting**
 - Emitted output aims to look like it has already been through Prettier with default
   settings: double quotes, brace spacing in import and export specifiers, `;` separators in
@@ -80,7 +96,9 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 **Project**
 - A golden-file integration test covering every construct once, type-checked with the real
   `tsc` — against TypeScript 5 and 7, the floor the emitted constructs need and the current
-  major — and validated with `prettier --check`.
+  major — and validated with `prettier --check`. The same file is built three ways — Kotlin
+  DSL, Kotlin builders, Java builders — each asserted to emit it byte for byte, so the Java
+  half of "a Kotlin and Java API" is tested at full size.
 - Binary compatibility validation, a coverage floor, and ktlint plus license-header checks,
   all wired into `check`.
 

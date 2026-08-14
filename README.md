@@ -35,41 +35,70 @@ export class Greeter {
 }
 ```
 
-And this is the code to generate it with TypeScriptPoet:
+And this is the code to generate it. In Kotlin, through the DSL:
 
 ```kotlin
 val observable = TypeName.standard("@rxjs/Observable")
 
-val greeter = ClassSpec.builder("Greeter")
-  .addModifiers(Modifier.EXPORT)
-  .constructor(
-    FunctionSpec.constructorBuilder()
-      .addParameter("name", TypeName.STRING, false, Modifier.PRIVATE)
-      .build()
-  )
-  .addFunction(
-    FunctionSpec.builder("greet")
-      .returns(TypeName.parameterizedType(observable, TypeName.STRING))
-      .addStatement("return %T.of(`Hello \${this.name}`)", observable)
-      .build()
-  )
-  .build()
-
-val file = FileSpec.builder("Greeter")
-  .addClass(greeter)
-  .build()
+val file = file("Greeter") {
+  clazz("Greeter", export) {
+    constructor {
+      parameter("name", string, private)
+    }
+    function("greet") {
+      returns(TypeName.parameterizedType(observable, string))
+      body {
+        statement("return %T.of(`Hello \${this.name}`)", observable)
+      }
+    }
+  }
+}
 
 val out = StringWriter()
 file.writeTo(out)
 ```
 
+The names are TypeScript's own — `clazz`, `interfaze`, `type`, `namespace`, `constructor`,
+`function`, `export`, `private`, `string` — because the thing being written is TypeScript.
+Two are misspelled and three carry a trailing underscore only where TypeScript's word is a
+Kotlin keyword: `clazz`, `interfaze`, and `null_`, `object_`, `var_`.
+
+In Java, through the builders:
+
+```java
+TypeName.Standard observable = TypeName.standard("@rxjs/Observable");
+
+FileSpec file = FileSpec.builder("Greeter")
+    .addClass(
+        ClassSpec.builder("Greeter")
+            .addModifiers(Modifier.EXPORT)
+            .constructor(
+                FunctionSpec.constructorBuilder()
+                    .addParameter("name", TypeName.STRING, false, Modifier.PRIVATE)
+                    .build())
+            .addFunction(
+                FunctionSpec.builder("greet")
+                    .returns(TypeName.parameterizedType(observable, TypeName.STRING))
+                    .addStatement("return %T.of(`Hello ${this.name}`)", observable)
+                    .build())
+            .build())
+    .build();
+
+StringWriter out = new StringWriter();
+file.writeTo(out);
+```
+
+The builders are the whole API; the Kotlin DSL is a layer over them and is `@JvmSynthetic`, so
+Java sees only the builders and never the DSL.
+
 That example is compiled and asserted by [`ReadmeExampleTests`][readme-test], so it cannot
 drift from what the library actually emits.
 
-For everything else, the integration test is the worked reference:
-[`KitchenSink.kt`][sink-src] builds one file using every construct the library can emit, and
-[`kitchen-sink.ts`][sink-out] is the exact output it produces. That file is type-checked with
-the real `tsc` on every build, so both sides stay honest.
+For everything else, the integration test is the worked reference. The same file is built
+three ways, and all three are asserted to emit it byte for byte:
+[`KitchenSinkDsl.kt`][sink-dsl] with the Kotlin DSL, [`KitchenSink.kt`][sink-src] with the
+Kotlin builders, and [`KitchenSinkJava.java`][sink-java] with the builders from Java.
+[`kitchen-sink.ts`][sink-out] is the output, type-checked with the real `tsc` on every build.
 
 **TypeScript 5.0 or newer**, and the same file is type-checked against both 5 and 7 on every
 build. 5.0 is the floor because that is what the newest construct here needs — a `const` type
@@ -207,6 +236,8 @@ License
 
  [readme-test]: src/test/kotlin/dk/lldata/typescriptpoet/test/ReadmeExampleTests.kt
  [sink-src]: src/test/kotlin/dk/lldata/typescriptpoet/test/KitchenSink.kt
+ [sink-dsl]: src/test/kotlin/dk/lldata/typescriptpoet/test/KitchenSinkDsl.kt
+ [sink-java]: src/test/java/dk/lldata/typescriptpoet/test/KitchenSinkJava.java
  [sink-out]: src/test/resources/kitchen-sink.ts
  [dl]: https://central.sonatype.com/artifact/dk.lldata/typescriptpoet
  [kdoc]: https://lldata.github.io/typescriptpoet/2.0.0/index.html

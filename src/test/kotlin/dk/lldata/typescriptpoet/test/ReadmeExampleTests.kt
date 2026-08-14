@@ -18,8 +18,16 @@ package dk.lldata.typescriptpoet.test
 import dk.lldata.typescriptpoet.ClassSpec
 import dk.lldata.typescriptpoet.FileSpec
 import dk.lldata.typescriptpoet.FunctionSpec
-import dk.lldata.typescriptpoet.Modifier
 import dk.lldata.typescriptpoet.TypeName
+import dk.lldata.typescriptpoet.dsl.body
+import dk.lldata.typescriptpoet.dsl.clazz
+import dk.lldata.typescriptpoet.dsl.constructor
+import dk.lldata.typescriptpoet.dsl.export
+import dk.lldata.typescriptpoet.dsl.file
+import dk.lldata.typescriptpoet.dsl.function
+import dk.lldata.typescriptpoet.dsl.parameter
+import dk.lldata.typescriptpoet.dsl.private
+import dk.lldata.typescriptpoet.dsl.string
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -41,47 +49,47 @@ class ReadmeExampleTests {
   fun testReadmeExample() {
     val observable = TypeName.standard("@rxjs/Observable")
 
-    val greeter = ClassSpec.builder("Greeter")
-      .addModifiers(Modifier.EXPORT)
-      .constructor(
-        FunctionSpec.constructorBuilder()
-          .addParameter("name", TypeName.STRING, false, Modifier.PRIVATE)
-          .build(),
-      )
-      .addFunction(
-        FunctionSpec.builder("greet")
-          .returns(TypeName.parameterizedType(observable, TypeName.STRING))
-          .addStatement("return %T.of(`Hello \${this.name}`)", observable)
-          .build(),
-      )
-      .build()
-
-    val file = FileSpec.builder("Greeter")
-      .addClass(greeter)
-      .build()
+    val file = file("Greeter") {
+      clazz("Greeter", export) {
+        constructor {
+          parameter("name", string, private)
+        }
+        function("greet") {
+          returns(TypeName.parameterizedType(observable, string))
+          body {
+            statement("return %T.of(`Hello \${this.name}`)", observable)
+          }
+        }
+      }
+    }
 
     val out = StringWriter()
     file.writeTo(out)
 
-    assertThat(
-      out.toString(),
-      emits(
-        """
-            import { Observable } from "rxjs/Observable";
+    assertThat(out.toString(), emits(EXPECTED))
+  }
+
+  @Test
+  @DisplayName("The Java README example generates the same file")
+  fun testReadmeExampleJava() {
+    assertThat(ReadmeExampleJava.emit(), emits(EXPECTED))
+  }
+
+  private companion object {
+    val EXPECTED = """
+        import { Observable } from "rxjs/Observable";
 
 
-            export class Greeter {
+        export class Greeter {
 
-              constructor(private name: string) {}
+          constructor(private name: string) {}
 
-              greet(): Observable<string> {
-                return Observable.of(`Hello ${'$'}{this.name}`);
-              }
+          greet(): Observable<string> {
+            return Observable.of(`Hello ${'$'}{this.name}`);
+          }
 
-            }
+        }
 
-        """.trimIndent(),
-      ),
-    )
+    """.trimIndent()
   }
 }
