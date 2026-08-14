@@ -122,6 +122,12 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 
 ### Fixed
 
+- A concise arrow body that did not fit stayed on the `=>` line and broke inside itself, so a
+  call that would have fitted on a line of its own came apart into one argument per line. It
+  now breaks after the `=>` and takes the whole body down one level, which is both what
+  Prettier does and what keeps the call intact. An object literal body still hugs the arrow —
+  `=> ({` and then its members — since moving `({` down on its own reads worse.
+  ([#14](https://github.com/lldata/typescriptpoet/issues/14))
 - A value that lays itself out — an object literal, an inline object type — measured only
   itself and not the rest of the line, so `return f({ method: "POST", path, body }, config,
   options);` came out at 83 columns against a print width of 80. Whatever the enclosing

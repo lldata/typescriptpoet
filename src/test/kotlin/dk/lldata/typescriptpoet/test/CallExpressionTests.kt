@@ -20,6 +20,8 @@ import dk.lldata.typescriptpoet.CodeBlock
 import dk.lldata.typescriptpoet.CodeWriter
 import dk.lldata.typescriptpoet.FileSpec
 import dk.lldata.typescriptpoet.FunctionSpec
+import dk.lldata.typescriptpoet.ObjectLiteral
+import dk.lldata.typescriptpoet.ParameterSpec
 import dk.lldata.typescriptpoet.TypeName
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -193,6 +195,130 @@ class CallExpressionTests {
       |      log(e);
       |    },
       |  );
+      |}
+      |
+      """.trimMargin(),
+    )
+  }
+
+  /** The arrow a leaf of a generated client is made of: `post: (…) => apiRequest(…)`. */
+  private fun leaf(returns: TypeName, request: ObjectLiteral, vararg parameters: ParameterSpec) =
+    FunctionSpec.builder("post")
+      .arrow()
+      .apply { parameters.forEach { addParameter(it) } }
+      .returns(TypeName.promiseType(returns))
+      .expressionBody(
+        "%L",
+        CodeBlock.call(apiRequest)
+          .addTypeArgument(returns)
+          .addArgument(request)
+          .addArgument("config")
+          .addArgument("options")
+          .build(),
+      )
+      .build()
+
+  @Test
+  @DisplayName("Moves a body that does not fit onto its own line, leaving the call intact")
+  fun testExpressionBodyBreaksAfterTheArrow() {
+    val obj = CodeBlock.objectLiteral()
+      .addProperty(
+        "post",
+        leaf(
+          TypeName.VOID,
+          CodeBlock.objectLiteral().addProperty("method", "%S", "POST").addShorthand("path").build(),
+          ParameterSpec.builder("options", TypeName.namedImport("RequestOptions", "./runtime"), true).build(),
+        ),
+      )
+      .build()
+
+    val fn = FunctionSpec.builder("node").addStatement("return %L", obj).build()
+
+    // The call fits once it has a line of its own, so it stays whole rather than exploding.
+    assertEmitsExactly(
+      emit(fn),
+      """
+      |function node() {
+      |  return {
+      |    post: (options?: RequestOptions): Promise<void> =>
+      |      apiRequest<void>({ method: "POST", path }, config, options),
+      |  };
+      |}
+      |
+      """.trimMargin(),
+    )
+  }
+
+  @Test
+  @DisplayName("Breaks the call too when its own line is still not enough")
+  fun testExpressionBodyBreaksAgainWhenItStillDoesNotFit() {
+    val obj = CodeBlock.objectLiteral()
+      .addProperty(
+        "post",
+        leaf(
+          TypeName.implicit("CompleteRegistrationResponse"),
+          CodeBlock.objectLiteral()
+            .addProperty("method", "%S", "POST")
+            .addShorthand("path")
+            .addShorthand("body")
+            .build(),
+          ParameterSpec.builder("body", TypeName.implicit("CompleteRegistrationRequest"), false).build(),
+          ParameterSpec.builder("options", TypeName.namedImport("RequestOptions", "./runtime"), true).build(),
+        ),
+      )
+      .build()
+
+    val fn = FunctionSpec.builder("node").addStatement("return %L", obj).build()
+
+    assertEmitsExactly(
+      emit(fn),
+      """
+      |function node() {
+      |  return {
+      |    post: (
+      |      body: CompleteRegistrationRequest,
+      |      options?: RequestOptions,
+      |    ): Promise<CompleteRegistrationResponse> =>
+      |      apiRequest<CompleteRegistrationResponse>(
+      |        { method: "POST", path, body },
+      |        config,
+      |        options,
+      |      ),
+      |  };
+      |}
+      |
+      """.trimMargin(),
+    )
+  }
+
+  @Test
+  @DisplayName("An object literal body hugs the arrow rather than moving down")
+  fun testObjectLiteralBodyHugs() {
+    val arrow = FunctionSpec.builder("make")
+      .arrow()
+      .addParameter("identifier", TypeName.STRING)
+      .addParameter("displayName", TypeName.STRING)
+      .expressionBody(
+        "%L",
+        CodeBlock.objectLiteral()
+          .addShorthand("identifier")
+          .addShorthand("displayName")
+          .addProperty("createdAt", "%L", "Date.now()")
+          .build(),
+      )
+      .build()
+
+    val fn = FunctionSpec.builder("factory").addStatement("return %L", arrow).build()
+
+    assertEmitsExactly(
+      emit(fn),
+      """
+      |function factory() {
+      |  return (identifier: string, displayName: string) => ({
+      |    identifier,
+      |    displayName,
+      |    createdAt: Date.now(),
+      |  });
       |}
       |
       """.trimMargin(),

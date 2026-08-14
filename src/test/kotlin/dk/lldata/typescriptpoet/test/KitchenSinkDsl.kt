@@ -517,6 +517,36 @@ object KitchenSinkDsl {
         }
       }
 
+      // A concise body that does not fit moves to its own line whole. Breaking after the `=>`
+      // buys it a fresh line at one more level of indent, which is enough for this call to
+      // stay intact; breaking inside it would take apart a call that never needed to come
+      // apart.
+      function("configurationLoaderFactory", export) {
+        parameter("config", TypeName.namedImport("RequestConfig", "./fetch-resource"))
+        body {
+          statement(
+            "return %L",
+            arrow("load") {
+              parameter("path", string)
+              returns(TypeName.promiseType(TypeName.implicit("Widget")))
+              expression(
+                call(TypeName.namedImport("fetchResource", "./fetch-resource")) {
+                  typeArgument(TypeName.implicit("Widget"))
+                  argument(
+                    obj {
+                      property("method", "%S", "GET")
+                      shorthand("path")
+                      property("retries", "%L", 1)
+                    },
+                  )
+                  argument("config")
+                },
+              )
+            },
+          )
+        }
+      }
+
       function("wrap", export) {
         body {
           statement(

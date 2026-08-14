@@ -220,6 +220,11 @@ export function doubler(): (value: number) => number {
   return (value: number) => value * 2;
 }
 
+export function configurationLoaderFactory(config: RequestConfig) {
+  return (path: string): Promise<Widget> =>
+    fetchResource<Widget>({ method: "GET", path, retries: 1 }, config);
+}
+
 export function wrap() {
   return (value: number) => ({ value });
 }

@@ -51,6 +51,11 @@ An object literal or inline object type used to measure only itself, so
 things that used to stay on one line now break. Inline object types break at all for the
 first time -- they were previously emitted on one line however long they were.
 
+**A concise arrow body that does not fit now moves to the next line whole.**
+It used to stay on the `=>` line and break inside itself, which took apart a call that would
+have fitted once it had a line of its own. An object literal body is unchanged: it still hugs
+the arrow as `=> ({`.
+
 **A lone parameter whose type is an inline object keeps its parens on the signature line,**
 letting the type break instead: `listWidgets(args?: {` … `}): Promise<T> {`. This is what
 Prettier does with an options bag.

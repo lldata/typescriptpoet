@@ -87,10 +87,11 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     if (isArrow) {
       // An arrow function is an expression, so it neither starts on its own line nor ends
       // with one; the surrounding statement owns the terminator.
-      codeWriter.emit(" => ")
+      codeWriter.emit(" =>")
       if (expressionBody != null) {
         emitExpressionBody(codeWriter, expressionBody)
       } else {
+        codeWriter.emit(" ")
         codeWriter.emitBody(body.isEmpty(), endsLine = false) { codeWriter.emitCode(body) }
       }
       return
@@ -101,22 +102,41 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
   }
 
   /**
-   * The `x * 2` in `(x) => x * 2`.
+   * The `x * 2` in `(x) => x * 2`, written after the `=>` this has already emitted.
    *
    * An object literal has to be parenthesised here: `=> { … }` is a statement block, so
    * `(): Point => { x: 1 }` is not an object at all but a body containing a label. TypeScript
    * accepts it and it means nothing, which is the kind of mistake a generator should not be
-   * able to make.
+   * able to make. A parenthesised object hugs the arrow rather than moving down -- `=> ({`
+   * and then its members -- which is both what Prettier does and what keeps `({` from
+   * sitting alone on a line.
    */
   private fun emitExpressionBody(codeWriter: CodeWriter, expression: CodeBlock) {
-    val needsParens = codeWriter.measure { emitCode(expression) }.trimStart().startsWith("{")
-    if (!needsParens) {
+    val rendered = codeWriter.measure { emitCode(expression) }
+    if (rendered.trimStart().startsWith("{")) {
+      codeWriter.emit(" (")
+      codeWriter.withTrailingWidth(codeWriter.trailingWidth + 1) { codeWriter.emitCode(expression) }
+      codeWriter.emit(")")
+      return
+    }
+
+    // Any other body that does not fit moves to the next line whole, rather than staying on
+    // the arrow's line and breaking inside itself. Breaking after the `=>` buys the body a
+    // fresh line at one more level of indent, which is usually enough for it to stay
+    // intact; breaking within it takes a call apart that never needed to come apart.
+    val fits = !rendered.contains('\n') &&
+      codeWriter.currentColumn + ARROW_SPACE + rendered.length + codeWriter.trailingWidth <=
+      codeWriter.printWidth
+    if (fits) {
+      codeWriter.emit(" ")
       codeWriter.emitCode(expression)
       return
     }
-    codeWriter.emit("(")
-    codeWriter.withTrailingWidth(codeWriter.trailingWidth + 1) { codeWriter.emitCode(expression) }
-    codeWriter.emit(")")
+
+    codeWriter.emit("\n")
+    codeWriter.indent()
+    codeWriter.emitCode(expression)
+    codeWriter.unindent()
   }
 
   private fun emitSignature(codeWriter: CodeWriter, enclosingName: String?) {
@@ -154,8 +174,9 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       // `;`
       isSignatureOnly || Modifier.ABSTRACT in modifiers -> 1
 
-      // ` => ` and then an expression that breaks on its own, or ` => {`.
-      isArrow -> if (expressionBody != null) 4 else 5
+      // ` => {`, or just ` =>` when the body that follows can move to its own line and so
+      // does not decide whether the parameters break.
+      isArrow -> if (expressionBody != null) 3 else 5
 
       // ` {`
       else -> 2
@@ -511,6 +532,9 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     private const val CONSTRUCTOR = "constructor()"
     private const val CALLABLE = "callable()"
     private const val INDEXABLE = "indexable()"
+
+    /** The space between `=>` and a body that stays on its line. */
+    private const val ARROW_SPACE = 1
 
     private val String.isConstructor get() = this == CONSTRUCTOR
     private val String.isCallable get() = this == CALLABLE

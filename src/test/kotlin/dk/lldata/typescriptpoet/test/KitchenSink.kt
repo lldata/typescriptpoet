@@ -623,6 +623,38 @@ object KitchenSink {
         .build(),
     )
 
+    // A concise body that does not fit moves to its own line whole. Breaking after the `=>`
+    // buys it a fresh line at one more level of indent, which is enough for this call to stay
+    // intact; breaking inside it would take apart a call that never needed to come apart.
+    file.addFunction(
+      FunctionSpec.builder("configurationLoaderFactory")
+        .addModifiers(Modifier.EXPORT)
+        .addParameter("config", TypeName.namedImport("RequestConfig", "./fetch-resource"))
+        .addStatement(
+          "return %L",
+          FunctionSpec.builder("load")
+            .arrow()
+            .addParameter("path", TypeName.STRING)
+            .returns(TypeName.promiseType(TypeName.implicit("Widget")))
+            .expressionBody(
+              "%L",
+              CodeBlock.call(TypeName.namedImport("fetchResource", "./fetch-resource"))
+                .addTypeArgument(TypeName.implicit("Widget"))
+                .addArgument(
+                  CodeBlock.objectLiteral()
+                    .addProperty("method", "%S", "GET")
+                    .addShorthand("path")
+                    .addProperty("retries", "%L", 1)
+                    .build(),
+                )
+                .addArgument("config")
+                .build(),
+            )
+            .build(),
+        )
+        .build(),
+    )
+
     file.addFunction(
       FunctionSpec.builder("wrap")
         .addModifiers(Modifier.EXPORT)
