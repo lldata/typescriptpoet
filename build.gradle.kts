@@ -1,14 +1,20 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
   `java-library`
   jacoco
-  `maven-publish`
-  signing
 
   kotlin("jvm") version "2.4.10"
   id("org.jetbrains.dokka") version "2.2.0"
+
+  // Speaks the Central Portal's publisher API directly. The OSSRH compatibility endpoint
+  // this replaced is for namespaces migrated off the legacy servers; `dk.lldata` was
+  // registered on the Portal, so uploads through it were accepted and then went nowhere.
+  // The plugin applies `maven-publish` and `signing` itself.
+  id("com.vanniktech.maven.publish") version "0.37.0"
 
   id("com.diffplug.spotless") version "8.9.0"
   id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
@@ -83,9 +89,8 @@ kotlin {
   }
 }
 
-java {
-  withSourcesJar()
-}
+// The sources jar comes from the publishing plugin's KotlinJvm configuration below, so
+// `withSourcesJar()` here would build a second one.
 
 // Reproducible archives: without this the jars embed file timestamps and filesystem
 // ordering, so two builds of the same commit produce different bytes.
@@ -184,14 +189,6 @@ dokka {
   }
 }
 
-// Maven Central requires a `-javadoc` artifact; Dokka's HTML output stands in for it,
-// because `java { withJavadocJar() }` produces an empty jar for a Kotlin-only source set.
-val javadocJar = tasks.register<Jar>("javadocJar") {
-  archiveClassifier.set("javadoc")
-  from(tasks.named("dokkaGeneratePublicationHtml"))
-}
-
-
 //
 // CHECKS
 //
@@ -221,130 +218,93 @@ spotless {
 // environment variables rather than `-P` flags, so the values never reach the Gradle
 // command line, where they would sit in the runner's process table and in the workflow
 // log's echoed `Run` line.
-val publishingCredentials = listOf(
-  "signingKey",
-  "signingPassword",
-  "mavenCentralUsername",
-  "mavenCentralPassword",
+// Only the signing properties. The plugin checks the Central credentials itself, in
+// `prepareMavenCentralPublishing`, and says plainly which one is missing.
+val signingCredentials = listOf(
+  "signingInMemoryKey",
+  "signingInMemoryKeyPassword",
 ).associateWith { project.findProperty(it)?.toString() }
 
-publishing {
+mavenPublishing {
 
-  publications {
+  // Deliberately not `automaticRelease = true`: the upload lands in the Portal and waits
+  // for a human to press Publish. A released version is permanent and cannot be recalled,
+  // so it stays a deliberate act rather than a consequence of pushing a tag.
+  publishToMavenCentral()
 
-    create<MavenPublication>("library") {
-      from(components["java"])
-      artifact(javadocJar)
-
-      pom {
-
-        name.set("TypeScript Poet")
-        description.set("TypeScriptPoet is a Kotlin and Java API for generating .ts source files.")
-        url.set("https://github.com/lldata/typescriptpoet")
-
-        organization {
-          name.set("LL Data ApS")
-          url.set("https://lldata.dk")
-        }
-
-        issueManagement {
-          system.set("GitHub")
-          url.set("https://github.com/lldata/typescriptpoet/issues")
-        }
-
-        licenses {
-          license {
-            name.set("Apache License 2.0")
-            url.set("https://raw.githubusercontent.com/lldata/typescriptpoet/main/LICENSE.txt")
-            distribution.set("repo")
-          }
-        }
-
-        scm {
-          url.set("https://github.com/lldata/typescriptpoet")
-          connection.set("scm:git:https://github.com/lldata/typescriptpoet.git")
-          developerConnection.set("scm:git:ssh://git@github.com/lldata/typescriptpoet.git")
-        }
-
-        developers {
-          // The original author, whose work this continues.
-          developer {
-            id.set("kdubb")
-            name.set("Kevin Wooten")
-            email.set("kevin@outfoxx.io")
-          }
-          developer {
-            id.set("lldata")
-            name.set("Lasse Lindgard")
-            email.set("lasse@lldata.dk")
-          }
-        }
-
-      }
-    }
-
+  // Snapshots are not signed, and Central does not ask them to be.
+  if (!isSnapshot) {
+    signAllPublications()
   }
 
-  repositories {
-
-    // OSSRH (oss.sonatype.org) was retired in 2025; these are the Central Portal endpoints.
-    maven {
-      name = "MavenCentral"
-      val snapshotUrl = "https://central.sonatype.com/repository/maven-snapshots/"
-      val releaseUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
-      url = uri(if (isSnapshot) snapshotUrl else releaseUrl)
-
-      credentials {
-        username = publishingCredentials["mavenCentralUsername"]
-        password = publishingCredentials["mavenCentralPassword"]
-      }
-    }
-
-  }
-
-}
-
-// The two-argument form, deliberately: the three-argument overload also takes a key ID, and
-// an unset one fails with "The key ID must be in a valid form", which describes the symptom
-// rather than the cause. A single-key ring needs no ID, so the whole failure mode goes away
-// along with the secret. `signing.keyId` still wins when set, for signing locally against a
-// gpg agent instead of an in-memory key.
-signing {
-  if (!hasProperty("signing.keyId")) {
-    useInMemoryPgpKeys(
-      publishingCredentials["signingKey"],
-      publishingCredentials["signingPassword"]
+  // Central requires a `-javadoc` artifact, and `withJavadocJar()` produces an empty one
+  // for a Kotlin-only source set, so Dokka's HTML output stands in for it.
+  configure(
+    KotlinJvm(
+      javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
+      sourcesJar = true,
     )
+  )
+
+  coordinates("dk.lldata", "typescriptpoet", releaseVersion)
+
+  pom {
+
+    name.set("TypeScript Poet")
+    description.set("TypeScriptPoet is a Kotlin and Java API for generating .ts source files.")
+    url.set("https://github.com/lldata/typescriptpoet")
+
+    organization {
+      name.set("LL Data ApS")
+      url.set("https://lldata.dk")
+    }
+
+    issueManagement {
+      system.set("GitHub")
+      url.set("https://github.com/lldata/typescriptpoet/issues")
+    }
+
+    licenses {
+      license {
+        name.set("Apache License 2.0")
+        url.set("https://raw.githubusercontent.com/lldata/typescriptpoet/main/LICENSE.txt")
+        distribution.set("repo")
+      }
+    }
+
+    scm {
+      url.set("https://github.com/lldata/typescriptpoet")
+      connection.set("scm:git:https://github.com/lldata/typescriptpoet.git")
+      developerConnection.set("scm:git:ssh://git@github.com/lldata/typescriptpoet.git")
+    }
+
+    developers {
+      // The original author, whose work this continues.
+      developer {
+        id.set("kdubb")
+        name.set("Kevin Wooten")
+        email.set("kevin@outfoxx.io")
+      }
+      developer {
+        id.set("lldata")
+        name.set("Lasse Lindgard")
+        email.set("lasse@lldata.dk")
+      }
+    }
+
   }
-  sign(publishing.publications["library"])
+
 }
 
+// Name the signing property that is empty rather than letting the signing plugin complain
+// about key format, which describes the symptom of an unset repository secret and not its
+// cause. This is where it surfaces, because signing runs before the upload.
 tasks.withType<Sign>().configureEach {
-  onlyIf { !isSnapshot }
-
-  // Signing is the first thing a release does, so this is where a missing secret surfaces.
-  // Name the property that is empty; the plugin's own errors do not, and an unset repository
-  // secret is by far the likeliest cause.
   doFirst {
-    val missing = publishingCredentials.filterValues { it.isNullOrBlank() }.keys
+    val missing = signingCredentials.filterValues { it.isNullOrBlank() }.keys
     check(missing.isEmpty()) {
       "Cannot publish $releaseVersion: no value for ${missing.joinToString()}. " +
         "CI supplies these from repository secrets as ORG_GRADLE_PROJECT_<name>."
     }
   }
-}
-
-
-//
-// RELEASING
-//
-
-tasks {
-
-  register("publishMavenRelease") {
-    dependsOn(
-      "publishAllPublicationsToMavenCentralRepository"
-    )
-  }
-
 }

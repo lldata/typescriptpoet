@@ -33,41 +33,24 @@ jobs:
     - name: Build
       run: ./gradlew build -PreleaseVersion=${{ steps.version.outputs.version }}
 
-    # Uploads to a staging repository; it does NOT release to Maven Central. A human
-    # completes the release at https://central.sonatype.com/publishing, which is the
-    # intended shape: publishing is irreversible and stays a deliberate human act.
+    # Uploads a bundle to the Central Portal; it does NOT release to Maven Central. The
+    # deployment waits at https://central.sonatype.com/publishing for a human to press
+    # Publish, which is the intended shape: a released version is permanent.
+    #
+    # `publishAndReleaseToMavenCentral` is the task that would skip that gate. It is not
+    # used here on purpose.
     #
     # Every credential arrives as an environment variable. Passing them as `-P` flags puts
     # them in the runner's process table and in the echoed `Run` line of the log.
     - name: Publish Maven
       env:
-        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
-        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
+        ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+        ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
         ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
       run: >-
-        ./gradlew publishMavenRelease
+        ./gradlew publishToMavenCentral
         -PreleaseVersion=${{ steps.version.outputs.version }}
-
-    # The upload above lands in an *open* staging repository, and Sonatype only forwards a
-    # repository to the Portal once it is closed — without this, a green run leaves the
-    # artifacts somewhere nobody can see or release. The endpoint keys the default repository
-    # by client IP, so this has to run on the same runner as the upload and cannot be done by
-    # hand afterwards.
-    #
-    # No `publishing_type=automatic`: the deployment lands in the Portal awaiting a human,
-    # which is the point. Publishing to Central is irreversible.
-    - name: Close Staging Repository
-      env:
-        USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-        PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-      run: |
-        token=$(printf '%s:%s' "$USERNAME" "$PASSWORD" | base64 -w0)
-        # Derived from two secrets, so it is not masked automatically.
-        echo "::add-mask::$token"
-        curl --fail-with-body -sS -X POST \
-          -H "Authorization: Bearer $token" \
-          "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/dk.lldata"
 
     - name: GitHub Release
       env:
