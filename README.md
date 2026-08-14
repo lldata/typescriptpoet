@@ -2,6 +2,7 @@ TypeScriptPoet
 ==========
 
 [![CI](https://github.com/lldata/typescriptpoet/actions/workflows/ci.yml/badge.svg)](https://github.com/lldata/typescriptpoet/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Flldata.github.io%2Ftypescriptpoet%2Fbadges%2Fcoverage.json)](https://github.com/lldata/typescriptpoet/actions/workflows/ci.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/dk.lldata/typescriptpoet?label=Maven%20Central)][dl]
 [![License](https://img.shields.io/github/license/lldata/typescriptpoet?color=blue)](LICENSE.txt)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)

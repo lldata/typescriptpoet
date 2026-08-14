@@ -71,6 +71,66 @@ jobs:
         path: build/reports
 
 
+  # Renders the shields.io endpoint the README's coverage badge reads. Kept in its own job
+  # so that `contents: write` is scoped to a job that only ever runs on a push to main,
+  # rather than granted to the job that also builds pull requests.
+  coverage-badge:
+    runs-on: ubuntu-latest
+
+    needs: [ build-test ]
+
+    if: >-
+      github.event_name == 'push' && github.ref == 'refs/heads/main'
+      && github.repository == 'lldata/typescriptpoet'
+
+    permissions:
+      contents: write
+
+    steps:
+
+    # Reuses the report build-test already produced rather than building again.
+    - uses: actions/download-artifact@v4
+      with:
+        name: reports-jdk17
+        path: reports
+
+    - name: Render badge endpoint
+      run: |
+        mkdir -p badges
+        python3 - <<'PY'
+        import json, pathlib, xml.etree.ElementTree as ET
+        root = ET.parse('reports/jacoco/test/jacocoTestReport.xml').getroot()
+        counter = next(c for c in root.findall('counter') if c.get('type') == 'LINE')
+        missed, covered = int(counter.get('missed')), int(counter.get('covered'))
+        pct = 100 * covered / (missed + covered)
+        # Yellow starts just above the 78% line floor in build.gradle.kts, so the badge
+        # turns while there is still room before jacocoTestCoverageVerification fails
+        # rather than at the same moment.
+        color = (
+            'brightgreen' if pct >= 90
+            else 'green' if pct >= 80
+            else 'yellow' if pct >= 75
+            else 'orange'
+        )
+        pathlib.Path('badges/coverage.json').write_text(json.dumps({
+            'schemaVersion': 1,
+            'label': 'coverage',
+            'message': f'{pct:.0f}%',
+            'color': color,
+        }))
+        print(f'line coverage {pct:.1f}% -> {color}')
+        PY
+
+    # clean: false, because this branch also holds the Dokka documentation.
+    - name: Publish badge endpoint
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        clean: false
+        folder: badges
+        target-folder: badges
+
+
   publish-snapshot:
     runs-on: ubuntu-latest
 

@@ -201,6 +201,10 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   them.
 - The README's licence notice carries the LL Data ApS copyright line alongside Outfox's,
   matching `NOTICE.txt` and the header Spotless applies to every source file.
+- The README carries a coverage badge, fed by a shields.io endpoint that CI writes to the
+  `gh-pages` branch on each push to `main`. GitHub Pages is now serving that branch, which
+  also means the Dokka documentation every release has been publishing there is readable
+  for the first time, at <https://lldata.github.io/typescriptpoet/>.
 
 ### Removed
 
