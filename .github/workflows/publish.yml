@@ -107,6 +107,23 @@ jobs:
     - name: Build Documentation
       run: ./gradlew dokkaGeneratePublicationHtml -PreleaseVersion=${{ steps.version.outputs.version }}
 
+    # Dokka writes into a per-version directory, so without this the branch root has no
+    # index and every link to the documentation has to name a version that will be stale
+    # by the next release. This redirect is what lets the README point at a bare URL.
+    - name: Point the Documentation Root at This Release
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        cat > build/javadoc/index.html <<HTML
+        <!doctype html>
+        <meta charset="utf-8">
+        <title>TypeScriptPoet API documentation</title>
+        <meta http-equiv="refresh" content="0; url=./$VERSION/">
+        <link rel="canonical" href="./$VERSION/">
+        <p>Redirecting to the
+          <a href="./$VERSION/">TypeScriptPoet $VERSION API documentation</a>.</p>
+        HTML
+
     - name: Publish Documentation
       uses: JamesIves/github-pages-deploy-action@v4
       with:

@@ -308,6 +308,6 @@ License
  [sink-java]: src/test/java/dk/lldata/typescriptpoet/test/KitchenSinkJava.java
  [sink-out]: src/test/resources/kitchen-sink.ts
  [dl]: https://central.sonatype.com/artifact/dk.lldata/typescriptpoet
- [kdoc]: https://lldata.github.io/typescriptpoet/2.0.0/index.html
+ [kdoc]: https://lldata.github.io/typescriptpoet/
  [javapoet]: https://github.com/square/javapoet/
  [upstream]: https://github.com/outfoxx/typescriptpoet
