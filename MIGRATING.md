@@ -31,12 +31,29 @@ and `readonly abstract`; both are rejected by `tsc`. They are now `static readon
 Double quotes rather than single, brace spacing in `import { A }`, `;` rather than `,` between
 type-literal members, trailing commas, no blank lines immediately inside `{ }`, and an
 80-column width. If you assert on generated output, regenerate your expectations; if you run
-Prettier over generated files, this removes most of the churn rather than adding it. It is an
-aim rather than a guarantee, so keep running Prettier if you need the output to match it
-exactly.
+Prettier over generated files, this removes most of the churn rather than adding it. It is
+best effort rather than a guarantee -- what to do about the remaining difference, whether that
+is excluding generated files from your formatter, running Prettier over them, or leaving them
+as they are, is yours to choose.
 
 **Rest parameters emit `...args` rather than `... args`.**
 Cosmetic; the old form was valid but not idiomatic.
+
+**Consecutive plain members no longer have a blank line between them.**
+An interface or class used to separate every pair of members, including two plain fields, so
+a six-field DTO interface was eleven lines. Prettier keeps blank lines but never inserts
+them, so nothing required these. Members carrying a comment, a decorator, an initializer or a
+body still get one.
+
+**A value that lays itself out now counts the rest of the line.**
+An object literal or inline object type used to measure only itself, so
+`f({ method: "POST", path, body }, config, options);` came out past the print width. Some
+things that used to stay on one line now break. Inline object types break at all for the
+first time -- they were previously emitted on one line however long they were.
+
+**A lone parameter whose type is an inline object keeps its parens on the signature line,**
+letting the type break instead: `listWidgets(args?: {` … `}): Promise<T> {`. This is what
+Prettier does with an options bag.
 
 **Types referenced only inside a nested `CodeBlock` are now imported.**
 Passing a `CodeBlock` as a `%L` argument used to flatten it to a string, discarding its
@@ -66,6 +83,11 @@ an `else`. The additions are `Operator`, `IndexedAccess`, `ArrayShorthand`, `Con
 **`SymbolSpec` gained `ImportsDefault`,** with `=` as its sigil in the symbol mini-DSL. If
 you pass hand-written spec strings containing `=`, check they still parse as intended; `=`
 was not previously a legal character in that position.
+
+**`TypeName.Anonymous.Member` gained a `tsDoc` parameter.**
+Constructing one with three positional arguments is unchanged -- the parameter is defaulted,
+and `@JvmOverloads` keeps the three-argument form for Java too. Only `copy()`'s signature and
+a four-component destructuring are affected.
 
 **`copy()` on `TypeName` and `SymbolSpec` subclasses is no longer public.**
 They are annotated `@ConsistentCopyVisibility`, matching their non-public constructors. Build

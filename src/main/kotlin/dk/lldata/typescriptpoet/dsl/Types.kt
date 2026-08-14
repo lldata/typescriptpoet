@@ -16,6 +16,7 @@
  */
 package dk.lldata.typescriptpoet.dsl
 
+import dk.lldata.typescriptpoet.CodeBlock
 import dk.lldata.typescriptpoet.TypeName
 
 // Composing types, written the way TypeScript composes them. Both operators flatten, so
@@ -47,11 +48,17 @@ fun literal(value: String): TypeName = TypeName.literal(value)
 @JvmSynthetic
 fun anonymous(vararg members: TypeName.Anonymous.Member): TypeName = TypeName.anonymousType(members.toList())
 
-/** `label: string`, a member of an anonymous type. */
+/**
+ * `label: string`, a member of an anonymous type.
+ *
+ * [tsDoc] documents this member alone, which is the thing an interface cannot do without
+ * being declared. A documented member puts the whole type on several lines.
+ */
 @JvmSynthetic
-fun member(name: String, type: TypeName): TypeName.Anonymous.Member = TypeName.Anonymous.Member(name, type, false)
+fun member(name: String, type: TypeName, tsDoc: CodeBlock = CodeBlock.empty()): TypeName.Anonymous.Member =
+  TypeName.Anonymous.Member(name, type, false, tsDoc)
 
 /** `hint?: string`, an optional member of an anonymous type. */
 @JvmSynthetic
-fun optionalMember(name: String, type: TypeName): TypeName.Anonymous.Member =
-  TypeName.Anonymous.Member(name, type, true)
+fun optionalMember(name: String, type: TypeName, tsDoc: CodeBlock = CodeBlock.empty()): TypeName.Anonymous.Member =
+  TypeName.Anonymous.Member(name, type, true, tsDoc)

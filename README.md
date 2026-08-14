@@ -108,10 +108,24 @@ native compiler rather than a language release, so it accepts the same file 5 do
 
 Emitted code tries to do a decent job of looking like it has already been through Prettier
 with default settings — double quotes, trailing commas, brace spacing, an 80-column width,
-and constructs that break onto several lines when they do not fit. That is an aim rather than
-a promise: Prettier decides where to break by laying out a whole document and reconsidering,
-while this library decides as it writes, so an unusual shape can still come out differently.
-Run Prettier over the output if you need it to match exactly.
+and constructs that break onto several lines when they do not fit. Everything the library
+lays out itself is measured against that width and against what the rest of the line still
+has to hold: parameter lists, call arguments, object literals, inline object types, unions
+and type parameter lists all stay on one line if they fit, and break one entry per line if
+they do not.
+
+**That is best effort, not a promise.** Prettier lays out a whole document and reconsiders;
+this library decides as it writes, and it does not implement Prettier's heuristics for which
+argument to hug or where a break reads best. An unusual shape can still come out differently.
+Nor is the width guaranteed everywhere: a statement given as a format string is text the
+writer cannot break, so `addStatement("return f(%L, a, b)", …)` can only give way where a
+structured value sits — which is what [`CodeBlock.call`][call] exists for, and why reaching
+for it is worth it in a call that might not fit.
+
+What to do about the difference is yours to choose, and the library takes no position: exclude
+generated files from your formatter, run the output through Prettier, or leave it as it stands.
+
+[call]: src/main/kotlin/dk/lldata/typescriptpoet/CallExpression.kt
 
 The [KDoc][kdoc] catalogs the complete API, which is inspired by [JavaPoet][javapoet]. Each
 entry shows the TypeScript it emits.
@@ -145,6 +159,14 @@ parameters.
 
 **Modules gained the rest of the import and export forms:** default imports, `import type` and
 `export type`, re-exports, standalone export lists, `export default` and `export =`.
+
+**Expressions are structured, not spelled.** `CodeBlock.objectLiteral` and `CodeBlock.call`
+keep an object's members and a call's arguments as lists until the file is written, so both
+can be measured and broken. A call written as a format string cannot be: `f(%L, a, b)` has no
+argument boundaries in it, so the arguments after the `%L` stay glued to whatever the `%L`
+laid out. There is a concise arrow body too — `(x) => x * 2` rather than
+`(x) => { return x * 2; }` — and an inline object type whose members can each carry a doc
+comment, which is the one thing an interface cannot do without being declared.
 
 **Operand precedence is handled.** A union used under `keyof` or `[]` is parenthesised, so
 `keyof (A | B)` means what you asked for rather than silently re-associating.

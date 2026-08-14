@@ -453,4 +453,55 @@ class ObjectLiteralTests {
       """.trimIndent(),
     )
   }
+
+  @Test
+  @DisplayName("Counts the rest of the statement when deciding whether the literal fits")
+  fun testTrailingTextCountsTowardsTheWidth() {
+    val obj = CodeBlock.objectLiteral()
+      .addProperty("method", "%S", "POST")
+      .addShorthand("path")
+      .addShorthand("body")
+      .build()
+
+    // The literal measures 30 wide and would fit at this column on its own. It is what comes
+    // after it on the line that does not, and the literal is the only thing here that can
+    // give way.
+    val fn = FunctionSpec.builder("marketplaceMessagesThreadIdReactionsMessageIdNode")
+      .addStatement("return apiRequest<DmMessageDto>(%L, config, options)", obj)
+      .build()
+
+    assertEmitsExactly(
+      emit(fn),
+      """
+      |function marketplaceMessagesThreadIdReactionsMessageIdNode() {
+      |  return apiRequest<DmMessageDto>({
+      |    method: "POST",
+      |    path,
+      |    body,
+      |  }, config, options);
+      |}
+      |
+      """.trimMargin(),
+    )
+  }
+
+  @Test
+  @DisplayName("Takes a spec as a member value without a %L to carry it")
+  fun testSpecValuedMembers() {
+    val getter = FunctionSpec.builder("get")
+      .arrow()
+      .addParameter("id", TypeName.STRING)
+      .expressionBody("load(id)")
+      .build()
+    val obj = CodeBlock.objectLiteral()
+      .addProperty("get", getter)
+      .addProperty("meta", CodeBlock.objectLiteral().addShorthand("version").build())
+      .addProperty("now", CodeBlock.call("Date.now").build())
+      .build()
+
+    assertThat(
+      obj.toString(),
+      equalTo("{ get: (id: string) => load(id), meta: { version }, now: Date.now() }"),
+    )
+  }
 }

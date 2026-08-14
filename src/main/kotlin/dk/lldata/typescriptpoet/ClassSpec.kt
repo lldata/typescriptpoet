@@ -40,9 +40,19 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     // Prettier strips blank lines next to the braces but keeps them between members, so
     // separate members rather than prefixing each one.
     var wroteMember = false
-    fun separate() {
-      if (wroteMember) codeWriter.emit("\n")
+    var lastWasPlainProperty = false
+
+    /**
+     * The blank line between two members, where there should be one.
+     *
+     * Consecutive plain fields are one block, as they are in an interface -- Prettier keeps
+     * blank lines but never adds them, so nothing here requires the gap. Anything with a body
+     * or a comment of its own still gets one. See [InterfaceSpec].
+     */
+    fun separate(plainProperty: Boolean = false) {
+      if (wroteMember && !(plainProperty && lastWasPlainProperty)) codeWriter.emit("\n")
       wroteMember = true
+      lastWasPlainProperty = plainProperty
     }
 
     val constructorProperties: Map<String, PropertySpec> =
@@ -92,14 +102,19 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
   private fun emitMembers(
     codeWriter: CodeWriter,
     constructorProperties: Map<String, PropertySpec>,
-    separate: () -> Unit,
+    separate: (Boolean) -> Unit,
   ) {
     // Non-static properties.
     for (propertySpec in propertySpecs) {
       if (constructorProperties.containsKey(propertySpec.name) && !propertySpec.modifiers.contains(Modifier.STATIC)) {
         continue
       }
-      separate()
+      // A field with a comment, a decorator or an initializer is not a plain one.
+      separate(
+        propertySpec.tsDoc.isEmpty() &&
+          propertySpec.decorators.isEmpty() &&
+          propertySpec.initializer == null,
+      )
       propertySpec.emit(
         codeWriter,
         setOf(Modifier.PUBLIC),
@@ -110,16 +125,16 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
 
     // Index signatures.
     for (funSpec in indexableSpecs) {
-      separate()
+      separate(false)
       funSpec.emit(codeWriter, null, setOf(Modifier.PUBLIC))
     }
 
-    if (constructor != null) separate()
+    if (constructor != null) separate(false)
     emitConstructor(codeWriter, constructorProperties)
 
     // Static initializer blocks.
     for (block in staticBlocks) {
-      separate()
+      separate(false)
       codeWriter.emit("static ")
       codeWriter.emitBody(block.isEmpty()) { codeWriter.emitCode(block) }
     }
@@ -127,14 +142,14 @@ private constructor(builder: Builder) : TypeSpec<ClassSpec, ClassSpec.Builder>(b
     // Constructors.
     for (funSpec in functionSpecs) {
       if (!funSpec.isConstructor) continue
-      separate()
+      separate(false)
       funSpec.emit(codeWriter, name, setOf(Modifier.PUBLIC))
     }
 
     // Functions (static and non-static).
     for (funSpec in functionSpecs) {
       if (funSpec.isConstructor) continue
-      separate()
+      separate(false)
       funSpec.emit(codeWriter, name, setOf(Modifier.PUBLIC))
     }
   }

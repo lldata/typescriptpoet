@@ -34,9 +34,31 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
 
   override fun emit(codeWriter: CodeWriter) {
     var wroteMember = false
-    fun separate() {
-      if (wroteMember) codeWriter.emit("\n")
+    var lastWasPlainProperty = false
+
+    /**
+     * The blank line between two members, where there should be one.
+     *
+     * Prettier never *inserts* a blank line -- it keeps the ones already written and collapses
+     * runs of them -- so an interface whose members are consecutive lines is as Prettier-clean
+     * as one with gaps. Putting a blank line between every pair was doubling the height of
+     * every DTO interface, which is the shape generated code is mostly made of:
+     *
+     * ```typescript
+     * export interface BorrowAccepted {
+     *   borrower: string;
+     *   dueAt: string;
+     *   outcome: "accepted";
+     * }
+     * ```
+     *
+     * A documented member still gets one, because a TSDoc comment butted against the line
+     * above reads as belonging to it, and so does anything with a signature of its own.
+     */
+    fun separate(plainProperty: Boolean = false) {
+      if (wroteMember && !(plainProperty && lastWasPlainProperty)) codeWriter.emit("\n")
       wroteMember = true
+      lastWasPlainProperty = plainProperty
     }
 
     codeWriter.emitTSDoc(tsDoc)
@@ -60,16 +82,16 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
   }
 
   // The body's members, in the order an interface writes them.
-  private fun emitMembers(codeWriter: CodeWriter, separate: () -> Unit) {
+  private fun emitMembers(codeWriter: CodeWriter, separate: (Boolean) -> Unit) {
     // Callable
     callable?.let {
-      separate()
+      separate(false)
       it.emit(codeWriter, null, setOf(Modifier.ABSTRACT))
     }
 
     // Properties.
     for (propertySpec in propertySpecs) {
-      separate()
+      separate(propertySpec.tsDoc.isEmpty() && propertySpec.decorators.isEmpty())
       propertySpec.emit(
         codeWriter,
         setOf(Modifier.PUBLIC),
@@ -80,14 +102,14 @@ private constructor(builder: Builder) : TypeSpec<InterfaceSpec, InterfaceSpec.Bu
 
     // Indexables
     for (funSpec in indexableSpecs) {
-      separate()
+      separate(false)
       funSpec.emit(codeWriter, null, setOf(Modifier.PUBLIC, Modifier.ABSTRACT))
     }
 
     // Functions.
     for (funSpec in functionSpecs) {
       if (funSpec.isConstructor) continue
-      separate()
+      separate(false)
       funSpec.emit(codeWriter, name, setOf(Modifier.PUBLIC, Modifier.ABSTRACT))
     }
   }

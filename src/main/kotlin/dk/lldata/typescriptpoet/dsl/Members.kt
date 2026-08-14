@@ -16,6 +16,7 @@
  */
 package dk.lldata.typescriptpoet.dsl
 
+import dk.lldata.typescriptpoet.CallExpression
 import dk.lldata.typescriptpoet.ClassSpec
 import dk.lldata.typescriptpoet.CodeBlock
 import dk.lldata.typescriptpoet.DecoratorSpec
@@ -215,24 +216,15 @@ inline fun PropertySpec.Builder.decorator(name: SymbolSpec, block: DecoratorBloc
 inline fun ParameterSpec.Builder.decorator(name: SymbolSpec, block: DecoratorBlock = {}) =
   addDecorator(DecoratorSpec.builder(name).apply(block).build())
 
-// ---- Enum and object literal members ----------------------------------------------------------
+// ---- Enum constants and decorator arguments ----------------------------------------------------
+//
+// An object literal's members and a call's arguments are expressions rather than declarations
+// and live in Expressions.kt.
 
 /** `Name = "value",` */
 @JvmSynthetic
 fun EnumSpec.Builder.constant(name: String, format: String, vararg args: Any?) =
   addConstant(name, CodeBlock.of(format, *args))
-
-/** `name: value` */
-@JvmSynthetic
-fun ObjectLiteral.Builder.property(name: String, format: String, vararg args: Any?) = addProperty(name, format, *args)
-
-/** `name` */
-@JvmSynthetic
-fun ObjectLiteral.Builder.shorthand(name: String) = addShorthand(name)
-
-/** `get name() { … }` */
-@JvmSynthetic
-fun ObjectLiteral.Builder.getter(name: String, format: String, vararg args: Any?) = addGetter(name, format, *args)
 
 /** `@dec("x")` */
 @JvmSynthetic

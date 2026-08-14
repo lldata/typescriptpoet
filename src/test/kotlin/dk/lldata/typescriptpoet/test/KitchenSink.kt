@@ -61,6 +61,18 @@ object KitchenSink {
     "decorators.ts" to
       "export function sealed(...args: any[]): any {}\n" +
       "export function logged(...args: any[]): any {}\n",
+    // What the call expressions call. `fetchResource` takes a request, a config and an
+    // optional third argument, which is the shape whose argument list has to break.
+    "fetch-resource.ts" to
+      "export interface RequestConfig { token?: string }\n" +
+      "export interface FetchRequest { method: string; path: string; retries: number }\n" +
+      "export function fetchResource<T>(\n" +
+      "  request: FetchRequest,\n" +
+      "  config: RequestConfig,\n" +
+      "  signal?: AbortSignal,\n" +
+      "): Promise<T> {\n  return null as unknown as Promise<T>;\n}\n" +
+      "export function queryWidgets(args?: unknown): Promise<unknown[]> {\n" +
+      "  return Promise.resolve([]);\n}\n",
   )
 
   // One deliberately linear function: it builds every construct in the order they appear in
@@ -529,9 +541,10 @@ object KitchenSink {
             .addProperty("kind", "%S", "node")
             .addShorthand("path")
             .addGetter("depth", "return path.split(%S).length", "/")
+            // A spec goes straight in as a member value; the `%L` that used to carry it said
+            // nothing the argument does not.
             .addProperty(
               "send",
-              "%L",
               FunctionSpec.builder("send")
                 .arrow()
                 .addParameter("message", TypeName.STRING)
@@ -539,6 +552,122 @@ object KitchenSink {
                 .addStatement("console.log(message)")
                 .build(),
             )
+            .build(),
+        )
+        .build(),
+    )
+
+    // ---- Call expressions ----------------------------------------------------------
+    // The construct that makes an argument list breakable. Written as a format string --
+    // `addStatement("return %T(%L, config, options)", …)` -- the `, config, options)` is
+    // text with no argument boundaries in it, so a writer cannot break the line where
+    // Prettier would. Kept as a list, the arguments break together and one per line.
+    //
+    // `fetchResource` is over the width and breaks; `ping` fits and stays inline.
+    file.addFunction(
+      FunctionSpec.builder("loadDeviceConfiguration")
+        .addModifiers(Modifier.EXPORT)
+        .addParameter("path", TypeName.STRING)
+        .addParameter("config", TypeName.namedImport("RequestConfig", "./fetch-resource"))
+        .returns(TypeName.promiseType(TypeName.implicit("Widget")))
+        .addStatement(
+          "return %L",
+          CodeBlock.call(TypeName.namedImport("fetchResource", "./fetch-resource"))
+            .addTypeArgument(TypeName.implicit("Widget"))
+            .addArgument(
+              CodeBlock.objectLiteral()
+                .addProperty("method", "%S", "POST")
+                .addShorthand("path")
+                .addProperty("retries", "%L", 3)
+                .build(),
+            )
+            .addArgument("config")
+            .addArgument("undefined")
+            .build(),
+        )
+        .build(),
+    )
+
+    file.addFunction(
+      FunctionSpec.builder("ping")
+        .addStatement("return %L", CodeBlock.call("fetch").addArgument("%S", "/ping").build())
+        .build(),
+    )
+
+    // A constructor call lays its arguments out the same way.
+    file.addFunction(
+      FunctionSpec.builder("emptyIndex")
+        .returns(TypeName.mapType(TypeName.STRING, TypeName.NUMBER))
+        .addStatement(
+          "return %L",
+          CodeBlock.newInstance(TypeName.mapType(TypeName.STRING, TypeName.NUMBER)).build(),
+        )
+        .build(),
+    )
+
+    // ---- Concise arrow bodies ------------------------------------------------------
+    // `=> expr` rather than `=> { return expr; }`, which is what a reader would write for a
+    // one-expression body. An object literal is parenthesised, since `=> {` opens a block.
+    file.addFunction(
+      FunctionSpec.builder("doubler")
+        .addModifiers(Modifier.EXPORT)
+        .returns(TypeName.lambda("value" to TypeName.NUMBER, returnType = TypeName.NUMBER))
+        .addStatement(
+          "return %L",
+          FunctionSpec.builder("double")
+            .arrow()
+            .addParameter("value", TypeName.NUMBER)
+            .expressionBody("value * 2")
+            .build(),
+        )
+        .build(),
+    )
+
+    file.addFunction(
+      FunctionSpec.builder("wrap")
+        .addModifiers(Modifier.EXPORT)
+        .addStatement(
+          "return %L",
+          FunctionSpec.builder("wrapOne")
+            .arrow()
+            .addParameter("value", TypeName.NUMBER)
+            .expressionBody(
+              CodeBlock.of("%L", CodeBlock.objectLiteral().addShorthand("value").build()),
+            )
+            .build(),
+        )
+        .build(),
+    )
+
+    // ---- Inline object types -------------------------------------------------------
+    // An anonymous type carrying a comment per member. The comment is the reason it is not
+    // an interface: it says what omitting the member means, which optionality alone does
+    // not, without lifting the shape into a declaration nothing else refers to. A
+    // documented member puts the type on several lines whatever it measures.
+    file.addFunction(
+      FunctionSpec.builder("listWidgets")
+        .addModifiers(Modifier.EXPORT)
+        .addParameter(
+          ParameterSpec.builder(
+            "args",
+            TypeName.anonymousType(
+              TypeName.anonymousMember(
+                "limit",
+                TypeName.NUMBER,
+                optional = true,
+                tsDoc = CodeBlock.of("Server default: %L.\n", 20),
+              ),
+              TypeName.anonymousMember("cursor", TypeName.STRING, optional = true),
+              TypeName.anonymousMember("includeArchived", TypeName.BOOLEAN, optional = true),
+            ),
+            true,
+          ).build(),
+        )
+        .returns(TypeName.promiseType(TypeName.arrayShorthandType(TypeName.implicit("unknown"))))
+        .addStatement(
+          "return %L",
+          CodeBlock.call(TypeName.namedImport("queryWidgets", "./fetch-resource"))
+            .addArgument("args")
             .build(),
         )
         .build(),

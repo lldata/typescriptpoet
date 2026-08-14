@@ -353,26 +353,80 @@ sealed class TypeName {
   data class Anonymous
   internal constructor(val members: List<Member>) : TypeName() {
 
-    data class Member(val name: String, val type: TypeName, val optional: Boolean)
+    /**
+     * One member: `limit?: number`, optionally with a TSDoc comment of its own.
+     *
+     * The comment is why this exists rather than an interface. A parameter taking
+     * `{ limit?: number }` can say what omitting `limit` means -- which is exactly the thing
+     * a caller needs and optionality alone does not tell them -- without lifting the shape
+     * out into a named declaration nothing else refers to.
+     */
+    data class Member
+    @JvmOverloads
+    constructor(
+      val name: String,
+      val type: TypeName,
+      val optional: Boolean,
+      val tsDoc: CodeBlock = CodeBlock.empty(),
+    )
 
     override fun emit(codeWriter: CodeWriter) {
-      codeWriter.emit("{ ")
-      members.forEachIndexed { idx, member ->
-        codeWriter.emit(member.name)
-        if (member.optional) {
-          codeWriter.emit("?")
-        }
-        codeWriter.emit(": ")
-        member.type.emit(codeWriter)
-
-        if (idx != members.size - 1) {
-          codeWriter.emit("; ")
-        }
+      if (members.isEmpty()) {
+        codeWriter.emit("{}")
+        return
       }
-      codeWriter.emit(" }")
+
+      // Measure, then break, as an object literal does. This used to be unconditionally one
+      // line, which made it the one construct that could not be laid out: a parameter taking
+      // a six-member object type ran off the line and there was nothing to be done about it.
+      val documented = members.any { it.tsDoc.isNotEmpty() }
+      val inline = codeWriter.measure { emitMembers(this, separator = "; ") }
+      val fits = !documented && !inline.contains('\n') &&
+        codeWriter.currentColumn + inline.length + BRACES_WIDTH + codeWriter.trailingWidth <=
+        codeWriter.printWidth
+      if (fits) {
+        codeWriter.emit("{ ")
+        emitMembers(codeWriter, separator = "; ")
+        codeWriter.emit(" }")
+        return
+      }
+
+      // A member comment only reads as a comment on its own line, so one anywhere breaks the
+      // whole type however short it measures.
+      codeWriter.emit("{\n")
+      codeWriter.indent()
+      members.forEach { member ->
+        codeWriter.emitTSDoc(member.tsDoc)
+        codeWriter.withTrailingWidth(1) { emitMember(codeWriter, member) }
+        codeWriter.emit(";\n")
+      }
+      codeWriter.unindent()
+      codeWriter.emit("}")
+    }
+
+    private fun emitMembers(codeWriter: CodeWriter, separator: String) {
+      members.forEachIndexed { index, member ->
+        if (index > 0) codeWriter.emit(separator)
+        emitMember(codeWriter, member)
+      }
+    }
+
+    private fun emitMember(codeWriter: CodeWriter, member: Member) {
+      codeWriter.emit(member.name)
+      if (member.optional) {
+        codeWriter.emit("?")
+      }
+      codeWriter.emit(": ")
+      member.type.emit(codeWriter)
     }
 
     override fun toString() = buildCodeString { emit(this) }
+
+    private companion object {
+
+      /** The `{ ` and ` }` around an inline type. */
+      const val BRACES_WIDTH = 4
+    }
   }
 
   @ConsistentCopyVisibility
@@ -695,6 +749,21 @@ sealed class TypeName {
     )
 
     /**
+     * Type name for the generic Promise type
+     *
+     * `PROMISE.parameterized(t)` says the same thing, but it is not where anyone looks:
+     * every other type a generated function returns is spelled by a factory here.
+     *
+     * @param valueType Type the promise resolves to
+     * @return Type name of the new promise type
+     */
+    @JvmStatic
+    fun promiseType(valueType: TypeName): TypeName = parameterizedType(
+      PROMISE,
+      valueType,
+    )
+
+    /**
      * Type name for the generic Map type
      *
      * @param keyType Key type of the map
@@ -846,6 +915,36 @@ sealed class TypeName {
     @JvmStatic
     fun anonymousType(vararg members: Pair<String, TypeName>): Anonymous =
       anonymousType(members.map { Anonymous.Member(it.first, it.second, false) })
+
+    /**
+     * Anonymous type name from members built with [anonymousMember], which is how an optional
+     * or documented member is spelled: `{ limit?: number; cursor?: string }`.
+     *
+     * @param members Each argument represents a distinct member
+     * @return Type name representing the anonymous type
+     */
+    @JvmStatic
+    fun anonymousType(vararg members: Anonymous.Member): Anonymous = anonymousType(members.toList())
+
+    /**
+     * One member of an [anonymousType], optional and documented as needed.
+     *
+     * A documented member puts the whole type on several lines, since a TSDoc comment only
+     * reads as one on a line of its own.
+     *
+     * @param name The member name
+     * @param type The member type
+     * @param optional Whether the member may be omitted, emitting `name?: T`
+     * @param tsDoc A TSDoc comment for this member, which puts the type on several lines
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun anonymousMember(
+      name: String,
+      type: TypeName,
+      optional: Boolean = false,
+      tsDoc: CodeBlock = CodeBlock.empty(),
+    ): Anonymous.Member = Anonymous.Member(name, type, optional, tsDoc)
 
     /**
      * Tuple type name (e.g. `[number, boolean, string]`}

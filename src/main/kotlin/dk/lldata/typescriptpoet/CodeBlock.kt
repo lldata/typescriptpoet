@@ -438,6 +438,27 @@ private constructor(internal val formatParts: List<String>, internal val args: L
     @JvmStatic
     fun objectLiteral() = ObjectLiteral.Builder()
 
+    /**
+     * A builder for a call expression, for use as a `%L` argument.
+     *
+     * The callee goes through `%T`, so an imported function is collected into the import
+     * statement rather than only spelled correctly. See [CallExpression].
+     */
+    @JvmStatic
+    fun call(callee: TypeName) = CallExpression.Builder(of("%T", callee), isNew = false)
+
+    /** A call of a function named here rather than imported: `encodeURIComponent(s)`. */
+    @JvmStatic
+    fun call(callee: String) = CallExpression.Builder(of("%L", callee), isNew = false)
+
+    /** A call of an arbitrary expression: `(await loader())(x)`, `obj.method(x)`. */
+    @JvmStatic
+    fun call(callee: CodeBlock) = CallExpression.Builder(callee, isNew = false)
+
+    /** A constructor call: `new Map<string, number>()`. Lays its arguments out as [call] does. */
+    @JvmStatic
+    fun newInstance(callee: TypeName) = CallExpression.Builder(of("%T", callee), isNew = true)
+
     /** The empty block. */
     @JvmStatic
     fun empty() = builder().build()

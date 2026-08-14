@@ -25,6 +25,24 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   getters — `addGetter` is what a lazily-reached value needs, since a property is computed
   where the object is built rather than where it is read.
   ([#9](https://github.com/lldata/typescriptpoet/issues/9))
+- `CodeBlock.call()` and `CodeBlock.newInstance()`, building a call expression whose argument
+  list stays structured until the file is written. A call spelled as a format string —
+  `addStatement("return %T(%L, config, options)", …)` — has no argument boundaries in it, so
+  the writer could not break it: the one argument that could lay itself out did, and the rest
+  stayed glued to its closing brace. Kept as a list, the arguments break together, one per
+  line, as a parameter list does.
+  ([#13](https://github.com/lldata/typescriptpoet/issues/13))
+- `FunctionSpec.Builder.expressionBody()`, giving an arrow a concise body: `(x) => x * 2`
+  rather than `(x) => { return x * 2; }`. An object literal is parenthesised, since `=> {`
+  would otherwise open a block.
+- `TypeName.promiseType()`, alongside `arrayType`/`setType`/`mapType`/`recordType`.
+  `PROMISE.parameterized(t)` said the same thing but was not where anyone looked.
+- `TypeName.anonymousMember()`, so a member of an inline object type can be optional and carry
+  a TSDoc comment of its own. The comment is the reason to use an inline type rather than an
+  interface: it says what omitting the member means, which optionality alone does not.
+- `ObjectLiteral.Builder.addProperty()` overloads taking a `FunctionSpec`, `ObjectLiteral` or
+  `CallExpression` directly. `addProperty("get", "%L", arrow(…))` still works; the `"%L"`
+  carried no information the argument did not.
 - `literal()`, for literal types: `literal("a")` emits `"a"`, escaped, and there are
   numeric and boolean overloads. Previously the only route was `implicit()` with the caller
   writing the quotes, which emitted an unparseable file if the value contained one.
@@ -104,6 +122,20 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 
 ### Fixed
 
+- A value that lays itself out — an object literal, an inline object type — measured only
+  itself and not the rest of the line, so `return f({ method: "POST", path, body }, config,
+  options);` came out at 83 columns against a print width of 80. Whatever the enclosing
+  format string still has to write is now counted.
+  ([#13](https://github.com/lldata/typescriptpoet/issues/13))
+- `TypeName.Anonymous` was emitted on one line unconditionally, which made an inline object
+  type the one construct that could not be laid out. It now measures and breaks like an
+  object literal.
+- An interface or class put a blank line between every pair of members, including two plain
+  fields. Prettier keeps blank lines but never inserts them, so the gaps were the library's
+  own and roughly doubled the height of every DTO interface. Members with a comment, a
+  decorator, an initializer or a body still get one.
+- A lone parameter whose type is an inline object now keeps its parens on the signature line
+  and lets the type break instead, which is what Prettier does with an options bag.
 - `FileSpec.addProperty` threw for every input: it required exactly one of `CONST`/`LET`/`VAR`
   and then ran a check forbidding all three. Top-level properties were unreachable.
 - `FileSpec.addEnum` rejected `CONST`, so `const enum` could not be added to a file.

@@ -412,7 +412,6 @@ final class KitchenSinkJava {
             .addGetter("depth", "return path.split(%S).length", "/")
             .addProperty(
                 "send",
-                "%L",
                 FunctionSpec.builder("send")
                     .arrow()
                     .addParameter("message", TypeName.STRING)
@@ -425,6 +424,97 @@ final class KitchenSinkJava {
             .addModifiers(Modifier.EXPORT)
             .addParameter("path", TypeName.STRING)
             .addStatement("return %L", node)
+            .build());
+
+    // ---- Call expressions ----
+    file.addFunction(
+        FunctionSpec.builder("loadDeviceConfiguration")
+            .addModifiers(Modifier.EXPORT)
+            .addParameter("path", TypeName.STRING)
+            .addParameter("config", TypeName.namedImport("RequestConfig", "./fetch-resource"))
+            .returns(TypeName.promiseType(TypeName.implicit("Widget")))
+            .addStatement(
+                "return %L",
+                CodeBlock.call(TypeName.namedImport("fetchResource", "./fetch-resource"))
+                    .addTypeArgument(TypeName.implicit("Widget"))
+                    .addArgument(
+                        CodeBlock.objectLiteral()
+                            .addProperty("method", "%S", "POST")
+                            .addShorthand("path")
+                            .addProperty("retries", "%L", 3)
+                            .build())
+                    .addArgument("config")
+                    .addArgument("undefined")
+                    .build())
+            .build());
+
+    file.addFunction(
+        FunctionSpec.builder("ping")
+            .addStatement("return %L", CodeBlock.call("fetch").addArgument("%S", "/ping").build())
+            .build());
+
+    file.addFunction(
+        FunctionSpec.builder("emptyIndex")
+            .returns(TypeName.mapType(TypeName.STRING, TypeName.NUMBER))
+            .addStatement(
+                "return %L",
+                CodeBlock.newInstance(TypeName.mapType(TypeName.STRING, TypeName.NUMBER)).build())
+            .build());
+
+    // ---- Concise arrow bodies ----
+    file.addFunction(
+        FunctionSpec.builder("doubler")
+            .addModifiers(Modifier.EXPORT)
+            .returns(TypeName.lambda(Map.of("value", TypeName.NUMBER), TypeName.NUMBER))
+            .addStatement(
+                "return %L",
+                FunctionSpec.builder("double")
+                    .arrow()
+                    .addParameter("value", TypeName.NUMBER)
+                    .expressionBody("value * 2")
+                    .build())
+            .build());
+
+    file.addFunction(
+        FunctionSpec.builder("wrap")
+            .addModifiers(Modifier.EXPORT)
+            .addStatement(
+                "return %L",
+                FunctionSpec.builder("wrapOne")
+                    .arrow()
+                    .addParameter("value", TypeName.NUMBER)
+                    .expressionBody(
+                        CodeBlock.of(
+                            "%L", CodeBlock.objectLiteral().addShorthand("value").build()))
+                    .build())
+            .build());
+
+    // ---- Inline object types ----
+    file.addFunction(
+        FunctionSpec.builder("listWidgets")
+            .addModifiers(Modifier.EXPORT)
+            .addParameter(
+                ParameterSpec.builder(
+                        "args",
+                        TypeName.anonymousType(
+                            List.of(
+                                TypeName.anonymousMember(
+                                    "limit",
+                                    TypeName.NUMBER,
+                                    true,
+                                    CodeBlock.of("Server default: %L.\n", 20)),
+                                TypeName.anonymousMember("cursor", TypeName.STRING, true),
+                                TypeName.anonymousMember(
+                                    "includeArchived", TypeName.BOOLEAN, true))),
+                        true)
+                    .build())
+            .returns(
+                TypeName.promiseType(TypeName.arrayShorthandType(TypeName.implicit("unknown"))))
+            .addStatement(
+                "return %L",
+                CodeBlock.call(TypeName.namedImport("queryWidgets", "./fetch-resource"))
+                    .addArgument("args")
+                    .build())
             .build());
 
     // ---- Classes ----

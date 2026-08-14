@@ -237,11 +237,32 @@ internal fun List<ParameterSpec>.emit(
   val fitsOnOneLine =
     params.isEmpty() || (!forcedBreak && column + inlineWidth + 2 + trailingWidth <= printWidth)
 
-  if (fitsOnOneLine) {
+  // The options bag: a lone parameter whose type is an inline object keeps its parens on the
+  // signature line and lets the type break instead, which is what Prettier does with it --
+  //
+  //     export function listWidgets(args?: {
+  //       limit?: number;
+  //     }): Promise<Widget[]> {
+  //
+  // rather than breaking the parameter list around a type that then breaks again inside it.
+  // Only one parameter, because with a second there is nothing to hug.
+  val hugged = !fitsOnOneLine &&
+    params.size == 1 &&
+    rest == null &&
+    constructorProperties.isEmpty() &&
+    params[0].type is TypeName.Anonymous
+
+  if (fitsOnOneLine || hugged) {
     params.forEachIndexed { index, parameter ->
       val optionalAllowed = subList(min(index + 1, size), size).all { it.optional }
       if (index > 0) emitCode(",%W")
-      emitBlock(parameter, rest === parameter, optionalAllowed)
+      // A hugged type breaks itself, so it needs to know about the `)` and everything the
+      // signature writes after it.
+      if (hugged) {
+        withTrailingWidth(1 + trailingWidth) { emitBlock(parameter, false, optionalAllowed) }
+      } else {
+        emitBlock(parameter, rest === parameter, optionalAllowed)
+      }
     }
   } else {
     // One per line, indented one level, with the closing paren back at the caller's indent.

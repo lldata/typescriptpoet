@@ -16,6 +16,7 @@
  */
 package dk.lldata.typescriptpoet.dsl
 
+import dk.lldata.typescriptpoet.CallExpression
 import dk.lldata.typescriptpoet.ClassSpec
 import dk.lldata.typescriptpoet.CodeBlock
 import dk.lldata.typescriptpoet.DecoratorSpec
@@ -74,6 +75,7 @@ internal typealias ParameterBlock = @TypeScriptPoetDsl ParameterSpec.Builder.() 
 internal typealias AliasBlock = @TypeScriptPoetDsl TypeAliasSpec.Builder.() -> Unit
 internal typealias DecoratorBlock = @TypeScriptPoetDsl DecoratorSpec.Builder.() -> Unit
 internal typealias ObjectBlock = @TypeScriptPoetDsl ObjectLiteral.Builder.() -> Unit
+internal typealias CallBlock = @TypeScriptPoetDsl CallExpression.Builder.() -> Unit
 
 // ---- Entry points ---------------------------------------------------------------------------
 
@@ -89,6 +91,19 @@ inline fun obj(block: ObjectBlock): ObjectLiteral = CodeBlock.objectLiteral().ap
 @JvmSynthetic
 inline fun arrow(name: String = "arrow", block: FunctionBlock): FunctionSpec =
   FunctionSpec.builder(name).arrow().apply(block).build()
+
+/** `f(a, b)` — an argument list that breaks on width rather than a format string that cannot. */
+@JvmSynthetic
+inline fun call(callee: TypeName, block: CallBlock = {}): CallExpression = CodeBlock.call(callee).apply(block).build()
+
+/** `f(a, b)`, where `f` is named here rather than imported. */
+@JvmSynthetic
+inline fun call(callee: String, block: CallBlock = {}): CallExpression = CodeBlock.call(callee).apply(block).build()
+
+/** `new Type(a, b)` */
+@JvmSynthetic
+inline fun newInstance(callee: TypeName, block: CallBlock = {}): CallExpression =
+  CodeBlock.newInstance(callee).apply(block).build()
 
 // ---- Declarations, in a file or a namespace --------------------------------------------------
 

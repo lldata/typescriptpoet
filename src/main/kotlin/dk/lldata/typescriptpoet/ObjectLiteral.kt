@@ -67,8 +67,13 @@ internal constructor(internal val members: List<Member>) {
     val inline = codeWriter.measure { emitMembers(this, separator = ", ") }
     // A member that spans lines -- an arrow function with a body, a nested literal that
     // broke -- forces the whole literal to break, however short the text measures.
+    //
+    // The trailing width is the rest of the line after the literal, which the literal does
+    // not write and cannot fit without: `{ method: "POST", path, body }` measures at 30 and
+    // is still too wide for a line that goes on to say `, config, options);`.
     val fits = !inline.contains('\n') &&
-      codeWriter.currentColumn + inline.length + 4 <= codeWriter.printWidth
+      codeWriter.currentColumn + inline.length + BRACES_WIDTH + codeWriter.trailingWidth <=
+      codeWriter.printWidth
     if (fits) {
       codeWriter.emit("{ ")
       emitMembers(codeWriter, separator = ", ")
@@ -79,7 +84,8 @@ internal constructor(internal val members: List<Member>) {
     codeWriter.emit("{\n")
     codeWriter.indent()
     members.forEach { member ->
-      emitMember(codeWriter, member)
+      // The comma is all that follows a member on its own line.
+      codeWriter.withTrailingWidth(1) { emitMember(codeWriter, member) }
       codeWriter.emit(",\n")
     }
     codeWriter.unindent()
@@ -136,6 +142,19 @@ internal constructor(internal val members: List<Member>) {
     /** Adds `name: value`, with the value written as a format string. */
     fun addProperty(name: String, format: String, vararg args: Any?) = addProperty(name, CodeBlock.of(format, *args))
 
+    // Spelling `addProperty("get", "%L", arrow(…))` to put a spec in a member is pure
+    // ceremony: the format string carries no information the argument does not. These are
+    // the kinds a member value is in practice.
+
+    /** Adds `name: (…) => …`, a function-valued member. */
+    fun addProperty(name: String, value: FunctionSpec) = addProperty(name, CodeBlock.of("%L", value))
+
+    /** Adds `name: { … }`, a nested object literal. */
+    fun addProperty(name: String, value: ObjectLiteral) = addProperty(name, CodeBlock.of("%L", value))
+
+    /** Adds `name: f(…)`, a call-valued member. */
+    fun addProperty(name: String, value: CallExpression) = addProperty(name, CodeBlock.of("%L", value))
+
     /** Adds a shorthand member: `{ name }`, where the value is a binding of the same name. */
     fun addShorthand(name: String) = apply {
       members += Member.Shorthand(name)
@@ -161,5 +180,11 @@ internal constructor(internal val members: List<Member>) {
       addGetter(name, CodeBlock.builder().addStatement(format, *args).build())
 
     fun build() = ObjectLiteral(members.toImmutableList())
+  }
+
+  private companion object {
+
+    /** The `{ ` and ` }` around an inline literal. */
+    const val BRACES_WIDTH = 4
   }
 }

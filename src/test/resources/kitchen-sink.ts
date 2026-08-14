@@ -3,6 +3,7 @@
 import { logged, sealed } from "./decorators";
 import { Engine } from "./engine";
 import "./engine-boost";
+import { RequestConfig, fetchResource, queryWidgets } from "./fetch-resource";
 import Logger from "./logger";
 import { type Options } from "./options";
 import * as utils from "./utils";
@@ -13,9 +14,7 @@ import "./polyfill";
  */
 export interface Person {
   name: string;
-
   age?: number;
-
   readonly id: string;
 }
 
@@ -196,6 +195,44 @@ export function node(path: string) {
       console.log(message);
     },
   };
+}
+
+export function loadDeviceConfiguration(
+  path: string,
+  config: RequestConfig,
+): Promise<Widget> {
+  return fetchResource<Widget>(
+    { method: "POST", path, retries: 3 },
+    config,
+    undefined,
+  );
+}
+
+function ping() {
+  return fetch("/ping");
+}
+
+function emptyIndex(): Map<string, number> {
+  return new Map<string, number>();
+}
+
+export function doubler(): (value: number) => number {
+  return (value: number) => value * 2;
+}
+
+export function wrap() {
+  return (value: number) => ({ value });
+}
+
+export function listWidgets(args?: {
+  /**
+   * Server default: 20.
+   */
+  limit?: number;
+  cursor?: string;
+  includeArchived?: boolean;
+}): Promise<unknown[]> {
+  return queryWidgets(args);
 }
 
 export abstract class Base<S extends string> {

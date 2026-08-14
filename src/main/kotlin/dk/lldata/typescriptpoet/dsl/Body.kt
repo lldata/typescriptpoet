@@ -16,8 +16,10 @@
  */
 package dk.lldata.typescriptpoet.dsl
 
+import dk.lldata.typescriptpoet.CallExpression
 import dk.lldata.typescriptpoet.CodeBlock
 import dk.lldata.typescriptpoet.FunctionSpec
+import dk.lldata.typescriptpoet.ObjectLiteral
 import dk.lldata.typescriptpoet.TypeName
 import dk.lldata.typescriptpoet.TypeScriptPoetDsl
 
@@ -53,6 +55,18 @@ class Body
 /** The `{ … }` after the signature. */
 @JvmSynthetic
 inline fun FunctionSpec.Builder.body(block: Body.() -> Unit) = apply { Body(this).block() }
+
+/** The `x * 2` in `(x) => x * 2`, in place of a `body { … }` holding one `return`. */
+@JvmSynthetic
+fun FunctionSpec.Builder.expression(format: String, vararg args: Any?) = expressionBody(format, *args)
+
+/** The `f(x)` in `(x) => f(x)`. */
+@JvmSynthetic
+fun FunctionSpec.Builder.expression(value: CallExpression) = expressionBody(CodeBlock.of("%L", value))
+
+/** The `({ a })` in `(a) => ({ a })` — parenthesised for you. */
+@JvmSynthetic
+fun FunctionSpec.Builder.expression(value: ObjectLiteral) = expressionBody(CodeBlock.of("%L", value))
 
 // ---- TypeScript's primitive names ------------------------------------------------------------
 //

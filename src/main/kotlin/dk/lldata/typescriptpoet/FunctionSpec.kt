@@ -44,6 +44,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
   val isSignatureOnly = builder.isSignatureOnly
   val isArrow = builder.isArrow
   val body = builder.body.build()
+  val expressionBody = builder.expressionBody
 
   init {
     require(body.isEmpty() || Modifier.ABSTRACT !in builder.modifiers) {
@@ -51,6 +52,13 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     }
     require(body.isEmpty() || !builder.isSignatureOnly) {
       "signature-only function ${builder.name} cannot have code"
+    }
+    require(expressionBody == null || builder.isArrow) {
+      "${builder.name} has an expression body but is not an arrow function; only an arrow " +
+        "function can be written as `(…) => expression`"
+    }
+    require(expressionBody == null || body.isEmpty()) {
+      "${builder.name} has both an expression body and a statement body; it can have one"
     }
   }
 
@@ -80,12 +88,35 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
       // An arrow function is an expression, so it neither starts on its own line nor ends
       // with one; the surrounding statement owns the terminator.
       codeWriter.emit(" => ")
-      codeWriter.emitBody(body.isEmpty(), endsLine = false) { codeWriter.emitCode(body) }
+      if (expressionBody != null) {
+        emitExpressionBody(codeWriter, expressionBody)
+      } else {
+        codeWriter.emitBody(body.isEmpty(), endsLine = false) { codeWriter.emitCode(body) }
+      }
       return
     }
 
     codeWriter.emit(" ")
     codeWriter.emitBody(body.isEmpty()) { codeWriter.emitCode(body) }
+  }
+
+  /**
+   * The `x * 2` in `(x) => x * 2`.
+   *
+   * An object literal has to be parenthesised here: `=> { … }` is a statement block, so
+   * `(): Point => { x: 1 }` is not an object at all but a body containing a label. TypeScript
+   * accepts it and it means nothing, which is the kind of mistake a generator should not be
+   * able to make.
+   */
+  private fun emitExpressionBody(codeWriter: CodeWriter, expression: CodeBlock) {
+    val needsParens = codeWriter.measure { emitCode(expression) }.trimStart().startsWith("{")
+    if (!needsParens) {
+      codeWriter.emitCode(expression)
+      return
+    }
+    codeWriter.emit("(")
+    codeWriter.withTrailingWidth(codeWriter.trailingWidth + 1) { codeWriter.emitCode(expression) }
+    codeWriter.emit(")")
   }
 
   private fun emitSignature(codeWriter: CodeWriter, enclosingName: String?) {
@@ -116,10 +147,20 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     emitReturnType(codeWriter)
   }
 
-  /** How much this signature writes after the closing paren: a return type, and ` {`. */
+  /** How much this signature writes after the closing paren: a return type, and what opens the body. */
   private fun trailingWidth(): Int {
     val returns = buildCodeString { emitReturnType(this) }.length
-    return returns + if (isSignatureOnly || Modifier.ABSTRACT in modifiers) 1 else 2
+    val opener = when {
+      // `;`
+      isSignatureOnly || Modifier.ABSTRACT in modifiers -> 1
+
+      // ` => ` and then an expression that breaks on its own, or ` => {`.
+      isArrow -> if (expressionBody != null) 4 else 5
+
+      // ` {`
+      else -> 2
+    }
+    return returns + opener
   }
 
   /** The leading keyword and name, which differ per kind of function. */
@@ -210,6 +251,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     builder.isGenerator = isGenerator
     builder.isSignatureOnly = isSignatureOnly
     builder.isArrow = isArrow
+    builder.expressionBody = expressionBody
     builder.body.add(body)
     return builder
   }
@@ -228,6 +270,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     internal var restParameter: ParameterSpec? = null
     internal var isGenerator = false
     internal var isSignatureOnly = false
+    internal var expressionBody: CodeBlock? = null
     internal var isArrow = false
     internal val body = CodeBlock.builder()
 
@@ -286,6 +329,25 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     @JvmOverloads
     fun arrow(value: Boolean = true) = apply {
       this.isArrow = value
+    }
+
+    /**
+     * Gives this arrow a concise body: `(x) => x * 2` rather than `(x) => { return x * 2; }`.
+     *
+     * The block form is what you would delete by hand when the body is one expression, and
+     * generated code is full of them -- a leaf that forwards its arguments to one call is an
+     * expression and nothing more. An object literal is parenthesised automatically, since
+     * `=> {` would otherwise open a block.
+     *
+     * Only an arrow function has one; [build] refuses otherwise, as it does for a spec given
+     * both this and a statement body.
+     */
+    fun expressionBody(format: String, vararg args: Any?) = expressionBody(CodeBlock.of(format, *args))
+
+    /** Gives this arrow a concise body: `(x) => x * 2`. */
+    fun expressionBody(expression: CodeBlock) = apply {
+      this.expressionBody = expression
+      this.isArrow = true
     }
 
     /**

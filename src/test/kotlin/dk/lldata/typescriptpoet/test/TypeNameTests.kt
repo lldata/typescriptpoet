@@ -16,6 +16,9 @@
  */
 package dk.lldata.typescriptpoet.test
 
+import dk.lldata.typescriptpoet.CodeBlock
+import dk.lldata.typescriptpoet.CodeWriter
+import dk.lldata.typescriptpoet.FunctionSpec
 import dk.lldata.typescriptpoet.SymbolSpec
 import dk.lldata.typescriptpoet.TypeName
 import dk.lldata.typescriptpoet.TypeName.Anonymous.Member
@@ -32,6 +35,12 @@ import org.junit.jupiter.api.fail
 
 @DisplayName("TypeName Tests")
 class TypeNameTests {
+
+  private fun emit(fn: FunctionSpec): String {
+    val out = java.io.StringWriter()
+    fn.emit(CodeWriter(out), null, setOf())
+    return out.toString()
+  }
 
   @Test
   @DisplayName("Parsing nested type import only imports root symbol while referencing fully nested import")
@@ -75,5 +84,74 @@ class TypeNameTests {
       ),
     )
     assertThat(typeName2.toString(), emits("{ a?: number; B: string; c?: Date }"))
+  }
+
+  @Test
+  @DisplayName("Promise type name")
+  fun testPromiseType() {
+    assertThat(TypeName.promiseType(STRING).toString(), emits("Promise<string>"))
+    assertThat(TypeName.promiseType(TypeName.VOID).toString(), emits("Promise<void>"))
+  }
+
+  @Test
+  @DisplayName("Empty anonymous type")
+  fun testEmptyAnonymousType() {
+    assertThat(TypeName.anonymousType(emptyList()).toString(), equalTo("{}"))
+  }
+
+  @Test
+  @DisplayName("Breaks an anonymous type that does not fit, one member per line")
+  fun testAnonymousTypeBreaksOnWidth() {
+    val args = TypeName.anonymousType(
+      TypeName.anonymousMember("limit", NUMBER, optional = true),
+      TypeName.anonymousMember("cursor", STRING, optional = true),
+      TypeName.anonymousMember("includeArchived", TypeName.BOOLEAN, optional = true),
+      TypeName.anonymousMember("sortDirection", STRING, optional = true),
+    )
+    val fn = FunctionSpec.builder("list")
+      .addParameter("args", args, optional = true)
+      .build()
+
+    assertEmitsExactly(
+      emit(fn),
+      """
+      |function list(args?: {
+      |  limit?: number;
+      |  cursor?: string;
+      |  includeArchived?: boolean;
+      |  sortDirection?: string;
+      |}) {}
+      |
+      """.trimMargin(),
+    )
+  }
+
+  @Test
+  @DisplayName("A documented member breaks the anonymous type however short it is")
+  fun testDocumentedAnonymousMemberBreaks() {
+    val args = TypeName.anonymousType(
+      TypeName.anonymousMember(
+        "limit",
+        NUMBER,
+        optional = true,
+        tsDoc = CodeBlock.of("Server default: %L.\n", 20),
+      ),
+    )
+    val fn = FunctionSpec.builder("list")
+      .addParameter("args", args, optional = true)
+      .build()
+
+    assertEmitsExactly(
+      emit(fn),
+      """
+      |function list(args?: {
+      |  /**
+      |   * Server default: 20.
+      |   */
+      |  limit?: number;
+      |}) {}
+      |
+      """.trimMargin(),
+    )
   }
 }

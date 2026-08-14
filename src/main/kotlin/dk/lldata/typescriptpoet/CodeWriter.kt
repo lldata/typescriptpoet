@@ -43,6 +43,31 @@ internal class CodeWriter(
   /** The column at which a line is considered too long. */
   val printWidth: Int get() = PRINT_WIDTH
 
+  /**
+   * How much of the current line is still to be written after the value being emitted.
+   *
+   * A value that lays itself out -- an object literal, a call's argument list, an inline
+   * object type -- fits only if the whole *line* fits, so it has to count what comes after it
+   * as well as itself. Without this, `{ method: "POST", path, body }` measures as fitting and
+   * the `, config, options);` that follows it takes the line past the print width.
+   *
+   * [emitCode] works this out from the format parts still to come; a list that emits its own
+   * elements sets it around each of them with [withTrailingWidth].
+   */
+  var trailingWidth: Int = 0
+    private set
+
+  /** Runs [block] with [trailingWidth] set to [width], restoring it afterwards. */
+  fun <T> withTrailingWidth(width: Int, block: () -> T): T {
+    val previous = trailingWidth
+    trailingWidth = width
+    try {
+      return block()
+    } finally {
+      trailingWidth = previous
+    }
+  }
+
   /** The column a line one level deeper than the current one starts at. */
   val nextIndentColumn: Int get() = (indentLevel + 1) * indent.length
   private var indentLevel = 0
@@ -259,7 +284,14 @@ internal class CodeWriter(
     val partIterator = codeBlock.formatParts.listIterator()
     while (partIterator.hasNext()) {
       when (val part = partIterator.next()) {
-        "%L" -> emitLiteral(codeBlock.args[a++])
+        // %L and %T are the two placeholders whose argument may decide its own layout, so
+        // they are the two that need to know how much of the line is already spoken for.
+        "%L" -> {
+          val arg = codeBlock.args[a++]
+          withTrailingWidth(trailingWidthAfter(codeBlock, partIterator.nextIndex())) {
+            emitLiteral(arg)
+          }
+        }
 
         "%N" -> emit(codeBlock.args[a++] as String)
 
@@ -267,7 +299,12 @@ internal class CodeWriter(
 
         "%P" -> emitStringTemplate(codeBlock.args[a++] as String?)
 
-        "%T" -> emitTypeName(codeBlock.args[a++] as TypeName)
+        "%T" -> {
+          val arg = codeBlock.args[a++] as TypeName
+          withTrailingWidth(trailingWidthAfter(codeBlock, partIterator.nextIndex())) {
+            emitTypeName(arg)
+          }
+        }
 
         "%Q" -> emitSymbol(codeBlock.args[a++] as SymbolSpec)
 
@@ -289,6 +326,38 @@ internal class CodeWriter(
         }
       }
     }
+  }
+
+  /**
+   * How much of the current line [codeBlock] still has to write from [partIndex] on.
+   *
+   * Only the plain text counts. The walk stops at the first newline, which ends the line and
+   * with it anything the enclosing block would have added; and at the first placeholder that
+   * takes an argument, whose width is not known without rendering it. Stopping there
+   * *under*-estimates, which can only leave a value inline that a fuller measure would have
+   * broken -- never break one that would have fitted.
+   */
+  private fun trailingWidthAfter(codeBlock: CodeBlock, partIndex: Int): Int {
+    var width = 0
+    for (index in partIndex until codeBlock.formatParts.size) {
+      when (val part = codeBlock.formatParts[index]) {
+        "%>", "%<", "%[", "%]" -> Unit
+
+        // A wrapping space is a space until something decides otherwise; a doubled percent
+        // is one character.
+        "%W", "%%" -> width++
+
+        "%L", "%N", "%S", "%P", "%T", "%Q" -> return width
+
+        else -> {
+          val newline = part.indexOf('\n')
+          if (newline != -1) return width + newline
+          width += part.length
+        }
+      }
+    }
+    // The block ended without a newline, so whatever encloses it continues this line.
+    return width + trailingWidth
   }
 
   private fun beginStatement() {
@@ -355,6 +424,7 @@ internal class CodeWriter(
       is DecoratorSpec -> o.emit(this)
       is FunctionSpec -> selfLaidOut { o.emit(this, null, emptySet()) }
       is ObjectLiteral -> selfLaidOut { o.emit(this) }
+      is CallExpression -> selfLaidOut { o.emit(this) }
       is TypeName -> emitTypeName(o)
       is SymbolSpec -> emitSymbol(o)
       is CodeBlock -> emitCode(o)

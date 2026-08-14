@@ -47,6 +47,7 @@ import dk.lldata.typescriptpoet.dsl.decorator
 import dk.lldata.typescriptpoet.dsl.default
 import dk.lldata.typescriptpoet.dsl.enum
 import dk.lldata.typescriptpoet.dsl.export
+import dk.lldata.typescriptpoet.dsl.expression
 import dk.lldata.typescriptpoet.dsl.extends
 import dk.lldata.typescriptpoet.dsl.file
 import dk.lldata.typescriptpoet.dsl.function
@@ -61,6 +62,7 @@ import dk.lldata.typescriptpoet.dsl.literal
 import dk.lldata.typescriptpoet.dsl.member
 import dk.lldata.typescriptpoet.dsl.namespace
 import dk.lldata.typescriptpoet.dsl.never
+import dk.lldata.typescriptpoet.dsl.newInstance
 import dk.lldata.typescriptpoet.dsl.null_
 import dk.lldata.typescriptpoet.dsl.number
 import dk.lldata.typescriptpoet.dsl.obj
@@ -82,6 +84,7 @@ import dk.lldata.typescriptpoet.dsl.static
 import dk.lldata.typescriptpoet.dsl.string
 import dk.lldata.typescriptpoet.dsl.tsDoc
 import dk.lldata.typescriptpoet.dsl.type
+import dk.lldata.typescriptpoet.dsl.typeArgument
 import dk.lldata.typescriptpoet.dsl.typeParam
 import dk.lldata.typescriptpoet.dsl.union
 import dk.lldata.typescriptpoet.dsl.unknown
@@ -443,9 +446,10 @@ object KitchenSinkDsl {
               property("kind", "%S", "node")
               shorthand("path")
               getter("depth", "return path.split(%S).length", "/")
+              // A spec goes straight in as a member value; the `%L` that used to carry it
+              // said nothing the argument does not.
               property(
                 "send",
-                "%L",
                 arrow("send") {
                   parameter("message", string)
                   returns(void)
@@ -453,6 +457,98 @@ object KitchenSinkDsl {
                 },
               )
             },
+          )
+        }
+      }
+
+      // ---- Call expressions ----------------------------------------------------------
+      // The construct that makes an argument list breakable. Written as a format string --
+      // `statement("return %T(%L, config, options)", …)` -- the `, config, options)` is text
+      // with no argument boundaries in it, so a writer cannot break the line where Prettier
+      // would. Kept as a list, the arguments break together and one per line.
+      //
+      // `fetchResource` is over the width and breaks; `ping` fits and stays inline.
+      function("loadDeviceConfiguration", export) {
+        parameter("path", string)
+        parameter("config", TypeName.namedImport("RequestConfig", "./fetch-resource"))
+        returns(TypeName.promiseType(TypeName.implicit("Widget")))
+        body {
+          statement(
+            "return %L",
+            call(TypeName.namedImport("fetchResource", "./fetch-resource")) {
+              typeArgument(TypeName.implicit("Widget"))
+              argument(
+                obj {
+                  property("method", "%S", "POST")
+                  shorthand("path")
+                  property("retries", "%L", 3)
+                },
+              )
+              argument("config")
+              argument("undefined")
+            },
+          )
+        }
+      }
+
+      function("ping") {
+        body { statement("return %L", call("fetch") { argument("%S", "/ping") }) }
+      }
+
+      // A constructor call lays its arguments out the same way.
+      function("emptyIndex") {
+        returns(TypeName.mapType(string, number))
+        body { statement("return %L", newInstance(TypeName.mapType(string, number))) }
+      }
+
+      // ---- Concise arrow bodies ------------------------------------------------------
+      // `=> expr` rather than `=> { return expr; }`, which is what a reader would write for
+      // a one-expression body. An object literal is parenthesised, since `=> {` opens a block.
+      function("doubler", export) {
+        returns(TypeName.lambda("value" to number, returnType = number))
+        body {
+          statement(
+            "return %L",
+            arrow("double") {
+              parameter("value", number)
+              expression("value * 2")
+            },
+          )
+        }
+      }
+
+      function("wrap", export) {
+        body {
+          statement(
+            "return %L",
+            arrow("wrapOne") {
+              parameter("value", number)
+              expression(obj { shorthand("value") })
+            },
+          )
+        }
+      }
+
+      // ---- Inline object types -------------------------------------------------------
+      // An anonymous type carrying a comment per member. The comment is the reason it is not
+      // an interface: it says what omitting the member means, which optionality alone does
+      // not, without lifting the shape into a declaration nothing else refers to. A
+      // documented member puts the type on several lines whatever it measures.
+      function("listWidgets", export) {
+        parameter(
+          "args",
+          anonymous(
+            optionalMember("limit", number, CodeBlock.of("Server default: %L.\n", 20)),
+            optionalMember("cursor", string),
+            optionalMember("includeArchived", boolean),
+          ),
+          optional = true,
+        )
+        returns(TypeName.promiseType(TypeName.arrayShorthandType(unknown)))
+        body {
+          statement(
+            "return %L",
+            call(TypeName.namedImport("queryWidgets", "./fetch-resource")) { argument("args") },
           )
         }
       }
