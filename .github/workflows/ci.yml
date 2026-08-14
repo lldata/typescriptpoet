@@ -88,6 +88,10 @@ jobs:
 
     steps:
 
+    # The deploy action operates on a git working directory, so the checkout is required
+    # even though nothing here reads the source.
+    - uses: actions/checkout@v5
+
     # Reuses the report build-test already produced rather than building again.
     - uses: actions/download-artifact@v4
       with:
