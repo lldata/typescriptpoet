@@ -4,6 +4,7 @@ Copyright 2026 LL Data ApS
 
 This product includes software developed at Outfox, Inc. (https://outfoxx.io).
 
-This distribution is a modified version of outfoxx/typescriptpoet, which has
-been unmaintained since 2023. The modifications are described in CHANGELOG.md,
-and the upgrade path from the last upstream release is in MIGRATING.md.
+This distribution is a modified version of outfoxx/typescriptpoet, whose last
+release was 1.1.2 in May 2021 and whose last commit was in May 2022. The
+modifications are described in CHANGELOG.md, and the upgrade path from the last
+upstream release is in MIGRATING.md.

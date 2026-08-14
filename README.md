@@ -132,6 +132,22 @@ The [KDoc][kdoc] catalogs the complete API, which is inspired by [JavaPoet][java
 entry shows the TypeScript it emits.
 
 
+A fork of outfoxx/typescriptpoet
+--------------------------------
+
+This library is a fork of [outfoxx/typescriptpoet][upstream], the original work of Kevin
+Wooten. That project released 1.1.2 in May 2021 and last took a commit in May 2022. This fork
+continues it under `dk.lldata` coordinates rather than waiting for that to change, and the
+Apache 2.0 licence and the original copyright travel with it.
+
+2.0.0 diverges substantially: [CHANGELOG.md](CHANGELOG.md) records what changed and
+[MIGRATING.md](MIGRATING.md) is the upgrade path from 1.1.2. A report about 1.x behaviour that
+predates the fork is still worth opening here — usually the answer is in `MIGRATING.md`, and
+if it is not, that is a gap worth knowing about.
+
+Changes are not sent upstream and upstream commits are not pulled in as a matter of course.
+
+
 Maintained by an agent
 ----------------------
 
@@ -294,3 +310,4 @@ License
  [dl]: https://central.sonatype.com/artifact/dk.lldata/typescriptpoet
  [kdoc]: https://lldata.github.io/typescriptpoet/2.0.0/index.html
  [javapoet]: https://github.com/square/javapoet/
+ [upstream]: https://github.com/outfoxx/typescriptpoet
