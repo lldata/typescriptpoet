@@ -1,0 +1,100 @@
+name: Agent — work an issue
+
+# A new issue from a trusted author is a work order: the agent implements it and opens a pull
+# request. An issue from anyone else stops at the authorisation job, which records why in the
+# run's annotations rather than failing.
+#
+# GitHub applies a second gate of its own before this ever matters: claude-code-action rejects
+# issue events from users without write access, so an untrusted author cannot start a run at
+# all. The trusted list is the narrower rule inside that.
+
+on:
+  issues:
+    types: [opened]
+  # Re-run the agent on an issue by hand, after editing it or after a failed attempt.
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: Issue number to work
+        required: true
+
+permissions: {}
+
+concurrency:
+  group: agent-issue-${{ github.event.issue.number || inputs.issue }}
+  cancel-in-progress: false
+
+jobs:
+
+  authorise:
+    runs-on: ubuntu-latest
+
+    outputs:
+      trusted: ${{ steps.check.outputs.trusted }}
+      issue: ${{ steps.check.outputs.issue }}
+
+    steps:
+
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 1
+
+    - id: check
+      env:
+        AUTHOR: ${{ github.event.issue.user.login || github.actor }}
+        ISSUE: ${{ github.event.issue.number || inputs.issue }}
+      run: |
+        echo "issue=$ISSUE" >> "$GITHUB_OUTPUT"
+        # Fail closed on an empty author: `grep -qxF ""` matches every line, so an
+        # unset login would otherwise come out trusted.
+        if [ -z "$AUTHOR" ]; then
+          echo "trusted=false" >> "$GITHUB_OUTPUT"
+          echo "::error::No issue author resolved; refusing to run."
+          exit 0
+        fi
+        if grep -qxF "$AUTHOR" .github/trusted-authors; then
+          echo "trusted=true" >> "$GITHUB_OUTPUT"
+          echo "::notice::$AUTHOR is trusted; working issue #$ISSUE."
+        else
+          echo "trusted=false" >> "$GITHUB_OUTPUT"
+          echo "::notice::$AUTHOR is not in .github/trusted-authors; no pull request will be opened."
+        fi
+
+  work:
+    needs: [ authorise ]
+    if: needs.authorise.outputs.trusted == 'true'
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+
+    steps:
+
+    - uses: actions/checkout@v6
+
+    - uses: actions/setup-java@v5
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    # The kitchen sink is type-checked with real tsc and Prettier through npx. Without Node
+    # those two checks quietly skip, and a green build would prove less than it appears to.
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - uses: gradle/actions/setup-gradle@v4
+
+    - uses: anthropics/claude-code-action@v1
+      with:
+        claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        prompt: "/work-issue ${{ needs.authorise.outputs.issue }}"
+        claude_args: |
+          --max-turns 80
+          --allowedTools "Read,Write,Edit,Grep,Glob,Bash(./gradlew:*),Bash(git:*),Bash(gh:*),Bash(npx:*)"

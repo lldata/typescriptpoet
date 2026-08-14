@@ -131,6 +131,26 @@ The [KDoc][kdoc] catalogs the complete API, which is inspired by [JavaPoet][java
 entry shows the TypeScript it emits.
 
 
+Maintained by an agent
+----------------------
+
+This library has a second purpose: finding out how far an almost fully autonomous agent can
+carry the maintenance of an open source project. The agent reads incoming issues, reproduces
+them, writes the fix, and opens the pull request; it reviews contributions against the project's
+standards, and it says when a release is due and what should be in it. It runs on Claude Code
+today, which is an implementation detail rather than a commitment — the instructions it works
+from are written for any agent that can read them.
+
+What it does not do is merge or publish. Every change arrives as a pull request that a human
+reads and merges, and releases are tagged by hand — so the experiment is about judgment and
+throughput rather than about removing the last review.
+
+The agent's standing instructions are in [AGENTS.md](AGENTS.md), checked in rather than hidden,
+because a contributor should be able to read exactly what their change is being judged against.
+If the agent gets something wrong, that file is usually where the mistake lives, and saying so
+in an issue is a useful contribution in its own right.
+
+
 What's new in 2.0.0
 -------------------
 
