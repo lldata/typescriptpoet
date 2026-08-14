@@ -205,9 +205,13 @@ being asked to — that is a human decision about divergence.
 ## Releases
 
 The version comes from the git tag, not from `gradle.properties`. Pushing a tag matching
-`v[0-9]+.[0-9]+.[0-9]+**` builds at that version, publishes to Maven Central, and opens a
-**draft** GitHub release. `releaseVersion=2.0.0-SNAPSHOT` in `gradle.properties` is only the
-development version.
+`v[0-9]+.[0-9]+.[0-9]+**` builds at that version, uploads a signed bundle to the Central
+Portal, reports the state the deployment reached, and opens a **draft** GitHub release.
+`releaseVersion=2.0.0-SNAPSHOT` in `gradle.properties` is only the development version.
+
+Nothing reaches Maven Central until a human presses Publish in the Portal. The workflow
+deliberately runs `publishToMavenCentral` rather than `publishAndReleaseToMavenCentral`,
+which would skip that gate.
 
 **The agent never pushes a tag.** Publishing to Maven Central is irreversible — a published
 version is permanent and cannot be recalled. The agent's role is to say when a release is due
