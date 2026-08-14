@@ -48,9 +48,52 @@ jobs:
         ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
         ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-      run: >-
-        ./gradlew publishToMavenCentral
-        -PreleaseVersion=${{ steps.version.outputs.version }}
+      run: |
+        set -o pipefail
+        ./gradlew publishToMavenCentral \
+          -PreleaseVersion=${{ steps.version.outputs.version }} | tee publish.log
+
+    # The upload reports success as soon as the Portal accepts the bundle, before it has
+    # validated it. Without this step a green run says nothing about whether the deployment
+    # is releasable, which is the question the run exists to answer.
+    - name: Report Deployment Status
+      env:
+        USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+        PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+      run: |
+        id=$(sed -n 's/.*deployment id: \([0-9a-f-]*\).*/\1/p' publish.log | head -1)
+        if [ -z "$id" ]; then
+          echo "The publish step reported no deployment id."
+          exit 1
+        fi
+
+        token=$(printf '%s:%s' "$USERNAME" "$PASSWORD" | base64 -w0)
+        # Derived from two secrets, so it is not masked automatically.
+        echo "::add-mask::$token"
+
+        status() {
+          curl -sS -X POST -H "Authorization: Bearer $token" \
+            "https://central.sonatype.com/api/v1/publisher/status?id=$id"
+        }
+
+        for _ in $(seq 1 20); do
+          state=$(status | python3 -c 'import json,sys; print(json.load(sys.stdin).get("deploymentState",""))')
+          echo "deployment $id: ${state:-unknown}"
+          case "$state" in
+            VALIDATED|PUBLISHED)
+              echo "::notice::Deployment $state — publish it at https://central.sonatype.com/publishing"
+              exit 0
+              ;;
+            FAILED)
+              echo "::error::Deployment failed validation."
+              status
+              exit 1
+              ;;
+          esac
+          sleep 15
+        done
+
+        echo "::warning::Still ${state:-unknown} after five minutes; check the Portal."
 
     - name: GitHub Release
       env:
