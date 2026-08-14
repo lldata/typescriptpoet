@@ -33,16 +33,21 @@ jobs:
     - name: Build
       run: ./gradlew build -PreleaseVersion=${{ steps.version.outputs.version }}
 
+    # Uploads to a staging repository; it does NOT release to Maven Central. A human
+    # completes the release at https://central.sonatype.com/publishing, which is the
+    # intended shape: publishing is irreversible and stays a deliberate human act.
+    #
+    # Every credential arrives as an environment variable. Passing them as `-P` flags puts
+    # them in the runner's process table and in the echoed `Run` line of the log.
     - name: Publish Maven
       env:
-        ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
-        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
+        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
+        ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+        ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
       run: >-
         ./gradlew publishMavenRelease
         -PreleaseVersion=${{ steps.version.outputs.version }}
-        -PossrhUsername=${{ secrets.OSSRH_USER }}
-        -PossrhPassword=${{ secrets.OSSRH_PASS }}
 
     - name: GitHub Release
       env:

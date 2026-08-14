@@ -217,6 +217,17 @@ spotless {
 // PUBLISHING
 //
 
+// Read once, at configuration time. CI supplies these as ORG_GRADLE_PROJECT_<name>
+// environment variables rather than `-P` flags, so the values never reach the Gradle
+// command line, where they would sit in the runner's process table and in the workflow
+// log's echoed `Run` line.
+val publishingCredentials = listOf(
+  "signingKey",
+  "signingPassword",
+  "mavenCentralUsername",
+  "mavenCentralPassword",
+).associateWith { project.findProperty(it)?.toString() }
+
 publishing {
 
   publications {
@@ -251,8 +262,8 @@ publishing {
 
         scm {
           url.set("https://github.com/lldata/typescriptpoet")
-          connection.set("scm:https://github.com/lldata/typescriptpoet.git")
-          developerConnection.set("scm:git@github.com:lldata/typescriptpoet.git")
+          connection.set("scm:git:https://github.com/lldata/typescriptpoet.git")
+          developerConnection.set("scm:git:ssh://git@github.com/lldata/typescriptpoet.git")
         }
 
         developers {
@@ -284,8 +295,8 @@ publishing {
       url = uri(if (isSnapshot) snapshotUrl else releaseUrl)
 
       credentials {
-        username = project.findProperty("ossrhUsername")?.toString()
-        password = project.findProperty("ossrhPassword")?.toString()
+        username = publishingCredentials["mavenCentralUsername"]
+        password = publishingCredentials["mavenCentralPassword"]
       }
     }
 
@@ -293,12 +304,16 @@ publishing {
 
 }
 
+// The two-argument form, deliberately: the three-argument overload also takes a key ID, and
+// an unset one fails with "The key ID must be in a valid form", which describes the symptom
+// rather than the cause. A single-key ring needs no ID, so the whole failure mode goes away
+// along with the secret. `signing.keyId` still wins when set, for signing locally against a
+// gpg agent instead of an in-memory key.
 signing {
   if (!hasProperty("signing.keyId")) {
     useInMemoryPgpKeys(
-      project.findProperty("signingKeyId")?.toString(),
-      project.findProperty("signingKey")?.toString(),
-      project.findProperty("signingPassword")?.toString()
+      publishingCredentials["signingKey"],
+      publishingCredentials["signingPassword"]
     )
   }
   sign(publishing.publications["library"])
@@ -306,6 +321,17 @@ signing {
 
 tasks.withType<Sign>().configureEach {
   onlyIf { !isSnapshot }
+
+  // Signing is the first thing a release does, so this is where a missing secret surfaces.
+  // Name the property that is empty; the plugin's own errors do not, and an unset repository
+  // secret is by far the likeliest cause.
+  doFirst {
+    val missing = publishingCredentials.filterValues { it.isNullOrBlank() }.keys
+    check(missing.isEmpty()) {
+      "Cannot publish $releaseVersion: no value for ${missing.joinToString()}. " +
+        "CI supplies these from repository secrets as ORG_GRADLE_PROJECT_<name>."
+    }
+  }
 }
 
 

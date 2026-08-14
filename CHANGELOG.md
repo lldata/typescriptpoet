@@ -195,6 +195,12 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - `@JvmField` on the `TypeName` constants, so Java callers write `TypeName.STRING`.
   ([outfoxx/typescriptpoet#19](https://github.com/outfoxx/typescriptpoet/pull/19))
 - Builds on Gradle 9.7 with Kotlin 2.4.10 and a JDK 17 toolchain.
+- The published POM spells its SCM coordinates as `scm:git:https://…` and
+  `scm:git:ssh://…`. The previous values omitted the provider segment, so tools that read
+  the POM to find the sources — IDEs, release plugins, provenance scanners — could not parse
+  them.
+- The README's licence notice carries the LL Data ApS copyright line alongside Outfox's,
+  matching `NOTICE.txt` and the header Spotless applies to every source file.
 
 ### Removed
 
