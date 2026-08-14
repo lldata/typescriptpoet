@@ -49,6 +49,26 @@ jobs:
         ./gradlew publishMavenRelease
         -PreleaseVersion=${{ steps.version.outputs.version }}
 
+    # The upload above lands in an *open* staging repository, and Sonatype only forwards a
+    # repository to the Portal once it is closed — without this, a green run leaves the
+    # artifacts somewhere nobody can see or release. The endpoint keys the default repository
+    # by client IP, so this has to run on the same runner as the upload and cannot be done by
+    # hand afterwards.
+    #
+    # No `publishing_type=automatic`: the deployment lands in the Portal awaiting a human,
+    # which is the point. Publishing to Central is irreversible.
+    - name: Close Staging Repository
+      env:
+        USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+        PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+      run: |
+        token=$(printf '%s:%s' "$USERNAME" "$PASSWORD" | base64 -w0)
+        # Derived from two secrets, so it is not masked automatically.
+        echo "::add-mask::$token"
+        curl --fail-with-body -sS -X POST \
+          -H "Authorization: Bearer $token" \
+          "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/dk.lldata"
+
     - name: GitHub Release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
