@@ -124,6 +124,14 @@ What's new in 2.0.0
 list is in the [changelog](CHANGELOG.md); the upgrade path, including every breaking change,
 is in [MIGRATING.md](MIGRATING.md).
 
+**There is a Kotlin DSL.** Declarations, members and types are written under the name of the
+TypeScript they emit — `clazz`, `interfaze`, `type`, `namespace`, `function`, `constructor`,
+`property`, `parameter` — with statements in a `body { }` that accepts only statements. It is
+extension functions over the same builders, not a second API: the builder stays in scope inside
+every block, and every declaration is `@JvmSynthetic`, so Java sees the builders and never the
+DSL. On the kitchen sink it is a third fewer lines of code and three `.build()` calls instead of
+ninety-eight.
+
 **The type system caught up with TypeScript 5.** Conditional types with `infer`, mapped types
 with `as` remapping and `+`/`-` modifiers, template literal types, `keyof`, `typeof`, indexed
 access, the `readonly` array shorthand, labelled and rest tuple elements, variance annotations
