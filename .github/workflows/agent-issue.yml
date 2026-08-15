@@ -98,7 +98,8 @@ jobs:
     # issue #21 spent all of them in seven minutes and was discarded whole. A turn here is
     # often a Gradle build, so the ceiling has to be generous; `timeout-minutes` on the job
     # is the real backstop against a run that goes nowhere.
-    - uses: anthropics/claude-code-action@v1
+    - id: agent
+      uses: anthropics/claude-code-action@v1
       with:
         claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         prompt: "/work-issue ${{ needs.authorise.outputs.issue }}"
@@ -110,6 +111,19 @@ jobs:
     # looks exactly as it did before — which reads as "nobody has looked at this yet" rather
     # than "an attempt was made and died". Say so on the issue itself, since that is where
     # someone is looking.
+    # The run log records what the agent *did* — every tool call — but never what it decided or
+    # why. When a run ends green having produced nothing, the log is silent about the only
+    # question worth asking. This keeps the transcript so that question can be answered; two
+    # runs on #27 were unexplainable without it.
+    - name: Keep the agent's transcript
+      if: always() && steps.agent.outputs.execution_file != ''
+      uses: actions/upload-artifact@v4
+      with:
+        name: transcript-issue-${{ needs.authorise.outputs.issue }}-${{ github.run_id }}
+        path: ${{ steps.agent.outputs.execution_file }}
+        retention-days: 30
+        if-no-files-found: warn
+
     # A run that finishes green without saying anything is indistinguishable from a run that
     # never happened, and that is the property which makes an agent impossible to trust when
     # nobody is watching. Two runs ended exactly this way — successful, silent, no branch and
