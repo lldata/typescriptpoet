@@ -98,3 +98,13 @@ without understanding why it worked — leave auto-merge off and say plainly in 
 condition it failed. That sentence is the most useful thing in the pull request.
 
 Do not tag, do not publish, do not approve your own pull request.
+
+## 7. Never end silently
+
+Whatever happened, the issue gets a comment before this run ends: the pull request is up, or the
+request does not fit and here is why, or you got stuck and here is where. One or two sentences is
+plenty.
+
+A run that ends green having said nothing looks exactly like an agent that has stopped working,
+and the person reading the issue has no way to tell the difference. Deciding not to act is a
+legitimate outcome; ending without saying so is not.

@@ -110,6 +110,40 @@ jobs:
     # looks exactly as it did before — which reads as "nobody has looked at this yet" rather
     # than "an attempt was made and died". Say so on the issue itself, since that is where
     # someone is looking.
+    # A run that finishes green without saying anything is indistinguishable from a run that
+    # never happened, and that is the property which makes an agent impossible to trust when
+    # nobody is watching. Two runs ended exactly this way — successful, silent, no branch and
+    # no comment — before this step existed. The skills tell the agent to leave a trace; this
+    # is what happens when it does not.
+    - name: Make sure the run left a trace
+      if: success()
+      env:
+        GH_TOKEN: ${{ github.token }}
+        ISSUE: ${{ needs.authorise.outputs.issue }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        # Only what this run produced counts: an older comment from a previous attempt is not
+        # this run answering the issue.
+        started=$(gh run view "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --json createdAt --jq .createdAt)
+
+        said=$(gh issue view "$ISSUE" --repo "$GITHUB_REPOSITORY" --json comments \
+          --jq "[.comments[] | select(.author.login == \"claude\" and .createdAt > \"$started\")] | length")
+
+        built=$(gh api "/repos/$GITHUB_REPOSITORY/branches" --paginate \
+          --jq "[.[] | select(.name | startswith(\"agent/issue-$ISSUE-\"))] | length")
+
+        if [ "$said" -gt 0 ] || [ "$built" -gt 0 ]; then
+          echo "::notice::Run left $said comment(s) and $built branch(es)."
+          exit 0
+        fi
+
+        echo "::warning::The run finished without leaving a comment or a branch."
+        gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "The agent's run on this issue finished without reaching a conclusion — no comment, no branch, no pull request. See [the run log]($RUN_URL).
+
+        This note is from the workflow rather than from the agent, so it cannot say why. It exists because a silent success and a broken agent look identical from the outside, and they should not.
+
+        The issue is still open and unanswered. Retry with: gh workflow run agent-issue.yml -f issue=$ISSUE"
+
     - name: Say on the issue that the run failed
       if: failure()
       env:

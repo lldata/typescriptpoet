@@ -66,7 +66,14 @@ re-reading the Merging section against the diff you actually produced rather tha
 set out to write. Leaving it off costs a human one click; getting it wrong merges something
 that was not yours to merge.
 
-## 4. Say what you did
+## 4. Say what you did — always, without exception
 
 Leave the trace where the next reader will look: a comment on the pull request or issue you
 touched, not only in the run log. If you decided to do nothing, one line saying so is enough.
+
+This is not the polite finishing touch, it is the whole point. A run that ends green and silent
+is indistinguishable from a run that never happened, and from an agent that has quietly stopped
+working — nobody can tell which without reading a log they have no reason to open. Deciding not
+to act is a fine outcome and it still gets said out loud, on the issue, with the reason.
+
+If you are ending the run because the work belongs to a human, say which rule sent it to them.
