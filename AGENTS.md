@@ -195,6 +195,14 @@ Never merge, however green:
   the rules cannot be authorised by the rules it changes.
 - **A pull request a human has commented on** and whose comment is unresolved. Someone
   engaging is the strongest available signal that the merge is not the agent's to make.
+  Note what does and does not enforce this. An unresolved *review thread* blocks the merge
+  mechanically, because `main` requires conversation resolution. A plain comment does not,
+  and auto-merge is armed when the pull request opens — so a comment left while the checks
+  are still running will not stop the merge on its own. Whenever the agent touches a pull
+  request again, it re-reads the comments first and turns auto-merge off
+  (`gh pr merge <pr> --disable-auto`) if a human has said anything it has not addressed.
+  A human who wants to stop a merge outright should disable auto-merge or leave the comment
+  as a review thread rather than a plain comment.
 - **Work the agent does not understand.** If the fix worked but the reason it worked is not
   clear, say so and leave it open. That is a good outcome, not a failure.
 
