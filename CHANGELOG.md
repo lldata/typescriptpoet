@@ -215,13 +215,15 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   `gh-pages` branch on each push to `main`. GitHub Pages is now serving that branch, which
   also means the Dokka documentation every release has been publishing there is readable
   for the first time, at <https://lldata.github.io/typescriptpoet/>.
-- Every merge to `main` publishes a snapshot to the Central Portal's snapshot repository, so
-  a project depending on this library can test a fix before a version is cut rather than
-  after. The README says how to consume one, and what the coordinate does not promise:
-  Central removes snapshots after 90 days and overwrites rather than accumulates them, so a
-  report should name the commit it tested. Release candidates on Maven Central would have
-  done the opposite of what was wanted — publishing holds every upload for a human, so each
-  candidate would have been one more deliberate release rather than one fewer.
+- Unreleased commits can be depended on through [JitPack](https://jitpack.io/#lldata/typescriptpoet),
+  so a project using this library can test a fix before a version is cut rather than after,
+  and report back while the fix is still cheap to change. The README says how; the group is
+  `com.github.lldata` there rather than `dk.lldata`, because JitPack builds from the
+  repository. Publishing snapshots to Maven Central was tried first and removed: one publish
+  costs about 11 MB, almost all of it the Dokka javadoc artifact, against an 80 MB monthly
+  limit and a ceiling of seven releases a month — so a snapshot per merge would have spent
+  the budget the actual releases need. Pinning a commit is also the better answer for a bug
+  report, since it does not move under the person testing it.
 
 ### Removed
 

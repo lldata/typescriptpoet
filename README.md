@@ -272,30 +272,34 @@ Upgrading from 1.x? See [MIGRATING.md](MIGRATING.md).
 
 ### Testing what is coming
 
-Every merge to `main` publishes a snapshot, so you can try a fix before it is released and say
-whether it actually worked on your code. That feedback is worth more before a version is cut
-than after.
+Any commit can be built and consumed through [JitPack][jitpack], so you can try a fix before it
+is released and say whether it actually worked on your code. That feedback is worth more before
+a version is cut than after.
 
 ```kotlin
 repositories {
   mavenCentral()
-  maven("https://central.sonatype.com/repository/maven-snapshots/")
+  maven("https://jitpack.io")
 }
 
 dependencies {
-  implementation("dk.lldata:typescriptpoet:2.0.0-SNAPSHOT")
+  // A commit on main, or `main-SNAPSHOT` for whatever is latest.
+  implementation("com.github.lldata:typescriptpoet:77d4c80")
 }
 ```
 
-A snapshot moves as `main` moves and is not signed, so it belongs in a branch where you are
-testing, not in anything you ship. Gradle caches it for 24 hours by default;
-`--refresh-dependencies` fetches the current one. Central removes snapshots after 90 days, and
-the coordinate is meant to be overwritten rather than accumulated, so it is not a stable
-reference: when reporting against one, name the commit on `main` you tested rather than the
-version, which will have moved by the time anyone reads the issue.
+Note the group is `com.github.lldata` rather than `dk.lldata`: JitPack builds from this
+repository, so the coordinate is the repository's, and the one line changes back when you move
+to a release. The first request for a given commit takes a minute or two while JitPack builds
+it; after that it is cached.
+
+Pinning a commit is the point. It does not move, so a bug report against one is reproducible —
+unlike a rolling version, which will have changed by the time anyone reads the issue.
 
 If something is wrong, [open an issue](https://github.com/lldata/typescriptpoet/issues) — a
-report against a snapshot is the cheapest bug this project can receive.
+report against an unreleased commit is the cheapest bug this project can receive.
+
+[jitpack]: https://jitpack.io/#lldata/typescriptpoet
 
 
 Building

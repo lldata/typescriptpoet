@@ -1,0 +1,21 @@
+# JitPack builds this repository on demand, so a project depending on the library can test an
+# unreleased commit without anything being published. The README says how to consume it.
+#
+# This exists instead of publishing snapshots to Maven Central. One publish costs about 11 MB,
+# almost all of it the Dokka javadoc artifact, against an 80 MB monthly limit — so a snapshot
+# per merge would have spent the same budget the actual releases need, to say nothing of the
+# monthly release count. JitPack builds from git instead, and costs nothing.
+
+# The Gradle toolchain pins compilation to JDK 17. The bytecode it emits is still Java 8, which
+# is what consumers need; this is only what compiles it.
+jdk:
+  - openjdk17
+
+# JitPack's default is `./gradlew install`, which this project does not define.
+#
+# Signing is skipped deliberately. JitPack builds a commit as an ordinary version rather than a
+# `-SNAPSHOT`, so `signAllPublications()` applies and would ask for the release signing key that
+# only the publish workflow holds. A build for testing does not need to be signed, and the key
+# should not leave that workflow.
+install:
+  - ./gradlew publishToMavenLocal -PreleaseVersion=$VERSION -x signMavenPublication
