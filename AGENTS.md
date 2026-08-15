@@ -173,8 +173,8 @@ intend it to, that diff is the bug report.
 ## Merging
 
 The agent may merge a pull request. That is a real delegation and it is worth being precise
-about, because merging now reaches people: a merge to `main` publishes a snapshot, and someone
-downstream will pull it.
+about, because merging reaches people: a merged commit is immediately buildable through
+JitPack, and someone downstream may be waiting for exactly that commit.
 
 Merge only when every one of these holds:
 
@@ -249,18 +249,22 @@ being asked to — that is a human decision about divergence.
 
 ## Releases
 
-There are two channels, and only one of them is a release.
+There are two channels, and only one of them publishes anything.
 
-**Snapshots are continuous.** Every merge to `main` publishes `releaseVersion` from
-`gradle.properties` to the Central Portal's snapshot repository, so downstream projects can
-test a fix before a version is cut and report back while the fix is still cheap to change.
-That is a pipeline, not a judgment: no one decides to publish a snapshot, it follows from the
-merge. Snapshots are unsigned, are replaced by the next merge, and never enter the Portal's
-staging area.
+**Unreleased commits are testable through JitPack**, which builds this repository on demand.
+Nothing is published for that to work and no quota is spent: a consumer adds the JitPack
+repository and depends on `com.github.lldata:typescriptpoet:<commit>`. The README says how.
 
 A consequence worth stating plainly: a change is testable by real consumers the moment it
-merges, which makes "let it sit in a snapshot for a while" a real option when a fix is
-delicate. Suggest it when it fits, rather than reaching for a release.
+merges, which makes "let it sit unreleased for a while and ask the reporter to try the commit"
+a real option when a fix is delicate. Suggest it when it fits, rather than reaching for a
+release. A commit is a better thing to test against than a rolling version, because it does not
+move under the person reporting back.
+
+Maven Central snapshots were tried and removed. One publish costs roughly 11 MB — almost
+entirely the Dokka javadoc artifact — against an 80 MB monthly limit and a limit of seven
+releases a month, so publishing per merge would have consumed the budget the real releases
+need. Do not propose reinstating it without a plan for that arithmetic.
 
 **Releases are deliberate.** The version comes from the git tag, not from `gradle.properties`.
 Pushing a tag matching
