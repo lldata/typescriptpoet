@@ -202,6 +202,42 @@ class FileSpecTests {
   }
 
   @Test
+  @DisplayName("Breaks a long named-import list onto its own lines instead of overrunning the print width")
+  fun testLongNamedImportListWraps() {
+    val apiConfig = TypeName.namedImport("ApiConfig", "../../../../../../client-runtime.js")
+    val requestOptions = TypeName.namedImport("RequestOptions", "../../../../../../client-runtime.js")
+    val apiRequest = TypeName.namedImport("apiRequest", "../../../../../../client-runtime.js")
+
+    val testFile =
+      FileSpec.builder("test")
+        .addTypeAlias(TypeAliasSpec.builder("Test1", apiConfig).build())
+        .addTypeAlias(TypeAliasSpec.builder("Test2", requestOptions).build())
+        .addTypeAlias(TypeAliasSpec.builder("Test3", apiRequest).build())
+        .build()
+
+    val out = StringBuilder()
+    testFile.writeTo(out)
+
+    assertEmitsExactly(
+      out.toString(),
+      """
+        import {
+          ApiConfig,
+          RequestOptions,
+          apiRequest,
+        } from "../../../../../../client-runtime.js";
+
+        type Test1 = ApiConfig;
+
+        type Test2 = RequestOptions;
+
+        type Test3 = apiRequest;
+
+      """.trimIndent(),
+    )
+  }
+
+  @Test
   fun `Generates star imports`() {
     val typeName = TypeName.standard(
       SymbolSpec.importsAll("stuff", "stuff/types"),
