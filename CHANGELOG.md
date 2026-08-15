@@ -224,6 +224,13 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   limit and a ceiling of seven releases a month — so a snapshot per merge would have spent
   the budget the actual releases need. Pinning a commit is also the better answer for a bug
   report, since it does not move under the person testing it.
+- The Maven Central `-javadoc` artifact is now a single redirect page pointing at
+  <https://lldata.github.io/typescriptpoet/>, instead of a full copy of the Dokka HTML site.
+  Central requires the artifact to exist, not to be useful, and nobody reads documentation out
+  of a jar; the previous 11 MB copy spent most of the 80 MB monthly publishing budget on
+  something identical to what is already on `gh-pages`. `gh-pages` itself is unaffected — it
+  still gets the complete site, unabridged, on every release.
+  ([#21](https://github.com/lldata/typescriptpoet/issues/21))
 
 ### Removed
 
