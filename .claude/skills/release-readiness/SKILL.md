@@ -33,17 +33,26 @@ many words and leave the decision alone.
 
 ## Report
 
-Keep exactly one open issue titled **Release readiness**. Find it with
-`gh issue list --search "Release readiness" --state open`. Edit that issue's body rather than
-opening a second one, and add a short dated comment only when the recommendation itself changes
-— nobody wants a weekly notification that says the same thing as last week.
+Keep exactly one open issue titled **Release readiness**. A text search for those words also
+matches unrelated issues whose title happens to contain "release" and "readiness" — filter to an
+exact title match rather than trusting search relevance to rank the real one first:
+
+```bash
+gh issue list --search "Release readiness in:title" --state open --json number,title \
+  --jq '.[] | select(.title == "Release readiness") | .number'
+```
+
+Edit that issue's body rather than opening a second one, and add a short dated comment only when
+the recommendation itself changes — nobody wants a weekly notification that says the same thing
+as last week.
 
 The body holds: the latest tag and commit count since, what has landed, what is missing, and a
 one-line recommendation — hold, or ready with the exact tag a human would push. If it is ready,
-give the command:
+give the command with the actual next tag in sequence (not a copied example — check
+`git tag --list 'v2.0.0-alpha*'` or the version policy for what comes after the latest one):
 
 ```bash
-git tag v2.0.0-alpha8 && git push origin v2.0.0-alpha8
+git tag v2.0.0-alphaN && git push origin v2.0.0-alphaN
 ```
 
 If nothing has landed since the last tag, say so in one line and stop. Do not manufacture work.
