@@ -229,6 +229,33 @@ val signingCredentials = listOf(
 // from git such as JitPack, has no key and does not need one.
 val canSign = signingCredentials.values.none { it.isNullOrBlank() }
 
+// Central requires a `-javadoc` artifact, but not a large or useful one: nobody reads
+// documentation out of a jar, and the full Dokka HTML site is already published to
+// https://lldata.github.io/typescriptpoet/, which is where the KDoc link in the README points.
+// Publishing that same 11 MB site as the Central artifact spends most of an 80 MB monthly
+// budget on a copy nobody will open. This task produces a single-page stand-in that redirects
+// there instead. `withJavadocJar()` was not used because it produces a genuinely empty jar for
+// a Kotlin-only source set; a jar with real, if minimal, content is worth the few extra lines.
+val minimalJavadocJar = tasks.register("minimalJavadocJar") {
+  val outputDir = layout.buildDirectory.dir("minimal-javadoc")
+  outputs.dir(outputDir)
+  doLast {
+    val dir = outputDir.get().asFile
+    dir.mkdirs()
+    dir.resolve("index.html").writeText(
+      """
+      <!doctype html>
+      <meta charset="utf-8">
+      <title>TypeScriptPoet API documentation</title>
+      <meta http-equiv="refresh" content="0; url=https://lldata.github.io/typescriptpoet/">
+      <link rel="canonical" href="https://lldata.github.io/typescriptpoet/">
+      <p>The API documentation is published at
+        <a href="https://lldata.github.io/typescriptpoet/">lldata.github.io/typescriptpoet</a>.</p>
+      """.trimIndent()
+    )
+  }
+}
+
 mavenPublishing {
 
   // Deliberately not `automaticRelease = true`: the upload lands in the Portal and waits
@@ -249,11 +276,11 @@ mavenPublishing {
     signAllPublications()
   }
 
-  // Central requires a `-javadoc` artifact, and `withJavadocJar()` produces an empty one
-  // for a Kotlin-only source set, so Dokka's HTML output stands in for it.
+  // `JavadocJar.Dokka` only means "zip up this task's output" — it works for any task, not
+  // just a Dokka one, which is what lets `minimalJavadocJar` above stand in for it.
   configure(
     KotlinJvm(
-      javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
+      javadocJar = JavadocJar.Dokka(minimalJavadocJar),
       sourcesJar = true,
     )
   )
