@@ -902,6 +902,7 @@ public abstract class dk/lldata/typescriptpoet/TypeName {
 	public static final fun anonymousMember (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
 	public static final fun anonymousMember (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
 	public static final fun anonymousMember (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
+	public static final fun anonymousMember (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;Z)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
 	public static final fun anonymousType (Ljava/util/List;)Ldk/lldata/typescriptpoet/TypeName$Anonymous;
 	public static final fun anonymousType ([Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;)Ldk/lldata/typescriptpoet/TypeName$Anonymous;
 	public static final fun anonymousType ([Lkotlin/Pair;)Ldk/lldata/typescriptpoet/TypeName$Anonymous;
@@ -978,16 +979,19 @@ public final class dk/lldata/typescriptpoet/TypeName$Anonymous : dk/lldata/types
 public final class dk/lldata/typescriptpoet/TypeName$Anonymous$Member {
 	public fun <init> (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z)V
 	public fun <init> (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;)V
-	public synthetic fun <init> (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ldk/lldata/typescriptpoet/TypeName;
 	public final fun component3 ()Z
 	public final fun component4 ()Ldk/lldata/typescriptpoet/CodeBlock;
-	public final fun copy (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
-	public static synthetic fun copy$default (Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
+	public final fun component5 ()Z
+	public final fun copy (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;Z)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
+	public static synthetic fun copy$default (Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getName ()Ljava/lang/String;
 	public final fun getOptional ()Z
+	public final fun getReadonly ()Z
 	public final fun getTsDoc ()Ldk/lldata/typescriptpoet/CodeBlock;
 	public final fun getType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
@@ -1006,7 +1010,8 @@ public final class dk/lldata/typescriptpoet/TypeName$Companion {
 	public final fun anonymousMember (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
 	public final fun anonymousMember (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
 	public final fun anonymousMember (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
-	public static synthetic fun anonymousMember$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
+	public final fun anonymousMember (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;Z)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
+	public static synthetic fun anonymousMember$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ZLdk/lldata/typescriptpoet/CodeBlock;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
 	public final fun anonymousType (Ljava/util/List;)Ldk/lldata/typescriptpoet/TypeName$Anonymous;
 	public final fun anonymousType ([Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;)Ldk/lldata/typescriptpoet/TypeName$Anonymous;
 	public final fun anonymousType ([Lkotlin/Pair;)Ldk/lldata/typescriptpoet/TypeName$Anonymous;
@@ -1500,10 +1505,10 @@ public final class dk/lldata/typescriptpoet/dsl/TypesKt {
 	public static final synthetic fun and (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName;
 	public static final synthetic fun anonymous ([Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;)Ldk/lldata/typescriptpoet/TypeName;
 	public static final synthetic fun literal (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName;
-	public static final synthetic fun member (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
-	public static synthetic fun member$default (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/CodeBlock;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
-	public static final synthetic fun optionalMember (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
-	public static synthetic fun optionalMember$default (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/CodeBlock;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
+	public static final synthetic fun member (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/CodeBlock;Z)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
+	public static synthetic fun member$default (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/CodeBlock;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
+	public static final synthetic fun optionalMember (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/CodeBlock;Z)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
+	public static synthetic fun optionalMember$default (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/CodeBlock;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Anonymous$Member;
 	public static final synthetic fun or (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName;
 	public static final synthetic fun union (Ljava/lang/Iterable;)Ldk/lldata/typescriptpoet/TypeName;
 }

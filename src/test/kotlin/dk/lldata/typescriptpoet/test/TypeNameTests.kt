@@ -154,4 +154,15 @@ class TypeNameTests {
       """.trimMargin(),
     )
   }
+
+  @Test
+  @DisplayName("An anonymous type member can be readonly")
+  fun testReadonlyAnonymousMember() {
+    val typeName = TypeName.anonymousType(
+      TypeName.anonymousMember("id", STRING, readonly = true),
+      TypeName.anonymousMember("label", STRING),
+    )
+
+    assertThat(typeName.toString(), emits("{ readonly id: string; label: string }"))
+  }
 }

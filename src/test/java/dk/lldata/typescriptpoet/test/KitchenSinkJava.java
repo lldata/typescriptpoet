@@ -175,7 +175,7 @@ final class KitchenSinkJava {
                 "Anon",
                 TypeName.anonymousType(
                     List.of(
-                        new TypeName.Anonymous.Member("label", TypeName.STRING, false),
+                        new TypeName.Anonymous.Member("label", TypeName.STRING, false, CodeBlock.empty(), true),
                         new TypeName.Anonymous.Member("hint", TypeName.STRING, true))))
             .build());
     file.addTypeAlias(
