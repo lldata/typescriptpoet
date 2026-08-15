@@ -113,21 +113,58 @@ class NameAllocator private constructor(
   fun tagsToNames() = tagToName.toImmutableMap()
 }
 
-/**
- * TODO Replace Java identifier checks with valid TypeScript code point checks
- */
+// U+200C/U+200D are explicitly added to ECMAScript's IdentifierPart (but not IdentifierStart)
+// so that combining scripts, e.g. Devanagari, can join characters that Unicode's ID_Continue
+// alone would leave disconnected.
+private const val ZERO_WIDTH_NON_JOINER = 0x200C
+private const val ZERO_WIDTH_JOINER = 0x200D
+
+// Approximates Unicode's ID_Start: letters and letter-numbers (e.g. Roman numeral characters).
+// This omits the small, rarely-used Other_ID_Start exception list, which is the trade-off for
+// staying on Character APIs old enough for the Java 8 floor in AGENTS.md.
+private fun isEcmaScriptIdStart(codePoint: Int): Boolean =
+  Character.isLetter(codePoint) || Character.getType(codePoint) == Character.LETTER_NUMBER.toInt()
+
+// Approximates Unicode's ID_Continue: ID_Start plus combining marks, decimal digits, and
+// connector punctuation (e.g. the underscore itself).
+private fun isEcmaScriptIdContinue(codePoint: Int): Boolean {
+  if (isEcmaScriptIdStart(codePoint)) return true
+  return when (Character.getType(codePoint)) {
+    Character.NON_SPACING_MARK.toInt(),
+    Character.COMBINING_SPACING_MARK.toInt(),
+    Character.DECIMAL_DIGIT_NUMBER.toInt(),
+    Character.CONNECTOR_PUNCTUATION.toInt(),
+    -> true
+
+    else -> false
+  }
+}
+
+// `$` is not part of Unicode's ID_Start/ID_Continue but ECMAScript explicitly allows it in both
+// positions. Java's isJavaIdentifierStart/Part also allow it, along with every other currency
+// symbol, which ECMAScript does not: that gap is what let a suggestion like "price€" through
+// unsanitised.
+private fun isTypeScriptIdentifierStart(codePoint: Int): Boolean =
+  isEcmaScriptIdStart(codePoint) || codePoint == '$'.code || codePoint == '_'.code
+
+private fun isTypeScriptIdentifierPart(codePoint: Int): Boolean = isEcmaScriptIdContinue(codePoint) ||
+  codePoint == '$'.code ||
+  codePoint == '_'.code ||
+  codePoint == ZERO_WIDTH_NON_JOINER ||
+  codePoint == ZERO_WIDTH_JOINER
+
 private fun toTypeScriptIdentifier(suggestion: String) = buildString {
   var i = 0
   while (i < suggestion.length) {
     val codePoint = suggestion.codePointAt(i)
     if (i == 0 &&
-      !Character.isJavaIdentifierStart(codePoint) &&
-      Character.isJavaIdentifierPart(codePoint)
+      !isTypeScriptIdentifierStart(codePoint) &&
+      isTypeScriptIdentifierPart(codePoint)
     ) {
       append("_")
     }
 
-    val validCodePoint: Int = if (Character.isJavaIdentifierPart(codePoint)) {
+    val validCodePoint: Int = if (isTypeScriptIdentifierPart(codePoint)) {
       codePoint
     } else {
       '_'.code
