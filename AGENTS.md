@@ -204,7 +204,21 @@ being asked to — that is a human decision about divergence.
 
 ## Releases
 
-The version comes from the git tag, not from `gradle.properties`. Pushing a tag matching
+There are two channels, and only one of them is a release.
+
+**Snapshots are continuous.** Every merge to `main` publishes `releaseVersion` from
+`gradle.properties` to the Central Portal's snapshot repository, so downstream projects can
+test a fix before a version is cut and report back while the fix is still cheap to change.
+That is a pipeline, not a judgment: no one decides to publish a snapshot, it follows from the
+merge. Snapshots are unsigned, are replaced by the next merge, and never enter the Portal's
+staging area.
+
+A consequence worth stating plainly: a change is testable by real consumers the moment it
+merges, which makes "let it sit in a snapshot for a while" a real option when a fix is
+delicate. Suggest it when it fits, rather than reaching for a release.
+
+**Releases are deliberate.** The version comes from the git tag, not from `gradle.properties`.
+Pushing a tag matching
 `v[0-9]+.[0-9]+.[0-9]+**` builds at that version, uploads a signed bundle to the Central
 Portal, reports the state the deployment reached, and opens a **draft** GitHub release.
 `releaseVersion=2.0.0-SNAPSHOT` in `gradle.properties` is only the development version.
