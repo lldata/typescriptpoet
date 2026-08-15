@@ -258,6 +258,43 @@ When a change is delicate, prefer leaving it in a snapshot for a while over merg
 That option now exists; use it.
 
 
+### Dependency bumps from Dependabot
+
+Dependabot opens pull requests that nobody currently reviews or merges: `dependabot[bot]` is not
+a trusted author, and the review workflow's `allowed_bots` list does not name it, so those pull
+requests get neither an inline review nor a path to merge and simply pile up.
+
+Reviewing them is a one-line change to `.github/workflows/agent-review.yml` — add
+`dependabot[bot]` to the existing `allowed_bots: "claude"` input, comma-separated. That line
+lives in `.github/workflows/`, which makes it the release path in the sense this section already
+means, so it is described here for a human to apply rather than made by the agent.
+
+Merging one is narrower than "the author is the agent itself or a trusted author" was written
+for, since neither describes a bot. Treat a Dependabot pull request as the agent's to merge only
+when, in addition to the ordinary green-build and unchanged-ABI conditions above, all of the
+following hold:
+
+- **It is the `gradle` ecosystem's `kotlin` or `test` group, or an ungrouped `gradle` bump that
+  only touches a `testImplementation`/`testRuntimeOnly` dependency.** Never the `github-actions`
+  group: those pull requests touch `.github/workflows/` and are already covered by "anything
+  that changes the rules or the release path" above — never merge, however green. A bump that
+  does not obviously fit one of the mergeable cases is not the agent's either; leave it for a
+  human rather than guessing.
+- **The diff leaves the compatibility floor alone.** `build.gradle.kts` pins the Kotlin
+  language/API version, the Java 8 `jvmTarget`, and `coreLibrariesVersion = "2.0.21"` as literal
+  values independent of the plugin version Dependabot bumps, so an ordinary `kotlin("jvm")` or
+  `org.jetbrains.dokka` version bump does not move them — but check the diff for those lines
+  before merging rather than assuming it. A bump that does move one is a floor change and is
+  never the agent's to merge, whatever the build says: `apiCheck` only compares public
+  signatures, so a newer compiler emitting different bytecode for the same source would pass it
+  cleanly while still breaking a promise made to a Java 8 or Kotlin 2.0 consumer.
+
+A qualifying bump does not need a `CHANGELOG.md` entry — nothing about it is visible to someone
+consuming the library, and the changelog is for them. A bump that changes observable behaviour
+(a test-framework upgrade that changes how a failure is reported, say) is judged on what it
+actually does, the same as any other change, not on which group opened the pull request.
+
+
 ## Public API changes
 
 `api/typescriptpoet.api` and `MIGRATING.md` are the contract with consumers.
@@ -271,7 +308,8 @@ trivial rename it needs a human to agree first. Say so on the issue and wait.
 ## Changelog
 
 `CHANGELOG.md` follows Keep a Changelog headings — Added, Fixed, Changed, Removed — under
-`## [Unreleased]`, and every merged change gets an entry.
+`## [Unreleased]`, and every merged change gets an entry, with one exception: a qualifying
+Dependabot bump, under **Merging**.
 
 The entries are prose, not one-liners. Look at what is already there: each says what changed and
 why it matters to someone using the library, often in several sentences, and links the issue or
