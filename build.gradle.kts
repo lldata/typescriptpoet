@@ -225,6 +225,10 @@ val signingCredentials = listOf(
   "signingInMemoryKeyPassword",
 ).associateWith { project.findProperty(it)?.toString() }
 
+// Whether this build is able to sign at all. A local build, or one on a service that builds
+// from git such as JitPack, has no key and does not need one.
+val canSign = signingCredentials.values.none { it.isNullOrBlank() }
+
 mavenPublishing {
 
   // Deliberately not `automaticRelease = true`: the upload lands in the Portal and waits
@@ -232,8 +236,16 @@ mavenPublishing {
   // so it stays a deliberate act rather than a consequence of pushing a tag.
   publishToMavenCentral()
 
-  // Snapshots are not signed, and Central does not ask them to be.
-  if (!isSnapshot) {
+  // Snapshots are not signed, and Central does not ask them to be. Neither is a build that
+  // has no key to sign with: JitPack builds a commit as an ordinary version, and a
+  // publication that *declares* `.asc` artifacts it cannot produce fails at publish time
+  // complaining that `module.json.asc` does not exist, which describes the symptom rather
+  // than the cause. Excluding the `sign` task is not enough, because the artifacts stay
+  // declared.
+  //
+  // This cannot quietly ship an unsigned release: publishing to Central without a key is
+  // refused below.
+  if (!isSnapshot && canSign) {
     signAllPublications()
   }
 
@@ -305,6 +317,25 @@ tasks.withType<Sign>().configureEach {
     check(missing.isEmpty()) {
       "Cannot publish $releaseVersion: no value for ${missing.joinToString()}. " +
         "CI supplies these from repository secrets as ORG_GRADLE_PROJECT_<name>."
+    }
+  }
+}
+
+// Signing is not configured at all when there is no key, so the check above never runs in
+// that case — which is right for a local or JitPack build, and wrong for a release. The
+// Portal rejects an unsigned bundle during validation, long after the tag was pushed, so
+// refuse before anything is uploaded and name the property that is empty.
+//
+// This hangs off `prepareMavenCentralPublishing` rather than `publishToMavenCentral`, which
+// would be too late: a task's `doFirst` runs after the tasks it depends on, and the upload is
+// one of those.
+tasks.matching { it.name == "prepareMavenCentralPublishing" }.configureEach {
+  doFirst {
+    check(canSign || isSnapshot) {
+      val missing = signingCredentials.filterValues { it.isNullOrBlank() }.keys
+      "Cannot publish $releaseVersion to Maven Central unsigned: no value for " +
+        "${missing.joinToString()}. CI supplies these from repository secrets as " +
+        "ORG_GRADLE_PROJECT_<name>."
     }
   }
 }
