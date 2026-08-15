@@ -13,9 +13,9 @@ jdk:
 
 # JitPack's default is `./gradlew install`, which this project does not define.
 #
-# Signing is skipped deliberately. JitPack builds a commit as an ordinary version rather than a
-# `-SNAPSHOT`, so `signAllPublications()` applies and would ask for the release signing key that
-# only the publish workflow holds. A build for testing does not need to be signed, and the key
-# should not leave that workflow.
+# Nothing needs to disable signing here: the build configures it only when a key is present,
+# and the key never leaves the publish workflow. Excluding the `sign` task instead does not
+# work — the publication still declares the `.asc` artifacts and then fails because they were
+# never produced.
 install:
-  - ./gradlew publishToMavenLocal -PreleaseVersion=$VERSION -x signMavenPublication
+  - ./gradlew publishToMavenLocal -PreleaseVersion=$VERSION
