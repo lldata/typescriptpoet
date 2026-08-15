@@ -288,9 +288,11 @@ dependencies {
 ```
 
 A snapshot moves as `main` moves and is not signed, so it belongs in a branch where you are
-testing, not in anything you ship. Gradle caches it for 24 hours by default; `--refresh-dependencies`
-fetches the current one. Each build is also stored under its own timestamp, so a specific
-snapshot can be pinned if you need to report against exactly one.
+testing, not in anything you ship. Gradle caches it for 24 hours by default;
+`--refresh-dependencies` fetches the current one. Central removes snapshots after 90 days, and
+the coordinate is meant to be overwritten rather than accumulated, so it is not a stable
+reference: when reporting against one, name the commit on `main` you tested rather than the
+version, which will have moved by the time anyone reads the issue.
 
 If something is wrong, [open an issue](https://github.com/lldata/typescriptpoet/issues) — a
 report against a snapshot is the cheapest bug this project can receive.
