@@ -52,13 +52,22 @@ fun anonymous(vararg members: TypeName.Anonymous.Member): TypeName = TypeName.an
  * `label: string`, a member of an anonymous type.
  *
  * [tsDoc] documents this member alone, which is the thing an interface cannot do without
- * being declared. A documented member puts the whole type on several lines.
+ * being declared. A documented member puts the whole type on several lines. [readonly] is
+ * the other thing an interface property can do that this form otherwise could not.
  */
 @JvmSynthetic
-fun member(name: String, type: TypeName, tsDoc: CodeBlock = CodeBlock.empty()): TypeName.Anonymous.Member =
-  TypeName.Anonymous.Member(name, type, false, tsDoc)
+fun member(
+  name: String,
+  type: TypeName,
+  tsDoc: CodeBlock = CodeBlock.empty(),
+  readonly: Boolean = false,
+): TypeName.Anonymous.Member = TypeName.Anonymous.Member(name, type, false, tsDoc, readonly)
 
 /** `hint?: string`, an optional member of an anonymous type. */
 @JvmSynthetic
-fun optionalMember(name: String, type: TypeName, tsDoc: CodeBlock = CodeBlock.empty()): TypeName.Anonymous.Member =
-  TypeName.Anonymous.Member(name, type, true, tsDoc)
+fun optionalMember(
+  name: String,
+  type: TypeName,
+  tsDoc: CodeBlock = CodeBlock.empty(),
+  readonly: Boolean = false,
+): TypeName.Anonymous.Member = TypeName.Anonymous.Member(name, type, true, tsDoc, readonly)

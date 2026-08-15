@@ -61,7 +61,7 @@ type Verbose =
 
 type Both = Person & Options;
 
-type Anon = { label: string; hint?: string };
+type Anon = { readonly label: string; hint?: string };
 
 type MixedArray = (string | number)[];
 

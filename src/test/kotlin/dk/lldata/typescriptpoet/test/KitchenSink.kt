@@ -238,7 +238,7 @@ object KitchenSink {
         "Anon",
         TypeName.anonymousType(
           listOf(
-            TypeName.Anonymous.Member("label", TypeName.STRING, false),
+            TypeName.Anonymous.Member("label", TypeName.STRING, false, readonly = true),
             TypeName.Anonymous.Member("hint", TypeName.STRING, true),
           ),
         ),

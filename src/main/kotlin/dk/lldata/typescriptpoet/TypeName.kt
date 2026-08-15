@@ -360,6 +360,10 @@ sealed class TypeName {
      * `{ limit?: number }` can say what omitting `limit` means -- which is exactly the thing
      * a caller needs and optionality alone does not tell them -- without lifting the shape
      * out into a named declaration nothing else refers to.
+     *
+     * [readonly] is the other thing an interface property can do that this form otherwise
+     * could not: `{ readonly x: T }`. It comes last, after [tsDoc], so that existing
+     * positional call sites keep compiling.
      */
     data class Member
     @JvmOverloads
@@ -368,6 +372,7 @@ sealed class TypeName {
       val type: TypeName,
       val optional: Boolean,
       val tsDoc: CodeBlock = CodeBlock.empty(),
+      val readonly: Boolean = false,
     )
 
     override fun emit(codeWriter: CodeWriter) {
@@ -412,6 +417,9 @@ sealed class TypeName {
     }
 
     private fun emitMember(codeWriter: CodeWriter, member: Member) {
+      if (member.readonly) {
+        codeWriter.emit("readonly ")
+      }
       codeWriter.emit(member.name)
       if (member.optional) {
         codeWriter.emit("?")
@@ -936,6 +944,7 @@ sealed class TypeName {
      * @param type The member type
      * @param optional Whether the member may be omitted, emitting `name?: T`
      * @param tsDoc A TSDoc comment for this member, which puts the type on several lines
+     * @param readonly Whether the member is `readonly`, emitting `readonly name: T`
      */
     @JvmStatic
     @JvmOverloads
@@ -944,7 +953,8 @@ sealed class TypeName {
       type: TypeName,
       optional: Boolean = false,
       tsDoc: CodeBlock = CodeBlock.empty(),
-    ): Anonymous.Member = Anonymous.Member(name, type, optional, tsDoc)
+      readonly: Boolean = false,
+    ): Anonymous.Member = Anonymous.Member(name, type, optional, tsDoc, readonly)
 
     /**
      * Tuple type name (e.g. `[number, boolean, string]`}

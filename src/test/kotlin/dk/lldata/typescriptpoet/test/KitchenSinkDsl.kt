@@ -202,7 +202,7 @@ object KitchenSinkDsl {
       )
       type("Verbose", union((1..4).map { literal("PARTITION_KEY_CANDIDATE_$it") }))
       type("Both", person and options)
-      type("Anon", anonymous(member("label", string), optionalMember("hint", string)))
+      type("Anon", anonymous(member("label", string, readonly = true), optionalMember("hint", string)))
       type("MixedArray", TypeName.arrayShorthandType(string or number))
       type("KeysOfEither", TypeName.keyOf(person or options))
       type("Handler", TypeName.lambda("event" to string, returnType = void))

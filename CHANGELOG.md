@@ -37,9 +37,12 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   would otherwise open a block.
 - `TypeName.promiseType()`, alongside `arrayType`/`setType`/`mapType`/`recordType`.
   `PROMISE.parameterized(t)` said the same thing but was not where anyone looked.
-- `TypeName.anonymousMember()`, so a member of an inline object type can be optional and carry
-  a TSDoc comment of its own. The comment is the reason to use an inline type rather than an
-  interface: it says what omitting the member means, which optionality alone does not.
+- `TypeName.anonymousMember()`, so a member of an inline object type can be optional, `readonly`,
+  and carry a TSDoc comment of its own. The comment is the reason to use an inline type rather
+  than an interface: it says what omitting the member means, which optionality alone does not.
+  Without `readonly`, that TSDoc-carrying form was a strictly weaker way to spell a shape an
+  interface property could already mark read-only.
+  ([#16](https://github.com/lldata/typescriptpoet/issues/16))
 - `ObjectLiteral.Builder.addProperty()` overloads taking a `FunctionSpec`, `ObjectLiteral` or
   `CallExpression` directly. `addProperty("get", "%L", arrow(…))` still works; the `"%L"`
   carried no information the argument did not.
