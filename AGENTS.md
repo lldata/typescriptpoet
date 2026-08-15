@@ -190,9 +190,21 @@ Merge only when every one of these holds:
 Never merge, however green:
 
 - **A breaking change.** It needs a human to agree before the work, let alone after.
-- **Anything that changes the rules or the release path** — `.github/workflows/`, this file,
-  `.github/trusted-authors`, `gradle.properties`, or the publishing configuration. A change to
-  the rules cannot be authorised by the rules it changes.
+- **Anything that changes the rules or the release path.** A change to the rules cannot be
+  authorised by the rules it changes, and a change to the release path cannot be verified by
+  the build — the Portal validates a bundle only when a tag is pushed, so a mistake surfaces
+  late and costs a release.
+
+  This is not a list of filenames to match against. Ask what the change *does*: if it alters
+  what gets published, how, by whom, or under what version, it is the release path. That
+  includes `.github/workflows/`, this file, `.github/trusted-authors`, `gradle.properties`,
+  and — the case that has already been got wrong once — the `mavenPublishing`, `signing` and
+  artifact configuration inside `build.gradle.kts`, which is not on any list but is exactly
+  the thing meant. An ordinary code change that happens to touch `build.gradle.kts`, such as
+  a test dependency, is not.
+
+  Being unsure is itself the answer: open it, say which rule you were unsure about, and leave
+  auto-merge off.
 - **A pull request a human has commented on** and whose comment is unresolved. Someone
   engaging is the strongest available signal that the merge is not the agent's to make.
   Note what does and does not enforce this. An unresolved *review thread* blocks the merge

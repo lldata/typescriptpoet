@@ -61,6 +61,11 @@ The **Merging** section of `AGENTS.md` governs whether the result may merge. Not
 changes it — in particular a change to the workflows, to `AGENTS.md`, or to the release path is
 still not yours to merge, however green.
 
+Arming auto-merge is that decision, not a step in a checklist. Make it deliberately, after
+re-reading the Merging section against the diff you actually produced rather than the one you
+set out to write. Leaving it off costs a human one click; getting it wrong merges something
+that was not yours to merge.
+
 ## 4. Say what you did
 
 Leave the trace where the next reader will look: a comment on the pull request or issue you
