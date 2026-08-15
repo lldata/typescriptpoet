@@ -20,8 +20,11 @@ on:
 
 permissions: {}
 
+# Shared with the sweep in agent-tend.yml. Two runs that can both push branches and comment
+# must not overlap, or they pick the same work and race each other. The cost is that a second
+# issue filed while one is being worked waits its turn, which is the right trade.
 concurrency:
-  group: agent-issue-${{ github.event.issue.number || inputs.issue }}
+  group: agent-write
   cancel-in-progress: false
 
 jobs:
