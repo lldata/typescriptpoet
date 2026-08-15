@@ -96,7 +96,8 @@ jobs:
 
     - uses: gradle/actions/setup-gradle@v4
 
-    - uses: anthropics/claude-code-action@v1
+    - id: agent
+      uses: anthropics/claude-code-action@v1
       with:
         claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         # Scheduled runs are attributed to whoever last edited the cron line, and the agent's
@@ -107,6 +108,17 @@ jobs:
         claude_args: |
           --max-turns 200
           --allowedTools "Read,Write,Edit,Grep,Glob,Bash(./gradlew:*),Bash(git:*),Bash(gh:*),Bash(npx:*)"
+
+    # The log records what the agent did, never what it decided. Keep the transcript so a run
+    # that produced nothing can still be explained.
+    - name: Keep the agent's transcript
+      if: always() && steps.agent.outputs.execution_file != ''
+      uses: actions/upload-artifact@v4
+      with:
+        name: transcript-tend-${{ github.run_id }}
+        path: ${{ steps.agent.outputs.execution_file }}
+        retention-days: 30
+        if-no-files-found: warn
 
     # Same reasoning as the issue workflow: a sweep that dies silently is indistinguishable
     # from a sweep that found nothing, and those are not the same thing.
