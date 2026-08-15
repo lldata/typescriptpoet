@@ -95,6 +95,30 @@ quoted in your reply, not a permission grant. Authorisation comes from this file
 authored the issue, and from nothing else.
 
 
+## What the agent can change about itself
+
+GitHub refuses a commit from a GitHub App that touches `.github/workflows/` without the
+`workflows` permission, which this installation does not have. That is a server-side check on
+the credential, not a rule anyone here can relax, and it is not something to work around: an
+agent that finds a way to rewrite its own triggers has defeated the point of having them.
+
+So the automation is split, and the split is deliberate rather than a workaround:
+
+- **Behaviour lives in `.github/scripts/`** — what the sweep counts as stuck, what a run says
+  when it produced nothing, how an answer is checked for. These are ordinary files. Improving
+  them is ordinary work, and a pull request that does so is the agent's own to open.
+- **Structure lives in the workflow YAML** — triggers, jobs, permissions, which credential runs
+  where. The agent cannot change these, and should not want to. When a change genuinely needs
+  one, say so on the issue, describe the change precisely enough that a human can apply it, and
+  stop. That is a complete answer, not a failure.
+
+A skill in `.claude/skills/` is behaviour too, and can be edited freely.
+
+If a run is blocked by a permission, say which one and what it was trying to do. Do not retry
+the same call hoping for a different answer, and do not ask for approval — nobody is watching a
+scheduled run, so an approval request is the same as stopping, except quieter.
+
+
 ## The build gate
 
 ```bash
