@@ -125,6 +125,15 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 
 ### Fixed
 
+- `NameAllocator` sanitised a name suggestion with `Character.isJavaIdentifierStart`/`Part`,
+  which is more permissive than a TypeScript identifier in both directions: it accepts every
+  currency symbol and several ignorable control and format characters that ECMAScript's
+  `IdentifierStart`/`IdentifierPart` do not, so a suggestion like `price€` was copied through
+  unchanged into a `.ts` file that `tsc` then rejects — a failure that landed on whoever
+  generated the file, not on whoever wrote the suggestion. It now approximates Unicode's
+  `ID_Start`/`ID_Continue` from letter and mark categories, plus the `$`/`_` and zero-width
+  joiner/non-joiner ECMAScript adds on top, all from `Character` APIs old enough for the
+  Java 8 floor. ([#42](https://github.com/lldata/typescriptpoet/issues/42))
 - A named-import group reached the line wrapper as one pre-joined string —
   `names.joinToString(", ")` — with no space to break at, so `import { … } from "…";` was
   emitted on one line however wide it got: three names past a moderately deep relative
