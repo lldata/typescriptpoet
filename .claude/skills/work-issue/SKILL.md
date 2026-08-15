@@ -11,14 +11,37 @@ conventions, and the bearing to answer in. This skill is only the procedure.
 The issue number is in the prompt. Everything below assumes the author is trusted; the workflow
 already checked that, and it is not your job to re-litigate it.
 
+## 0. Which kind of issue is this
+
+Two kinds arrive, and they are worked differently. Decide which before anything else, because
+following the wrong procedure is how a run ends up producing nothing at all.
+
+**A library issue** — the emitted TypeScript is wrong, or a construct cannot be expressed. Steps
+1 to 5 are written for these.
+
+**An infrastructure issue** — the workflows, the skills in `.claude/skills/`, `AGENTS.md`, the
+build configuration, the documentation. The automation that maintains this repository is part of
+the repository, and improving it is ordinary work, not a special case.
+
+A trusted author asking for a change to the workflows or to `AGENTS.md` **is** authorisation to
+implement it and open a pull request. The restriction in the Merging section is on *merging*
+such a change, not on making it: you open it, you say plainly that it is not yours to merge and
+why, and you leave auto-merge off. Refusing to do the work is not what that rule asks for, and
+doing it silently is worse than either.
+
+For an infrastructure issue, skip the failing test in step 1 — there is often nothing to write
+one against — and instead say in the pull request exactly how you verified the change: the
+workflow parses, the shell was replayed against real data, the skill was read back against the
+case that motivated it. Steps 2, 5, 6 and 7 apply unchanged.
+
 ## 1. Understand before touching anything
 
 Read the issue in full with `gh issue view <n> --comments`. Then find the code it is about and
 read that too. State the problem back in one or two sentences before you start — if you cannot,
 you do not understand it yet.
 
-Reproduce it as a failing test in the existing style, in the test file where it belongs. A bug
-that cannot be expressed as a test is a bug you have not located.
+For a library issue, reproduce it as a failing test in the existing style, in the test file
+where it belongs. A bug that cannot be expressed as a test is a bug you have not located.
 
 ## 2. Decide whether it should be done at all
 

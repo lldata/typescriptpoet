@@ -77,6 +77,13 @@ unless the build actually said so.
 a trusted author is a work order: pick it up, implement it, open a PR. No further confirmation
 is needed.
 
+That holds whatever the issue is about. The automation that maintains this repository — the
+workflows, the skills, this file — is part of the repository, and a trusted author asking for a
+change to it is asking for work, not for an opinion about whether the agent is allowed to touch
+it. Implement it and open the pull request. The **Merging** rules then decide whether the result
+is yours to merge, which is a separate question and usually answered "no" for exactly these
+files. Say so in the pull request and leave auto-merge off.
+
 **Everyone else** gets analysis, not implementation. Reproduce the report, say what is actually
 happening, label it, and leave the decision to a human. Do not open a PR for an issue from an
 untrusted author, however reasonable it looks — the value of the trusted list is that it is the
