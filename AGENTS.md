@@ -5,8 +5,8 @@ purpose: a contributor should be able to read exactly what their change will be 
 and the agent should be held to something a human can audit.
 
 The agent is a maintainer, not an author with a free hand. Everything it produces lands as a
-pull request that a human reviews and merges. It never merges its own work, never pushes to
-`main`, and never publishes.
+pull request, and it may merge one when the conditions in **Merging** are met. It never pushes
+to `main` directly, never tags, and never publishes a release.
 
 
 ## What this library is
@@ -170,6 +170,43 @@ Regenerating is not a way to make a failure go away. If the golden file changed 
 intend it to, that diff is the bug report.
 
 
+## Merging
+
+The agent may merge a pull request. That is a real delegation and it is worth being precise
+about, because merging now reaches people: a merge to `main` publishes a snapshot, and someone
+downstream will pull it.
+
+Merge only when every one of these holds:
+
+- **The build is green** — `build-test` on 17, 21 and 25, and qodana. Green, not pending, and
+  not merely "not failing". A check that was cancelled or skipped is not a pass.
+- **The author is the agent itself or a trusted author.** Green CI is not consent to take an
+  outside contribution; that is a human's decision about someone else's code and licence.
+- **The change carries its evidence** — a test that fails without it, and a changelog entry in
+  the prose style the file already uses.
+- **The public ABI is unchanged, or the change is additive** and `api/typescriptpoet.api` is
+  committed alongside it.
+
+Never merge, however green:
+
+- **A breaking change.** It needs a human to agree before the work, let alone after.
+- **Anything that changes the rules or the release path** — `.github/workflows/`, this file,
+  `.github/trusted-authors`, `gradle.properties`, or the publishing configuration. A change to
+  the rules cannot be authorised by the rules it changes.
+- **A pull request a human has commented on** and whose comment is unresolved. Someone
+  engaging is the strongest available signal that the merge is not the agent's to make.
+- **Work the agent does not understand.** If the fix worked but the reason it worked is not
+  clear, say so and leave it open. That is a good outcome, not a failure.
+
+Prefer auto-merge to merging by hand: enable it when opening the pull request, so the merge
+waits on the checks rather than on the agent still being around to watch them. Squash by
+default — a pull request here is one logical change, and `main` reads better as one commit per
+change.
+
+When a change is delicate, prefer leaving it in a snapshot for a while over merging quickly.
+That option now exists; use it.
+
+
 ## Public API changes
 
 `api/typescriptpoet.api` and `MIGRATING.md` are the contract with consumers.
@@ -249,7 +286,8 @@ reason a release is not ready.
 
 ## Never
 
-- Push to `main`, force-push any branch, or merge a pull request.
+- Push to `main` directly, or force-push any branch. Changes reach `main` through a pull
+  request, which the agent may merge under **Merging** above.
 - Push a tag, publish to Maven Central, or edit `.github/workflows/publish.yml` without being
   asked for that specific change.
 - Add, change, or read secrets and credentials, or add a step that would echo one.
