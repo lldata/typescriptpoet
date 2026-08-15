@@ -105,12 +105,9 @@ jobs:
         prompt: "/work-issue ${{ needs.authorise.outputs.issue }}"
         claude_args: |
           --max-turns 200
-          --allowedTools "Read,Write,Edit,Grep,Glob,Bash(./gradlew:*),Bash(git:*),Bash(gh:*),Bash(npx:*)"
+          --permission-mode acceptEdits
+          --allowedTools "Read,Write,Edit,Grep,Glob,Bash"
 
-    # A failed run is otherwise invisible. The work is lost, nothing is pushed, and the issue
-    # looks exactly as it did before — which reads as "nobody has looked at this yet" rather
-    # than "an attempt was made and died". Say so on the issue itself, since that is where
-    # someone is looking.
     # The run log records what the agent *did* — every tool call — but never what it decided or
     # why. When a run ends green having produced nothing, the log is silent about the only
     # question worth asking. This keeps the transcript so that question can be answered; two
@@ -158,6 +155,10 @@ jobs:
 
         The issue is still open and unanswered. Retry with: gh workflow run agent-issue.yml -f issue=$ISSUE"
 
+    # A failed run is otherwise invisible. The work is lost, nothing is pushed, and the issue
+    # looks exactly as it did before — which reads as "nobody has looked at this yet" rather
+    # than "an attempt was made and died". Say so on the issue itself, since that is where
+    # someone is looking.
     - name: Say on the issue that the run failed
       if: failure()
       env:

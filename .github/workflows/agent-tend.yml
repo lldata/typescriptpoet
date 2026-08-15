@@ -107,7 +107,8 @@ jobs:
         prompt: "/tend"
         claude_args: |
           --max-turns 200
-          --allowedTools "Read,Write,Edit,Grep,Glob,Bash(./gradlew:*),Bash(git:*),Bash(gh:*),Bash(npx:*)"
+          --permission-mode acceptEdits
+          --allowedTools "Read,Write,Edit,Grep,Glob,Bash"
 
     # The log records what the agent did, never what it decided. Keep the transcript so a run
     # that produced nothing can still be explained.
