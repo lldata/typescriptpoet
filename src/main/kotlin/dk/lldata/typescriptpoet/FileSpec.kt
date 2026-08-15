@@ -199,13 +199,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
             .toSortedSet()
             .let { names ->
               if (names.isEmpty()) return@let
-              // Output named imports as a group
-              codeWriter
-                .emitCode("import { ")
-                .indent()
-                .emitCode(names.joinToString(", "))
-                .unindent()
-                .emitCode(CodeBlock.of(" } from \"%L\";\n", sourceImportPath))
+              emitNamedImportGroup(codeWriter, names, sourceImportPath)
               // Output related augments
               names.forEach { name ->
                 augmentImports[name]?.forEach { augment ->
@@ -219,6 +213,28 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
         codeWriter.emitCode(CodeBlock.of("%[import %S;\n%]", it.key))
       }
     }
+  }
+
+  /**
+   * Emits a named-import group, all-or-nothing: the whole `import { … } from "…";` stays on one
+   * line if it fits the print width, otherwise every name goes on its own line with a trailing
+   * comma. This is what Prettier does with a named-import list, and matching it is the point --
+   * the group used to reach the line wrapper as one pre-joined string with no space to break at,
+   * so it was never wrapped at all, however wide the statement got.
+   */
+  private fun emitNamedImportGroup(codeWriter: CodeWriter, names: Set<String>, sourceImportPath: String) {
+    val joined = names.joinToString(", ")
+    val inlineWidth = "import { $joined } from \"$sourceImportPath\";".length
+    if (codeWriter.currentColumn + inlineWidth <= codeWriter.printWidth) {
+      codeWriter.emit("import { $joined } from \"$sourceImportPath\";\n")
+      return
+    }
+
+    codeWriter.emit("import {\n")
+    codeWriter.indent()
+    names.forEach { codeWriter.emit("$it,\n") }
+    codeWriter.unindent()
+    codeWriter.emit("} from \"$sourceImportPath\";\n")
   }
 
   /** Whether the file declares no members. */

@@ -122,6 +122,13 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 
 ### Fixed
 
+- A named-import group reached the line wrapper as one pre-joined string —
+  `names.joinToString(", ")` — with no space to break at, so `import { … } from "…";` was
+  emitted on one line however wide it got: three names past a moderately deep relative
+  specifier was enough to reach 92 columns. It now measures the whole statement and, like every
+  other list in this emitter, breaks all-or-nothing — one name per line with a trailing comma —
+  rather than wrapping only the names that overflow, which is what keeps the result a fixed
+  point under Prettier. ([#15](https://github.com/lldata/typescriptpoet/issues/15))
 - A concise arrow body that did not fit stayed on the `=>` line and broke inside itself, so a
   call that would have fitted on a line of its own came apart into one argument per line. It
   now breaks after the `=>` and takes the whole body down one level, which is both what
