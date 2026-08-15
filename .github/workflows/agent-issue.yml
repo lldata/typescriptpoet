@@ -91,10 +91,31 @@ jobs:
 
     - uses: gradle/actions/setup-gradle@v4
 
+    # 80 turns was not enough for a change that has to build to learn anything: the run on
+    # issue #21 spent all of them in seven minutes and was discarded whole. A turn here is
+    # often a Gradle build, so the ceiling has to be generous; `timeout-minutes` on the job
+    # is the real backstop against a run that goes nowhere.
     - uses: anthropics/claude-code-action@v1
       with:
         claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         prompt: "/work-issue ${{ needs.authorise.outputs.issue }}"
         claude_args: |
-          --max-turns 80
+          --max-turns 200
           --allowedTools "Read,Write,Edit,Grep,Glob,Bash(./gradlew:*),Bash(git:*),Bash(gh:*),Bash(npx:*)"
+
+    # A failed run is otherwise invisible. The work is lost, nothing is pushed, and the issue
+    # looks exactly as it did before — which reads as "nobody has looked at this yet" rather
+    # than "an attempt was made and died". Say so on the issue itself, since that is where
+    # someone is looking.
+    - name: Say on the issue that the run failed
+      if: failure()
+      env:
+        GH_TOKEN: ${{ github.token }}
+        ISSUE: ${{ needs.authorise.outputs.issue }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "The agent's run on this issue failed and left nothing behind — no branch, no pull request. See [the run log]($RUN_URL).
+
+        This note is from the workflow rather than from the agent, so it says only that the attempt did not finish. It is not a judgment about the issue itself, which is still open and unanswered.
+
+        Retry with: gh workflow run agent-issue.yml -f issue=$ISSUE"
