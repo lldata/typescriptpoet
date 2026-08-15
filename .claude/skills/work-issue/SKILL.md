@@ -69,5 +69,32 @@ The PR description covers, briefly:
 - The public API diff, if any.
 - What you verified: name the build, and say plainly if any check skipped.
 
-Then `Closes #<n>`, and leave it for review. Do not merge, do not tag, do not approve your own
-PR. Say in a short issue comment that the PR is up.
+Then `Closes #<n>`, and say in a short issue comment that the PR is up.
+
+## 6. Hand it to the checks, not to yourself
+
+Read the **Merging** section of `AGENTS.md` and decide honestly whether this change qualifies.
+If it does, enable auto-merge so the merge waits on the build rather than on you:
+
+```bash
+gh pr merge <pr> --squash --auto
+```
+
+The checks take minutes and this run ends before they finish, so auto-merge is the mechanism —
+never poll for green and merge by hand, and never merge without the build having passed.
+
+Arming it early has one consequence worth knowing: a plain comment left by a human after this
+point does not disarm it, and the merge still fires when the checks pass. An unresolved review
+thread does block it, since `main` requires conversation resolution. So whenever you come back
+to a pull request for any reason, read its comments first and disarm it if someone has spoken
+and you have not answered:
+
+```bash
+gh pr merge <pr> --disable-auto
+```
+
+If it does not qualify — a breaking change, a rules or release-path file, something you fixed
+without understanding why it worked — leave auto-merge off and say plainly in the PR which
+condition it failed. That sentence is the most useful thing in the pull request.
+
+Do not tag, do not publish, do not approve your own pull request.

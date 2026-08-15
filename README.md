@@ -270,6 +270,34 @@ bytecode and Kotlin 2.0 metadata, so it is usable from JDK 8+ and any Kotlin 2.0
 Upgrading from 1.x? See [MIGRATING.md](MIGRATING.md).
 
 
+### Testing what is coming
+
+Every merge to `main` publishes a snapshot, so you can try a fix before it is released and say
+whether it actually worked on your code. That feedback is worth more before a version is cut
+than after.
+
+```kotlin
+repositories {
+  mavenCentral()
+  maven("https://central.sonatype.com/repository/maven-snapshots/")
+}
+
+dependencies {
+  implementation("dk.lldata:typescriptpoet:2.0.0-SNAPSHOT")
+}
+```
+
+A snapshot moves as `main` moves and is not signed, so it belongs in a branch where you are
+testing, not in anything you ship. Gradle caches it for 24 hours by default;
+`--refresh-dependencies` fetches the current one. Central removes snapshots after 90 days, and
+the coordinate is meant to be overwritten rather than accumulated, so it is not a stable
+reference: when reporting against one, name the commit on `main` you tested rather than the
+version, which will have moved by the time anyone reads the issue.
+
+If something is wrong, [open an issue](https://github.com/lldata/typescriptpoet/issues) — a
+report against a snapshot is the cheapest bug this project can receive.
+
+
 Building
 --------
 
