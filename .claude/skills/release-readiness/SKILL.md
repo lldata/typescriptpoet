@@ -1,6 +1,6 @@
 ---
 name: release-readiness
-description: Assess whether a release is due and keep the standing release-readiness issue current. Use on the weekly schedule or when asked whether to cut a release.
+description: Assess whether a release is due, reporting to the run summary and opening an issue only when one actually is. Use on the weekly schedule or when asked whether to cut a release.
 ---
 
 # Release readiness
@@ -33,26 +33,42 @@ many words and leave the decision alone.
 
 ## Report
 
-Keep exactly one open issue titled **Release readiness**. A text search for those words also
-matches unrelated issues whose title happens to contain "release" and "readiness" — filter to an
-exact title match rather than trusting search relevance to rank the real one first:
+**When the answer is hold, do not open an issue.** Write the report to the workflow run summary
+and stop:
+
+```bash
+cat >> "$GITHUB_STEP_SUMMARY" <<'EOF'
+… the report …
+EOF
+```
+
+A standing issue that says "hold" every week is noise, and noise is what makes a real signal
+easy to miss. Hold is the answer most weeks, so most weeks leave nothing behind but a run
+summary. That is the intended outcome, not a run that failed to find something to say.
+
+**When a release is genuinely due**, open an issue titled **Release readiness** — that is the
+signal, and it should be rare enough to be worth a notification.
+
+Before opening one, check whether it already exists, matching the title exactly. A text search
+also matches issues that merely contain the words, so do not trust search relevance to rank the
+real one first:
 
 ```bash
 gh issue list --search "Release readiness in:title" --state open --json number,title \
   --jq '.[] | select(.title == "Release readiness") | .number'
 ```
 
-Edit that issue's body rather than opening a second one, and add a short dated comment only when
-the recommendation itself changes — nobody wants a weekly notification that says the same thing
-as last week.
+If one is open, edit its body rather than opening a second, and comment only when the
+recommendation itself changes.
 
-The body holds: the latest tag and commit count since, what has landed, what is missing, and a
-one-line recommendation — hold, or ready with the exact tag a human would push. If it is ready,
-give the command with the actual next tag in sequence (not a copied example — check
-`git tag --list 'v2.0.0-alpha*'` or the version policy for what comes after the latest one):
+The body holds: the latest tag and commit count since, what has landed, what is missing, and the
+exact tag a human would push. Use the actual next tag in sequence rather than copying an example
+— check `git tag --list 'v2.0.0-alpha*' | sort -V | tail -1` and the version policy for what
+comes after it:
 
 ```bash
 git tag v2.0.0-alphaN && git push origin v2.0.0-alphaN
 ```
 
-If nothing has landed since the last tag, say so in one line and stop. Do not manufacture work.
+If nothing has landed since the last tag, say so in one line in the run summary and stop. Do not
+manufacture work.
