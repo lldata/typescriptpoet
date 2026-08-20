@@ -24,6 +24,7 @@ import dk.lldata.typescriptpoet.ModuleSpec
 import dk.lldata.typescriptpoet.SymbolSpec
 import dk.lldata.typescriptpoet.TypeAliasSpec
 import dk.lldata.typescriptpoet.TypeName
+import dk.lldata.typescriptpoet.TypePredicate
 import dk.lldata.typescriptpoet.tag
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -167,6 +168,46 @@ class FileSpecTests {
           
           type Test = Observable;
           
+        """.trimIndent(),
+      ),
+    )
+  }
+
+  @Test
+  @DisplayName("Imports a type reached only through a type predicate in a function type")
+  fun testImportedTypeInLambdaTypePredicate() {
+    // The exact shape from #46: a branded-scalar guard held as an interface member, where the
+    // narrowed type was previously only reachable by spelling the whole lambda as a string --
+    // which the import collector, walking TypeName rather than text, never saw.
+    val brand = TypeName.namedImport("Brand", "./brand.js")
+
+    val testFile =
+      FileSpec.builder("test")
+        .addInterface(
+          InterfaceSpec.builder("Checked")
+            .addProperty(
+              "is",
+              TypeName.lambda("raw" to TypeName.STRING, typePredicate = TypePredicate.isType("raw", brand)),
+              false,
+            )
+            .build(),
+        )
+        .build()
+
+    val out = StringBuilder()
+    testFile.writeTo(out)
+
+    assertThat(
+      out.toString(),
+      emits(
+        """
+          import { Brand } from "./brand.js";
+
+
+          interface Checked {
+            is: (raw: string) => raw is Brand;
+          }
+
         """.trimIndent(),
       ),
     )

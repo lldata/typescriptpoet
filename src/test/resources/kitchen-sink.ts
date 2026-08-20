@@ -71,6 +71,8 @@ type KeysOfEither = keyof (Person | Options);
 
 type Handler = (event: string) => void;
 
+type Guard = (raw: unknown) => raw is Engine;
+
 type Identity = <V>(value: V) => V;
 
 type EngineFactory = new () => Engine;

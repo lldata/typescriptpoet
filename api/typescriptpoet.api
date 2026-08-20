@@ -924,7 +924,9 @@ public abstract class dk/lldata/typescriptpoet/TypeName {
 	public static final fun defaultImport (Ljava/lang/String;Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public static final fun defaultImport (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public static final fun genericLambda (Ljava/util/List;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun genericLambda (Ljava/util/List;Ldk/lldata/typescriptpoet/TypePredicate;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public static final fun genericLambda (Ljava/util/List;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun genericLambda (Ljava/util/List;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypePredicate;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public static final fun implicit (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public static final fun indexedAccess (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$IndexedAccess;
 	public static final fun infer (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
@@ -933,8 +935,11 @@ public abstract class dk/lldata/typescriptpoet/TypeName {
 	public static final fun intersectionType ([Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Intersection;
 	public static final fun keyOf (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Operator;
 	public static final fun lambda (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun lambda (Ldk/lldata/typescriptpoet/TypePredicate;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public static final fun lambda (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun lambda (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypePredicate;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public static final fun lambda ([Lkotlin/Pair;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static final fun lambda ([Lkotlin/Pair;Ldk/lldata/typescriptpoet/TypePredicate;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public static final fun literal (I)Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public static final fun literal (J)Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public static final fun literal (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
@@ -1036,8 +1041,11 @@ public final class dk/lldata/typescriptpoet/TypeName$Companion {
 	public final fun defaultImport (Ljava/lang/String;Ljava/lang/String;Z)Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public static synthetic fun defaultImport$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public final fun genericLambda (Ljava/util/List;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun genericLambda (Ljava/util/List;Ldk/lldata/typescriptpoet/TypePredicate;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public final fun genericLambda (Ljava/util/List;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun genericLambda (Ljava/util/List;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypePredicate;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public static synthetic fun genericLambda$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/util/List;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static synthetic fun genericLambda$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/util/List;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypePredicate;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public final fun implicit (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public final fun indexedAccess (Ldk/lldata/typescriptpoet/TypeName;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$IndexedAccess;
 	public final fun infer (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$TypeVariable;
@@ -1047,10 +1055,15 @@ public final class dk/lldata/typescriptpoet/TypeName$Companion {
 	public final fun intersectionType ([Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Intersection;
 	public final fun keyOf (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Operator;
 	public final fun lambda (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun lambda (Ldk/lldata/typescriptpoet/TypePredicate;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public final fun lambda (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun lambda (Ljava/util/Map;Ldk/lldata/typescriptpoet/TypePredicate;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public final fun lambda ([Lkotlin/Pair;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public final fun lambda ([Lkotlin/Pair;Ldk/lldata/typescriptpoet/TypePredicate;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public static synthetic fun lambda$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypeName;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static synthetic fun lambda$default (Ldk/lldata/typescriptpoet/TypeName$Companion;Ljava/util/Map;Ldk/lldata/typescriptpoet/TypePredicate;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public static synthetic fun lambda$default (Ldk/lldata/typescriptpoet/TypeName$Companion;[Lkotlin/Pair;Ldk/lldata/typescriptpoet/TypeName;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
+	public static synthetic fun lambda$default (Ldk/lldata/typescriptpoet/TypeName$Companion;[Lkotlin/Pair;Ldk/lldata/typescriptpoet/TypePredicate;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypeName$Lambda;
 	public final fun literal (I)Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public final fun literal (J)Ldk/lldata/typescriptpoet/TypeName$Standard;
 	public final fun literal (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypeName$Standard;
@@ -1132,11 +1145,13 @@ public final class dk/lldata/typescriptpoet/TypeName$Lambda : dk/lldata/typescri
 	public final fun component3 ()Ljava/util/List;
 	public final fun component4 ()Z
 	public final fun component5 ()Z
+	public final fun component6 ()Ldk/lldata/typescriptpoet/TypePredicate;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAbstract ()Z
 	public final fun getConstructable ()Z
 	public final fun getParameters ()Ljava/util/Map;
 	public final fun getReturnType ()Ldk/lldata/typescriptpoet/TypeName;
+	public final fun getTypePredicate ()Ldk/lldata/typescriptpoet/TypePredicate;
 	public final fun getTypeVariables ()Ljava/util/List;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -1319,6 +1334,9 @@ public final class dk/lldata/typescriptpoet/TypeName$Union : dk/lldata/typescrip
 }
 
 public final class dk/lldata/typescriptpoet/TypePredicate {
+	public static final field Companion Ldk/lldata/typescriptpoet/TypePredicate$Companion;
+	public static final fun asserts (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypePredicate;
+	public static final fun asserts (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypePredicate;
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ldk/lldata/typescriptpoet/TypeName;
 	public final fun component3 ()Z
@@ -1327,7 +1345,15 @@ public final class dk/lldata/typescriptpoet/TypePredicate {
 	public final fun getParameterName ()Ljava/lang/String;
 	public final fun getType ()Ldk/lldata/typescriptpoet/TypeName;
 	public fun hashCode ()I
+	public static final fun isType (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypePredicate;
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class dk/lldata/typescriptpoet/TypePredicate$Companion {
+	public final fun asserts (Ljava/lang/String;)Ldk/lldata/typescriptpoet/TypePredicate;
+	public final fun asserts (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypePredicate;
+	public static synthetic fun asserts$default (Ldk/lldata/typescriptpoet/TypePredicate$Companion;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/TypePredicate;
+	public final fun isType (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/TypePredicate;
 }
 
 public abstract interface annotation class dk/lldata/typescriptpoet/TypeScriptPoetDsl : java/lang/annotation/Annotation {

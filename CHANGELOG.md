@@ -62,6 +62,15 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Variance annotations (`in`/`out`) and `const` type parameters.
 - Operand precedence: a union or intersection used under `keyof`, `[]` or `[K]` is
   parenthesised, so the emitted type means what was asked for.
+- `TypeName.lambda()` and `TypeName.genericLambda()` gain overloads taking a `TypePredicate`
+  in place of a return type, so a type predicate can appear in a function type:
+  `(raw: string) => raw is Brand`. `TypePredicate` — until now only reachable through
+  `FunctionSpec.Builder.returnsIs`/`returnsAsserts` — is public, with `isType()` and
+  `asserts()` factories. Before this, the only way to spell one in a function type was
+  `TypeName.implicit("(raw: string) => raw is Brand")`, which — the same root cause as #45 —
+  bypasses the import collector: a narrowed type reached only through that string was never
+  imported, emitting a file that does not compile.
+  ([#46](https://github.com/lldata/typescriptpoet/issues/46))
 
 **Declarations**
 - `async`, generator functions and methods, and arrow functions.

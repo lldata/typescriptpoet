@@ -20,6 +20,7 @@ import dk.lldata.typescriptpoet.ClassSpec
 import dk.lldata.typescriptpoet.CodeWriter
 import dk.lldata.typescriptpoet.FunctionSpec
 import dk.lldata.typescriptpoet.TypeName
+import dk.lldata.typescriptpoet.TypePredicate
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -146,6 +147,42 @@ class TypeOperatorTests {
     )
 
     assertThat(lambda.toString(), emits("<T>(value: T) => T"))
+  }
+
+  @Test
+  @DisplayName("Generates a type predicate in a function type")
+  fun testLambdaTypePredicate() {
+    // The plain `is` case, via the vararg form of `lambda`.
+    assertThat(
+      TypeName.lambda("raw" to TypeName.STRING, typePredicate = TypePredicate.isType("raw", person)).toString(),
+      emits("(raw: string) => raw is Person"),
+    )
+
+    // Both assertion-signature forms, and the Map-taking form of `lambda`.
+    assertThat(
+      TypeName.lambda(
+        mapOf("value" to TypeName.implicit("unknown")),
+        typePredicate = TypePredicate.asserts("value", person),
+      ).toString(),
+      emits("(value: unknown) => asserts value is Person"),
+    )
+    assertThat(
+      TypeName.lambda(
+        mapOf("value" to TypeName.implicit("unknown")),
+        typePredicate = TypePredicate.asserts("value"),
+      ).toString(),
+      emits("(value: unknown) => asserts value"),
+    )
+
+    // A generic function type can carry one too.
+    assertThat(
+      TypeName.genericLambda(
+        typeVariables = listOf(TypeName.typeVariable("T")),
+        parameters = mapOf("raw" to TypeName.implicit("unknown")),
+        typePredicate = TypePredicate.isType("raw", TypeName.typeVariable("T")),
+      ).toString(),
+      emits("<T>(raw: unknown) => raw is T"),
+    )
   }
 
   @Test
