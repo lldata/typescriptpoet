@@ -5,9 +5,15 @@ description: Look over the repository, find the one thing most stuck, and move i
 
 # Tend the repository
 
-Read `AGENTS.md` first. This skill is the procedure for the periodic sweep: the rest of the
-automation reacts to events, and events are missed, fail, or arrive while nobody is looking.
-This is what notices.
+Read `AGENTS.md` first. This skill is the procedure for the sweep: the rest of the automation
+reacts to events, and events are missed, fail, or arrive while nobody is looking. This is what
+notices.
+
+It is also what dispatches. A trusted author's issue is no longer worked by the issue event
+itself — this runs on every merge to `main`, when an issue opens, and every three hours, and
+picks up one piece of work each time. Waking on the merge is deliberate: it is the first moment
+the next issue can be branched from a `main` that contains the last one, which is what keeps a
+regenerated golden file or ABI dump from being built on a base that is already stale.
 
 Do **one** thing per run and do it properly. A run that fixes one stuck pull request is worth
 more than a run that touches five and finishes none.
@@ -39,6 +45,10 @@ pushing something to make it pass.
 request. Treat it as `/work-issue` would: reproduce, decide whether it belongs here, implement
 or explain. A previous run that died leaves exactly this shape, so check whether one did before
 starting from scratch — the run log may already contain the diagnosis.
+
+Take the **oldest** first. Several issues filed together are worked in the order they were
+filed, which is the order the person filing them expects, and the merge that ends this run
+wakes the next sweep for the next one.
 
 **An issue from anyone else, unanswered.** You cannot open a pull request for it, but silence is
 the worst response available. Reproduce it, say plainly what is happening, and label it. Leave

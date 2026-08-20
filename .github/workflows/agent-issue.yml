@@ -1,7 +1,10 @@
 name: Agent — work an issue
 
-# A new issue from a trusted author is a work order: the agent implements it and opens a pull
-# request. An issue from anyone else stops at the authorisation job, which records why in the
+# A new issue from a trusted author is a work order, but this workflow no longer starts that
+# work when the issue opens. `agent-tend.yml` does, one issue at a time, oldest first, waking on
+# each merge so the next issue starts from a `main` containing the last one. What is left here
+# is answering an issue from an untrusted author, and a manual dispatch for forcing one specific
+# issue. An issue from anyone else stops at the authorisation job, which records why in the
 # run's annotations rather than failing.
 #
 # GitHub applies a second gate of its own before this ever matters: claude-code-action rejects
@@ -142,7 +145,17 @@ jobs:
 
   work:
     needs: [ authorise ]
-    if: needs.authorise.outputs.trusted == 'true'
+    # By hand only. A run started by `issues: [opened]` is pinned to one issue, and issues filed
+    # close together evict all but the newest from the concurrency group's single pending slot —
+    # silently, with no job ever starting and nothing left recording that the issue was owed a
+    # run. Automatic dispatch belongs to `agent-tend.yml`, which survives eviction because it
+    # derives its work from the repository instead of carrying it in the event.
+    #
+    # This remains for forcing one specific issue, and for retrying after a failed attempt:
+    #
+    #     gh workflow run agent-issue.yml -f issue=46
+    #
+    if: needs.authorise.outputs.trusted == 'true' && github.event_name == 'workflow_dispatch'
 
     runs-on: ubuntu-latest
     timeout-minutes: 60
