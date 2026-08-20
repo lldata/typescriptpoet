@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Builder</title>
+    <link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer="defer"></script>
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    typescriptpoet
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+2.0.0        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":/main"
+                                       data-filter=":/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    typescriptpoet
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="typescriptpoet::dk.lldata.typescriptpoet/InterfaceSpec.Builder///PointingToDeclaration//-251573632">
+  <div class="breadcrumbs"><a href="../../../../index.html">typescriptpoet</a><span class="delimiter">/</span><a href="../../index.html">dk.lldata.typescriptpoet</a><span class="delimiter">/</span><a href="../index.html">InterfaceSpec</a><span class="delimiter">/</span><span class="current">Builder</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Builder</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Builder</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="../../-type-spec/-builder/index.html">TypeSpec.Builder</a><span class="token operator">&lt;</span><a href="../index.html">InterfaceSpec</a><span class="token punctuation">, </span><a href="index.html">InterfaceSpec.Builder</a><span class="token operator">&gt; </span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-1867008107%2FConstructors%2F-251573632" anchor-label="Builder" id="-1867008107%2FConstructors%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-builder.html"><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1867008107%2FConstructors%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-449193880%2FProperties%2F-251573632" anchor-label="tags" id="-449193880%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../-taggable/-builder/tags.html"><span><span>tags</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-449193880%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../../-taggable/-builder/tags.html">tags</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Mutable map of the current tags this builder contains.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-1764473056%2FFunctions%2F-251573632" anchor-label="addFunction" id="-1764473056%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-function.html"><span>add</span><wbr></wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1764473056%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-function.html"><span class="token function">addFunction</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">functionSpec<span class="token operator">: </span><a href="../../-function-spec/index.html">FunctionSpec</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds a method signature: <code class="lang-kotlin">greet(): string;</code>. Emitted body-less.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1335656761%2FFunctions%2F-251573632" anchor-label="addFunctions" id="-1335656761%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-functions.html"><span>add</span><wbr></wbr><span><span>Functions</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1335656761%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-functions.html"><span class="token function">addFunctions</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">functionSpecs<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="../../-function-spec/index.html">FunctionSpec</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds method signatures: <code class="lang-kotlin">greet(): string;</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="538880268%2FFunctions%2F-251573632" anchor-label="addIndexable" id="538880268%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-indexable.html"><span>add</span><wbr></wbr><span><span>Indexable</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="538880268%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-indexable.html"><span class="token function">addIndexable</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">functionSpec<span class="token operator">: </span><a href="../../-function-spec/index.html">FunctionSpec</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds an index signature: <code class="lang-kotlin">[key: string]: unknown;</code>. Must be ABSTRACT.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-693716045%2FFunctions%2F-251573632" anchor-label="addIndexables" id="-693716045%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-indexables.html"><span>add</span><wbr></wbr><span><span>Indexables</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-693716045%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-indexables.html"><span class="token function">addIndexables</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">indexableSpecs<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="../../-function-spec/index.html">FunctionSpec</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds index signatures: <code class="lang-kotlin">[key: string]: unknown;</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1965054432%2FFunctions%2F-251573632" anchor-label="addModifiers" id="-1965054432%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-modifiers.html"><span>add</span><wbr></wbr><span><span>Modifiers</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1965054432%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-modifiers.html"><span class="token function">addModifiers</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>modifiers<span class="token operator">: </span><a href="../../-modifier/index.html">Modifier</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds modifiers: <code class="lang-kotlin">export interface Person { }</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1326614596%2FFunctions%2F-251573632" anchor-label="addProperties" id="1326614596%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-properties.html"><span>add</span><wbr></wbr><span><span>Properties</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1326614596%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-properties.html"><span class="token function">addProperties</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">propertySpecs<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="../../-property-spec/index.html">PropertySpec</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds members: <code class="lang-kotlin">name: string;</code>. Initializers and decorators are not allowed.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1196151958%2FFunctions%2F-251573632" anchor-label="addProperty" id="1196151958%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-property.html"><span>add</span><wbr></wbr><span><span>Property</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1196151958%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-property.html"><span class="token function">addProperty</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">propertySpec<span class="token operator">: </span><a href="../../-property-spec/index.html">PropertySpec</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds a member: <code class="lang-kotlin">readonly name?: string;</code>. Initializers and decorators are not allowed.</p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-overloads/index.html"><span class="token annotation builtin">JvmOverloads</span></a></div></div><span class="token keyword">fun </span><a href="add-property.html"><span class="token function">addProperty</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="../../-type-name/index.html">TypeName</a><span class="token punctuation">, </span></span><span class="parameter ">optional<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>modifiers<span class="token operator">: </span><a href="../../-modifier/index.html">Modifier</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds a member: <code class="lang-kotlin">readonly name?: string;</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-469650348%2FFunctions%2F-251573632" anchor-label="addSuperInterface" id="-469650348%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-super-interface.html"><span>add</span><wbr></wbr><span>Super</span><wbr></wbr><span><span>Interface</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-469650348%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-super-interface.html"><span class="token function">addSuperInterface</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">superClass<span class="token operator">: </span><a href="../../-type-name/index.html">TypeName</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds an extended interface: <code class="lang-kotlin">interface Admin extends Person { }</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="898480460%2FFunctions%2F-251573632" anchor-label="addTSDoc" id="898480460%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-t-s-doc.html"><span>add</span><wbr></wbr><span><span>TSDoc</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="898480460%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-t-s-doc.html"><span class="token function">addTSDoc</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><a href="../../-code-block/index.html">CodeBlock</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-t-s-doc.html"><span class="token function">addTSDoc</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">format<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>args<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds TSDoc above the interface.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1208678094%2FFunctions%2F-251573632" anchor-label="addTypeVariable" id="-1208678094%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-type-variable.html"><span>add</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Variable</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1208678094%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-type-variable.html"><span class="token function">addTypeVariable</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">typeVariable<span class="token operator">: </span><a href="../../-type-name/-type-variable/index.html">TypeName.TypeVariable</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds a type parameter: <code class="lang-kotlin">interface Box&lt;T&gt; { }</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1247654859%2FFunctions%2F-251573632" anchor-label="addTypeVariables" id="-1247654859%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-type-variables.html"><span>add</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Variables</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1247654859%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add-type-variables.html"><span class="token function">addTypeVariables</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">typeVariables<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="../../-type-name/-type-variable/index.html">TypeName.TypeVariable</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Adds type parameters: <code class="lang-kotlin">interface Box&lt;T&gt; { }</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-602025604%2FFunctions%2F-251573632" anchor-label="build" id="-602025604%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="build.html"><span><span>build</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-602025604%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="build.html"><span class="token function">build</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html">InterfaceSpec</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-82163924%2FFunctions%2F-251573632" anchor-label="call" id="-82163924%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../../dk.lldata.typescriptpoet.dsl/call.html"><span><span>call</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-82163924%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/call.html"><span class="token function">call</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>modifiers<span class="token operator">: </span><a href="../../-modifier/index.html">Modifier</a><span class="token punctuation">, </span></span><span class="parameter ">block<span class="token operator">: </span><span data-unresolved-link="dk.lldata.typescriptpoet.dsl/FunctionBlock///PointingToDeclaration/">FunctionBlock</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">(value: string): number;</code> — a call signature, which only an interface has.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1334824970%2FFunctions%2F-251573632" anchor-label="callable" id="1334824970%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="callable.html"><span><span>callable</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1334824970%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="callable.html"><span class="token function">callable</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">callable<span class="token operator">: </span><a href="../../-function-spec/index.html">FunctionSpec</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Sets the call signature: <code class="lang-kotlin">(value: string): number;</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-963662243%2FFunctions%2F-251573632" anchor-label="extends" id="-963662243%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../../dk.lldata.typescriptpoet.dsl/extends.html"><span><span>extends</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-963662243%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/extends.html"><span class="token function">extends</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>types<span class="token operator">: </span><a href="../../-type-name/index.html">TypeName</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">extends A, B</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-235736373%2FFunctions%2F-251573632" anchor-label="function" id="-235736373%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../../dk.lldata.typescriptpoet.dsl/function.html"><span><span>function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-235736373%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/function.html"><span class="token function">function</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>modifiers<span class="token operator">: </span><a href="../../-modifier/index.html">Modifier</a><span class="token punctuation">, </span></span><span class="parameter ">block<span class="token operator">: </span><span data-unresolved-link="dk.lldata.typescriptpoet.dsl/FunctionBlock///PointingToDeclaration/">FunctionBlock</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">name(): T;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="324484482%2FFunctions%2F-251573632" anchor-label="index" id="324484482%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../../dk.lldata.typescriptpoet.dsl/--index--.html"><span><span>index</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="324484482%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/--index--.html"><span class="token function">index</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>modifiers<span class="token operator">: </span><a href="../../-modifier/index.html">Modifier</a><span class="token punctuation">, </span></span><span class="parameter ">block<span class="token operator">: </span><span data-unresolved-link="dk.lldata.typescriptpoet.dsl/FunctionBlock///PointingToDeclaration/">FunctionBlock</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">[key: string]: T;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-774873058%2FFunctions%2F-251573632" anchor-label="optional" id="-774873058%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../../dk.lldata.typescriptpoet.dsl/optional.html"><span><span>optional</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-774873058%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/optional.html"><span class="token function">optional</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="../../-type-name/index.html">TypeName</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">name?: T;</code></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/optional.html"><span class="token function"><strike>optional</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1779909781%2FFunctions%2F-251573632" anchor-label="property" id="1779909781%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../../dk.lldata.typescriptpoet.dsl/property.html"><span><span>property</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1779909781%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/property.html"><span class="token function"><strike>property</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a></div><br><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/property.html"><span class="token function">property</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="../../-type-name/index.html">TypeName</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>modifiers<span class="token operator">: </span><a href="../../-modifier/index.html">Modifier</a><span class="token punctuation">, </span></span><span class="parameter ">block<span class="token operator">: </span><span data-unresolved-link="dk.lldata.typescriptpoet.dsl/PropertyBlock///PointingToDeclaration/">PropertyBlock</span><span class="token operator"> = </span>{}</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">name: T;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-434475547%2FFunctions%2F-251573632" anchor-label="tag" id="-434475547%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../-taggable/-builder/tag.html"><span><span>tag</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-434475547%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../-taggable/-builder/tag.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../../-taggable/-builder/tag.html"><span class="token function">tag</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span data-unresolved-link="dk.lldata.typescriptpoet/InterfaceSpec.Builder/tag/#java.lang.Class[TypeParam(bounds=[kotlin.Any])]#TypeParam(bounds=[kotlin.Any])?/PointingToGenericParameters(0)/">T</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">tag<span class="token operator">: </span><span data-unresolved-link="dk.lldata.typescriptpoet/InterfaceSpec.Builder/tag/#java.lang.Class[TypeParam(bounds=[kotlin.Any])]#TypeParam(bounds=[kotlin.Any])?/PointingToGenericParameters(0)/">T</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../-taggable/-builder/tag.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../../-taggable/-builder/tag.html"><span class="token function">tag</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span data-unresolved-link="dk.lldata.typescriptpoet/InterfaceSpec.Builder/tag/#kotlin.reflect.KClass[TypeParam(bounds=[kotlin.Any])]#TypeParam(bounds=[kotlin.Any])?/PointingToGenericParameters(0)/">T</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">tag<span class="token operator">: </span><span data-unresolved-link="dk.lldata.typescriptpoet/InterfaceSpec.Builder/tag/#kotlin.reflect.KClass[TypeParam(bounds=[kotlin.Any])]#TypeParam(bounds=[kotlin.Any])?/PointingToGenericParameters(0)/">T</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">Attaches <a href="../../-taggable/-builder/tag.html">tag</a> to the request using <a href="../../-taggable/-builder/tag.html">type</a> as a key. Tags can be read from a request using <a href="../../-taggable/tag.html">Taggable.tag</a>. Use <code class="lang-kotlin">null</code> to remove any existing tag assigned for <a href="../../-taggable/-builder/tag.html">type</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1020087557%2FFunctions%2F-251573632" anchor-label="tag" id="-1020087557%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../tag.html"><span><span>tag</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1020087557%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../tag.html">TAG</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><a href="../../tag.html">T</a><span class="token operator"> : </span><a href="../../-type-spec/index.html">TypeSpec</a><span class="token operator">&lt;</span><a href="../../tag.html">T</a><span class="token punctuation">, </span><a href="../../tag.html">B</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><a href="../../tag.html">B</a><span class="token operator"> : </span><a href="../../-type-spec/-builder/index.html">TypeSpec.Builder</a><span class="token operator">&lt;</span><a href="../../tag.html">T</a><span class="token punctuation">, </span><a href="../../tag.html">B</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../../-type-spec/-builder/index.html">TypeSpec.Builder</a><span class="token operator">&lt;</span><a href="../../tag.html">T</a><span class="token punctuation">, </span><a href="../../tag.html">B</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../tag.html"><span class="token function">tag</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">tag<span class="token operator">: </span><a href="../../tag.html">TAG</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../tag.html">B</a></div><div class="brief "><p class="paragraph">Attaches <a href="../../tag.html">tag</a> to the request using <a href="../../tag.html">T</a> as a key. Tags can be read from a request using <a href="../../-taggable/tag.html">Taggable.tag</a>. Use <code class="lang-kotlin">null</code> to remove any existing tag assigned for <a href="../../tag.html">T</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="678111440%2FFunctions%2F-251573632" anchor-label="tsDoc" id="678111440%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../../dk.lldata.typescriptpoet.dsl/ts-doc.html"><span>ts</span><wbr></wbr><span><span>Doc</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="678111440%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/ts-doc.html"><span class="token function">tsDoc</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">format<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>args<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph">A TSDoc comment above the interface.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-951458579%2FFunctions%2F-251573632" anchor-label="typeParam" id="-951458579%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../../dk.lldata.typescriptpoet.dsl/type-param.html"><span>type</span><wbr></wbr><span><span>Param</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-951458579%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/type-param.html"><span class="token function">typeParam</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">variable<span class="token operator">: </span><a href="../../-type-name/-type-variable/index.html">TypeName.TypeVariable</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">&lt;T&gt;</code>, reusing a variable declared elsewhere.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">InterfaceSpec.Builder</a><span class="token punctuation">.</span><a href="../../../dk.lldata.typescriptpoet.dsl/type-param.html"><span class="token function">typeParam</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>bounds<span class="token operator">: </span><a href="../../-type-name/-type-variable/-bound/index.html">TypeName.TypeVariable.Bound</a><span class="token punctuation">, </span></span><span class="parameter ">variance<span class="token operator">: </span><a href="../../-type-name/-type-variable/-variance/index.html">TypeName.TypeVariable.Variance</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">const<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">InterfaceSpec.Builder</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">&lt;T extends Base&gt;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
