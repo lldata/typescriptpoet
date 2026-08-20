@@ -158,9 +158,19 @@ standards, and it says when a release is due and what should be in it. It runs o
 today, which is an implementation detail rather than a commitment — the instructions it works
 from are written for any agent that can read them.
 
-What it does not do is merge or publish. Every change arrives as a pull request that a human
-reads and merges, and releases are tagged by hand — so the experiment is about judgment and
-throughput rather than about removing the last review.
+What it does not do is publish. Releases are tagged by hand, and nothing reaches Maven Central
+until a person presses Publish, because a published version is permanent and cannot be recalled.
+
+Merging is delegated, within limits. The agent may merge its own pull request once the build is
+green on every JDK the project targets, the change carries a test that fails without it and a
+changelog entry, and the public ABI is unchanged or additive. It does not merge a breaking
+change, anything that alters the rules it works from or the path a release takes — a change to
+the rules cannot be authorised by the rules it changes — or a contribution from outside the
+project, which is a human's decision about someone else's code. Those stay open for a person to
+read.
+
+So the experiment is about how much judgment can be delegated while the irreversible steps stay
+human, rather than about removing review altogether.
 
 The agent's standing instructions are in [AGENTS.md](AGENTS.md), checked in rather than hidden,
 because a contributor should be able to read exactly what their change is being judged against.
@@ -254,14 +264,14 @@ Download [the latest .jar][dl] or depend via Maven:
 <dependency>
   <groupId>dk.lldata</groupId>
   <artifactId>typescriptpoet</artifactId>
-  <version>2.0.0-alpha11</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 or Gradle:
 
 ```kotlin
-implementation("dk.lldata:typescriptpoet:2.0.0-alpha11")
+implementation("dk.lldata:typescriptpoet:2.0.0")
 ```
 
 The library has no runtime dependencies beyond the Kotlin standard library. It targets Java 8
