@@ -146,6 +146,11 @@ inline fun FileSpec.Builder.property(
   block: PropertyBlock = {},
 ) = addProperty(PropertySpec.builder(name, type).addModifiers(*modifiers).apply(block).build())
 
+/** `const name = …;` — needs one of CONST, LET or VAR. The type is left to inference. */
+@JvmSynthetic
+inline fun FileSpec.Builder.property(name: String, vararg modifiers: Modifier, block: PropertyBlock = {}) =
+  addProperty(PropertySpec.builder(name).addModifiers(*modifiers).apply(block).build())
+
 /** `export … ;` */
 @JvmSynthetic
 fun FileSpec.Builder.export(exportSpec: ExportSpec) = addExport(exportSpec)
@@ -188,6 +193,11 @@ inline fun ModuleSpec.Builder.property(
   vararg modifiers: Modifier,
   block: PropertyBlock = {},
 ) = addProperty(PropertySpec.builder(name, type).addModifiers(*modifiers).apply(block).build())
+
+/** `const name = …;` — needs one of CONST, LET or VAR. The type is left to inference. */
+@JvmSynthetic
+inline fun ModuleSpec.Builder.property(name: String, vararg modifiers: Modifier, block: PropertyBlock = {}) =
+  addProperty(PropertySpec.builder(name).addModifiers(*modifiers).apply(block).build())
 
 /** `// text` */
 @JvmSynthetic

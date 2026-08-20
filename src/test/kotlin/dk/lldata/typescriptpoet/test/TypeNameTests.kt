@@ -53,6 +53,18 @@ class TypeNameTests {
   }
 
   @Test
+  @DisplayName("Rejects a blank implicit type name")
+  fun testRejectsBlankImplicit() {
+    val error = runCatching { TypeName.implicit("") }.exceptionOrNull()
+
+    assertThat(error is IllegalArgumentException, equalTo(true))
+
+    val blankError = runCatching { TypeName.implicit("   ") }.exceptionOrNull()
+
+    assertThat(blankError is IllegalArgumentException, equalTo(true))
+  }
+
+  @Test
   @DisplayName("Anonymous type names produce valid syntax")
   fun testAnonymousNameGen() {
     val typeName = TypeName.anonymousType("a" to STRING, "b" to NUMBER, "C" to BOOLEAN)

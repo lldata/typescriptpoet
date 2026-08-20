@@ -633,6 +633,7 @@ public final class dk/lldata/typescriptpoet/PropertySpec : dk/lldata/typescriptp
 	public synthetic fun <init> (Ldk/lldata/typescriptpoet/PropertySpec$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public static final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
 	public static final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public static final fun builder (Ljava/lang/String;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
 	public final fun getDecorators ()Ljava/util/List;
 	public final fun getDefiniteAssignment ()Z
 	public final fun getInitializer ()Ldk/lldata/typescriptpoet/CodeBlock;
@@ -663,6 +664,7 @@ public final class dk/lldata/typescriptpoet/PropertySpec$Builder : dk/lldata/typ
 public final class dk/lldata/typescriptpoet/PropertySpec$Companion {
 	public final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
 	public final fun builder (Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
+	public final fun builder (Ljava/lang/String;[Ldk/lldata/typescriptpoet/Modifier;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
 	public static synthetic fun builder$default (Ldk/lldata/typescriptpoet/PropertySpec$Companion;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Z[Ldk/lldata/typescriptpoet/Modifier;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/PropertySpec$Builder;
 }
 
@@ -1399,9 +1401,13 @@ public final class dk/lldata/typescriptpoet/dsl/DeclarationsKt {
 	public static final synthetic fun obj (Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/ObjectLiteral;
 	public static final synthetic fun overloads (Ldk/lldata/typescriptpoet/FileSpec$Builder;Ljava/lang/String;[Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
 	public static final synthetic fun property (Ldk/lldata/typescriptpoet/FileSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public static final synthetic fun property (Ldk/lldata/typescriptpoet/FileSpec$Builder;Ljava/lang/String;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
 	public static final synthetic fun property (Ldk/lldata/typescriptpoet/ModuleSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public static final synthetic fun property (Ldk/lldata/typescriptpoet/ModuleSpec$Builder;Ljava/lang/String;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
 	public static synthetic fun property$default (Ldk/lldata/typescriptpoet/FileSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
+	public static synthetic fun property$default (Ldk/lldata/typescriptpoet/FileSpec$Builder;Ljava/lang/String;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
 	public static synthetic fun property$default (Ldk/lldata/typescriptpoet/ModuleSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
+	public static synthetic fun property$default (Ldk/lldata/typescriptpoet/ModuleSpec$Builder;Ljava/lang/String;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
 	public static final synthetic fun type (Ldk/lldata/typescriptpoet/FileSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
 	public static final synthetic fun type (Ldk/lldata/typescriptpoet/ModuleSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/ModuleSpec$Builder;
 	public static synthetic fun type$default (Ldk/lldata/typescriptpoet/FileSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/FileSpec$Builder;
@@ -1450,8 +1456,10 @@ public final class dk/lldata/typescriptpoet/dsl/MembersKt {
 	public static final synthetic fun parameter (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;ZLkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
 	public static synthetic fun parameter$default (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
 	public static final synthetic fun property (Ldk/lldata/typescriptpoet/ClassSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public static final synthetic fun property (Ldk/lldata/typescriptpoet/ClassSpec$Builder;Ljava/lang/String;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
 	public static final synthetic fun property (Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
 	public static synthetic fun property$default (Ldk/lldata/typescriptpoet/ClassSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
+	public static synthetic fun property$default (Ldk/lldata/typescriptpoet/ClassSpec$Builder;Ljava/lang/String;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/ClassSpec$Builder;
 	public static synthetic fun property$default (Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;[Ldk/lldata/typescriptpoet/Modifier;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/InterfaceSpec$Builder;
 	public static final synthetic fun rest (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Lkotlin/jvm/functions/Function1;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;
 	public static synthetic fun rest$default (Ldk/lldata/typescriptpoet/FunctionSpec$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/TypeName;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldk/lldata/typescriptpoet/FunctionSpec$Builder;

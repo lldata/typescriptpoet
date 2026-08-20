@@ -740,6 +740,12 @@ object KitchenSinkDsl {
       property("defaultLogger", logger, let)
       property("VERSION", string, const) { initializer("%S", "2.0.0") }
 
+      // No TypeName at all: the type is left to inference, which for an object literal is
+      // often better typing than anything a generator could name.
+      property("api", const) {
+        initializer("%L", call(TypeName.namedImport("createApi", "./api")))
+      }
+
       // `export default` is a modifier rather than a statement, and a file may carry one.
       clazz("Catalogue", export, default) {
         property("entries", TypeName.arrayShorthandType(string), readonly) { initializer("[]") }

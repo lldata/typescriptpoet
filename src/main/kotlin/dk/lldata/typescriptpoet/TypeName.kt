@@ -714,7 +714,10 @@ sealed class TypeName {
      * @param name Name for the implicit type, will be symbolized
      */
     @JvmStatic
-    fun implicit(name: String): Standard = Standard(SymbolSpec.implicit(name))
+    fun implicit(name: String): Standard {
+      require(name.isNotBlank()) { "implicit type name must not be blank" }
+      return Standard(SymbolSpec.implicit(name))
+    }
 
     /**
      * Any class/enum/primitive/etc type name
