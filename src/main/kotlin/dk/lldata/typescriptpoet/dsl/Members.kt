@@ -16,24 +16,18 @@
  */
 package dk.lldata.typescriptpoet.dsl
 
-import dk.lldata.typescriptpoet.CallExpression
 import dk.lldata.typescriptpoet.ClassSpec
 import dk.lldata.typescriptpoet.CodeBlock
 import dk.lldata.typescriptpoet.DecoratorSpec
 import dk.lldata.typescriptpoet.EnumSpec
-import dk.lldata.typescriptpoet.ExportSpec
-import dk.lldata.typescriptpoet.FileSpec
 import dk.lldata.typescriptpoet.FunctionSpec
 import dk.lldata.typescriptpoet.InterfaceSpec
 import dk.lldata.typescriptpoet.Modifier
-import dk.lldata.typescriptpoet.ModuleSpec
-import dk.lldata.typescriptpoet.ObjectLiteral
 import dk.lldata.typescriptpoet.ParameterSpec
 import dk.lldata.typescriptpoet.PropertySpec
 import dk.lldata.typescriptpoet.SymbolSpec
 import dk.lldata.typescriptpoet.TypeAliasSpec
 import dk.lldata.typescriptpoet.TypeName
-import dk.lldata.typescriptpoet.TypeScriptPoetDsl
 
 // The member half of the DSL: what goes inside a class, an interface, a function, an enum or an
 // object literal. See Declarations.kt for the file- and namespace-level half.

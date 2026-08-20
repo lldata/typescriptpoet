@@ -127,6 +127,8 @@ private fun isEcmaScriptIdStart(codePoint: Int): Boolean =
 
 // Approximates Unicode's ID_Continue: ID_Start plus combining marks, decimal digits, and
 // connector punctuation (e.g. the underscore itself).
+// The guard reads better than folding it into the `when` with `||`.
+@Suppress("RedundantIf")
 private fun isEcmaScriptIdContinue(codePoint: Int): Boolean {
   if (isEcmaScriptIdStart(codePoint)) return true
   return when (Character.getType(codePoint)) {
