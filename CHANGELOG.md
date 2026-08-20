@@ -239,6 +239,12 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   operators, conditional and mapped types, object literals and call expressions the same page
   advertises — while the Maven Central badge a screen above resolved the real latest version.
   ([#60](https://github.com/lldata/typescriptpoet/pull/60))
+- CI runs on current action majors: `checkout` v7, `setup-node` v7, `upload-artifact` v7,
+  `download-artifact` v8 and `gradle/actions` v6. Nothing about the published artifact changes;
+  the JDK stays at 17 to match the Gradle toolchain and Node stays at 22, both LTS. `checkout`
+  had drifted to two majors at once — v5 in the build and publish workflows, v6 in the agent
+  ones — which is the shape of gap that stays invisible until something stops working.
+  ([#61](https://github.com/lldata/typescriptpoet/pull/61))
 
 ### Changed
 
