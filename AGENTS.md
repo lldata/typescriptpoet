@@ -376,8 +376,11 @@ and what should be in it; a human tags.
 
 The version policy:
 
-- **2.0.0 has not shipped yet.** The latest tag is `v2.0.0-alpha7`. Until a human cuts 2.0.0 by
-  hand, release automation stays dormant: no tags are proposed automatically on merge.
+- **2.0.0 has not shipped yet.** Every tag so far is a 2.0.0 alpha; `git describe --tags
+  --abbrev=0` names the current one. This file deliberately does not, because a version copied
+  into prose is wrong from the next tag onwards and nothing here checks it — it said `alpha7`
+  through alpha8, alpha9 and alpha10. Until a human cuts 2.0.0 by hand, release automation stays
+  dormant: no tags are proposed automatically on merge.
 - **After 2.0.0 ships**, a merged PR earns a patch bump — 2.0.0 → 2.0.1. That is the default for
   fixes and for additions that do not change the public API.
 - **A minor or major release happens only when a trusted author opens an issue asking for one.**
