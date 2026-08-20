@@ -562,6 +562,7 @@ sealed class TypeName {
     val typeVariables: List<TypeVariable> = emptyList(),
     val constructable: Boolean = false,
     val abstract: Boolean = false,
+    val typePredicate: TypePredicate? = null,
   ) : TypeName() {
 
     override val bindsLoosely: Boolean get() = true
@@ -587,7 +588,18 @@ sealed class TypeName {
         }
       }
       codeWriter.emit(") => ")
-      returnType.emit(codeWriter)
+      if (typePredicate != null) {
+        if (typePredicate.asserts) {
+          codeWriter.emit("asserts ")
+        }
+        codeWriter.emit(typePredicate.parameterName)
+        typePredicate.type?.let {
+          codeWriter.emit(" is ")
+          it.emit(codeWriter)
+        }
+      } else {
+        returnType.emit(codeWriter)
+      }
     }
 
     override fun toString() = buildCodeString { emit(this) }
@@ -1079,6 +1091,23 @@ sealed class TypeName {
       Lambda(parameters.toMap(), returnType)
 
     /**
+     * A lambda type whose return position is a type predicate rather than a type
+     * (e.g. `(raw: string) => raw is Brand`).
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun lambda(parameters: Map<String, TypeName> = emptyMap(), typePredicate: TypePredicate) =
+      Lambda(parameters, typePredicate = typePredicate)
+
+    /**
+     * A lambda type whose return position is a type predicate rather than a type
+     * (e.g. `(raw: string) => raw is Brand`).
+     */
+    @JvmStatic
+    fun lambda(vararg parameters: Pair<String, TypeName> = emptyArray(), typePredicate: TypePredicate) =
+      Lambda(parameters.toMap(), typePredicate = typePredicate)
+
+    /**
      * A generic function type (e.g. `<T>(value: T) => T`).
      *
      * @param typeVariables Type parameters of the function type
@@ -1092,6 +1121,22 @@ sealed class TypeName {
       parameters: Map<String, TypeName> = emptyMap(),
       returnType: TypeName,
     ) = Lambda(parameters, returnType, typeVariables)
+
+    /**
+     * A generic function type whose return position is a type predicate rather than a type
+     * (e.g. `<T>(raw: unknown) => raw is T`).
+     *
+     * @param typeVariables Type parameters of the function type
+     * @param parameters Parameters of the function type
+     * @param typePredicate Type predicate stood in place of a return type
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun genericLambda(
+      typeVariables: List<TypeVariable>,
+      parameters: Map<String, TypeName> = emptyMap(),
+      typePredicate: TypePredicate,
+    ) = Lambda(parameters, typeVariables = typeVariables, typePredicate = typePredicate)
 
     /**
      * A construct signature type (e.g. `new (value: string) => Widget`).

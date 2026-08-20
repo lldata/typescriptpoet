@@ -20,11 +20,32 @@ package dk.lldata.typescriptpoet
  * A type-predicate return type: `x is Y`, `asserts x`, or `asserts x is Y`.
  *
  * These are return-position-only and depend on a parameter name, so they are not a
- * [TypeName] -- a predicate cannot appear anywhere a type can.
+ * [TypeName] -- a predicate cannot appear anywhere a type can. A function *type* still has a
+ * return position of its own, which is where [TypeName.lambda] and [TypeName.genericLambda]
+ * take one of these instead of a [TypeName].
  */
 @ConsistentCopyVisibility
 data class TypePredicate
-internal constructor(val parameterName: String, val type: TypeName?, val asserts: Boolean)
+internal constructor(val parameterName: String, val type: TypeName?, val asserts: Boolean) {
+
+  companion object {
+
+    /** A predicate return type: `parameterName is type` (e.g. `raw is Brand`). */
+    @JvmStatic
+    fun isType(parameterName: String, type: TypeName): TypePredicate =
+      TypePredicate(parameterName, type, asserts = false)
+
+    /**
+     * An assertion signature: `asserts parameterName` or `asserts parameterName is type`.
+     *
+     * @param type Type asserted, or null for a bare `asserts parameterName`
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun asserts(parameterName: String, type: TypeName? = null): TypePredicate =
+      TypePredicate(parameterName, type, asserts = true)
+  }
+}
 
 /** A generated function declaration. */
 class FunctionSpec
@@ -405,7 +426,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
      */
     fun returnsIs(parameterName: String, type: TypeName) = apply {
       check(!name.isConstructor) { "$name cannot have a return type" }
-      this.typePredicate = TypePredicate(parameterName, type, asserts = false)
+      this.typePredicate = TypePredicate.isType(parameterName, type)
     }
 
     /**
@@ -417,7 +438,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     @JvmOverloads
     fun returnsAsserts(parameterName: String, type: TypeName? = null) = apply {
       check(!name.isConstructor) { "$name cannot have a return type" }
-      this.typePredicate = TypePredicate(parameterName, type, asserts = true)
+      this.typePredicate = TypePredicate.asserts(parameterName, type)
     }
 
     /**

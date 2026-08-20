@@ -32,6 +32,7 @@ import dk.lldata.typescriptpoet.SymbolSpec
 import dk.lldata.typescriptpoet.TypeAliasSpec
 import dk.lldata.typescriptpoet.TypeName
 import dk.lldata.typescriptpoet.TypeName.Mapped
+import dk.lldata.typescriptpoet.TypePredicate
 import java.io.StringWriter
 
 /**
@@ -260,6 +261,18 @@ object KitchenSink {
     )
     file.addTypeAlias(
       TypeAliasSpec.builder("Handler", TypeName.lambda("event" to TypeName.STRING, returnType = TypeName.VOID)).build(),
+    )
+    // A type predicate in a function type's return position, rather than a type -- the case
+    // from #46, where narrowing to an imported type previously had no structured form and so
+    // bypassed the import collector.
+    file.addTypeAlias(
+      TypeAliasSpec.builder(
+        "Guard",
+        TypeName.lambda(
+          "raw" to TypeName.implicit("unknown"),
+          typePredicate = TypePredicate.isType("raw", engine),
+        ),
+      ).build(),
     )
     file.addTypeAlias(
       TypeAliasSpec.builder(

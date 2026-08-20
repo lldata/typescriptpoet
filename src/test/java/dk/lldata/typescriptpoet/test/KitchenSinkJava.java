@@ -32,6 +32,7 @@ import dk.lldata.typescriptpoet.PropertySpec;
 import dk.lldata.typescriptpoet.SymbolSpec;
 import dk.lldata.typescriptpoet.TypeAliasSpec;
 import dk.lldata.typescriptpoet.TypeName;
+import dk.lldata.typescriptpoet.TypePredicate;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -192,6 +193,15 @@ final class KitchenSinkJava {
     eventParam.put("event", TypeName.STRING);
     file.addTypeAlias(
         TypeAliasSpec.builder("Handler", TypeName.lambda(eventParam, TypeName.VOID)).build());
+
+    // A type predicate in a function type's return position, rather than a type -- the case
+    // from #46, where narrowing to an imported type previously had no structured form and so
+    // bypassed the import collector.
+    Map<String, TypeName> guardParam = new LinkedHashMap<>();
+    guardParam.put("raw", TypeName.implicit("unknown"));
+    file.addTypeAlias(
+        TypeAliasSpec.builder("Guard", TypeName.lambda(guardParam, TypePredicate.isType("raw", engine)))
+            .build());
 
     Map<String, TypeName> identityParams = new LinkedHashMap<>();
     identityParams.put("value", TypeName.typeVariable("V"));

@@ -25,6 +25,7 @@ import dk.lldata.typescriptpoet.ParameterSpec
 import dk.lldata.typescriptpoet.SymbolSpec
 import dk.lldata.typescriptpoet.TypeName
 import dk.lldata.typescriptpoet.TypeName.Mapped
+import dk.lldata.typescriptpoet.TypePredicate
 import dk.lldata.typescriptpoet.dsl.abstract
 import dk.lldata.typescriptpoet.dsl.accessor
 import dk.lldata.typescriptpoet.dsl.and
@@ -208,6 +209,10 @@ object KitchenSinkDsl {
       type("MixedArray", TypeName.arrayShorthandType(string or number))
       type("KeysOfEither", TypeName.keyOf(person or options))
       type("Handler", TypeName.lambda("event" to string, returnType = void))
+      // A type predicate in a function type's return position, rather than a type -- the case
+      // from #46, where narrowing to an imported type previously had no structured form and so
+      // bypassed the import collector.
+      type("Guard", TypeName.lambda("raw" to unknown, typePredicate = TypePredicate.isType("raw", engine)))
       type(
         "Identity",
         TypeName.genericLambda(
