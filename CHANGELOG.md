@@ -226,6 +226,14 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   `export const api:  = createApi();` — a dangling colon and a doubled space, silently, until
   `tsc` saw it. `implicit()` now requires a non-blank name.
   ([#48](https://github.com/lldata/typescriptpoet/issues/48))
+- `FunctionSpec.Builder` refused a reserved word as a name unconditionally, but the same
+  builder produces class and interface methods, where TypeScript has no such restriction —
+  `class Repo { delete(id: string) { … } }` is ordinary TypeScript, and `{ delete: … }` already
+  worked as an object literal key. The check only belongs where the name becomes a binding, so
+  it moved to `FileSpec.addFunction` and `ModuleSpec.addFunction`; `ClassSpec.addFunction` and
+  `InterfaceSpec.addFunction` no longer run it. `EnumSpec.addConstant` dropped the check
+  entirely, since an enum member is a member name too — `enum E { delete }` is legal.
+  ([#47](https://github.com/lldata/typescriptpoet/issues/47))
 
 ### Changed
 

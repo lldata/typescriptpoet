@@ -396,6 +396,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     /** Adds a function. Constructors and decorators are not allowed at file scope. */
     fun addFunction(functionSpec: FunctionSpec) = apply {
       require(!functionSpec.isConstructor) { "cannot add ${functionSpec.name} to file $modulePath" }
+      require(functionSpec.name.isName) { "not a valid name: ${functionSpec.name}" }
       require(functionSpec.decorators.isEmpty()) { "decorators on module functions are not allowed" }
       checkMemberModifiers(functionSpec.modifiers)
       members += functionSpec

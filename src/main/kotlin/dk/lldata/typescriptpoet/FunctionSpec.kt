@@ -298,6 +298,10 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     return builder
   }
 
+  // Unlike ParameterSpec, this does not reject a keyword name here: the same builder produces
+  // class and interface methods, where a reserved word is a legal member name (`delete()`).
+  // Only a binding position -- FileSpec.addFunction, ModuleSpec.addFunction -- can reject one,
+  // because only those know the spec is about to become a declaration rather than a member.
   @TypeScriptPoetDsl
   class Builder internal constructor(internal val name: String) : Taggable.Builder<Builder>() {
 
@@ -315,12 +319,6 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     internal var expressionBody: CodeBlock? = null
     internal var isArrow = false
     internal val body = CodeBlock.builder()
-
-    init {
-      require(name.isConstructor || name.isName) {
-        "not a valid name: $name"
-      }
-    }
 
     /** Adds TSDoc above the declaration. */
     fun addTSDoc(format: String, vararg args: Any) = apply {
