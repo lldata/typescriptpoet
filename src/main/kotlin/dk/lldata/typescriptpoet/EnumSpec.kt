@@ -86,9 +86,13 @@ private constructor(builder: Builder) : TypeSpec<EnumSpec, EnumSpec.Builder>(bui
     fun addConstant(name: String, initializer: String? = null) =
       addConstant(name, initializer?.let { CodeBlock.of(it) })
 
-    /** Adds a constant: `Up` or `Up = 1 << 2`. */
+    /**
+     * Adds a constant: `Up` or `Up = 1 << 2`.
+     *
+     * An enum member is a member name, not a binding, so a reserved word is legal here too:
+     * `enum E { delete }` is ordinary TypeScript.
+     */
     fun addConstant(name: String, initializer: CodeBlock?) = apply {
-      require(name.isName) { "not a valid enum constant: $name" }
       constants[name] = initializer
     }
 

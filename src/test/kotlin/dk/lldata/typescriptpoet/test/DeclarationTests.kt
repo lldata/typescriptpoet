@@ -19,6 +19,7 @@ package dk.lldata.typescriptpoet.test
 import dk.lldata.typescriptpoet.ClassSpec
 import dk.lldata.typescriptpoet.CodeWriter
 import dk.lldata.typescriptpoet.EnumSpec
+import dk.lldata.typescriptpoet.FileSpec
 import dk.lldata.typescriptpoet.FunctionSpec
 import dk.lldata.typescriptpoet.InterfaceSpec
 import dk.lldata.typescriptpoet.Modifier
@@ -466,5 +467,38 @@ class DeclarationTests {
 
       """.trimIndent(),
     )
+  }
+
+  @Test
+  @DisplayName("Allows a reserved word as a member name, where TypeScript allows one too")
+  fun testReservedWordAsMemberName() {
+    val testClass = ClassSpec.builder("Repo")
+      .addFunction(FunctionSpec.builder("delete").returns(TypeName.VOID).build())
+      .build()
+    assertThat(emit(testClass), emits("class Repo { delete(): void {} }"))
+
+    val testInterface = InterfaceSpec.builder("Repo")
+      .addFunction(
+        FunctionSpec.builder("delete").addModifiers(Modifier.ABSTRACT).returns(TypeName.VOID).build(),
+      )
+      .build()
+    assertThat(emit(testInterface), emits("interface Repo { delete(): void; }"))
+
+    val testEnum = EnumSpec.builder("E").addConstant("delete").build()
+    assertThat(emit(testEnum), emits("enum E { delete, }"))
+  }
+
+  @Test
+  @DisplayName("Still refuses a reserved word where it would be a binding, not a member")
+  fun testReservedWordRejectedAsBindingName() {
+    val fileError = runCatching {
+      FileSpec.builder("test").addFunction(FunctionSpec.builder("delete").build())
+    }.exceptionOrNull()
+    assertThat(fileError is IllegalArgumentException, equalTo(true))
+
+    val moduleError = runCatching {
+      ModuleSpec.builder("N").addFunction(FunctionSpec.builder("delete").build())
+    }.exceptionOrNull()
+    assertThat(moduleError is IllegalArgumentException, equalTo(true))
   }
 }
