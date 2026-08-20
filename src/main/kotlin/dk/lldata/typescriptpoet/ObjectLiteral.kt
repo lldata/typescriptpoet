@@ -19,7 +19,7 @@ package dk.lldata.typescriptpoet
 /**
  * An object literal expression: `{ name: n, send: (m: string): void => { ... } }`.
  *
- * Members are properties, shorthand, or getters. Built through [CodeBlock.objectLiteral] and
+ * Members are properties, shorthand, getters, or spreads. Built through [CodeBlock.objectLiteral] and
  * used as a `%L` argument, because an object literal is an expression rather than a
  * declaration:
  *
@@ -41,16 +41,19 @@ class ObjectLiteral
 internal constructor(internal val members: List<Member>) {
 
   /** One member of the literal. */
-  internal sealed class Member(val name: String) {
+  internal sealed class Member {
 
     /** `name: value`. */
-    class Property(name: String, val value: CodeBlock) : Member(name)
+    class Property(val name: String, val value: CodeBlock) : Member()
 
     /** `name` on its own, where the value is a binding of the same name. */
-    class Shorthand(name: String) : Member(name)
+    class Shorthand(val name: String) : Member()
 
     /** `get name() { ... }`, whose body runs on each access rather than once, here. */
-    class Getter(name: String, val body: CodeBlock) : Member(name)
+    class Getter(val name: String, val body: CodeBlock) : Member()
+
+    /** `...value`, spreading another object's members in. There is no key to carry. */
+    class Spread(val value: CodeBlock) : Member()
   }
 
   internal fun emit(codeWriter: CodeWriter) {
@@ -109,6 +112,11 @@ internal constructor(internal val members: List<Member>) {
         codeWriter.emitCode(member.value)
       }
 
+      is Member.Spread -> {
+        codeWriter.emit("...")
+        codeWriter.emitCode(member.value)
+      }
+
       // Written like an arrow function body: the member owns its braces but not the comma
       // after them, which the literal adds. A getter body is a statement list rather than an
       // expression, so it always spans lines -- which is what makes a literal holding one
@@ -159,6 +167,20 @@ internal constructor(internal val members: List<Member>) {
     fun addShorthand(name: String) = apply {
       members += Member.Shorthand(name)
     }
+
+    /**
+     * Adds a spread member: `{ ...value }`. [value] is written through the ordinary machinery,
+     * so a `%T` inside it imports rather than only spelling correctly.
+     */
+    fun addSpread(value: CodeBlock) = apply {
+      members += Member.Spread(value)
+    }
+
+    /** Adds a spread of a binding named here rather than imported: `{ ...defaults }`. */
+    fun addSpread(name: String) = addSpread(CodeBlock.of("%L", name))
+
+    /** Adds a spread of an imported symbol, collecting it into the file's imports. */
+    fun addSpread(name: TypeName) = addSpread(CodeBlock.of("%T", name))
 
     /**
      * Adds a getter: `get name() { ... }`.

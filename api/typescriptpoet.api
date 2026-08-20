@@ -573,6 +573,9 @@ public final class dk/lldata/typescriptpoet/ObjectLiteral$Builder {
 	public final fun addProperty (Ljava/lang/String;Ldk/lldata/typescriptpoet/ObjectLiteral;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
 	public final fun addProperty (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
 	public final fun addShorthand (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public final fun addSpread (Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public final fun addSpread (Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public final fun addSpread (Ljava/lang/String;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
 	public final fun build ()Ldk/lldata/typescriptpoet/ObjectLiteral;
 }
 
@@ -1416,6 +1419,9 @@ public final class dk/lldata/typescriptpoet/dsl/ExpressionsKt {
 	public static final synthetic fun property (Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;Ljava/lang/String;Ldk/lldata/typescriptpoet/ObjectLiteral;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
 	public static final synthetic fun property (Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
 	public static final synthetic fun shorthand (Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;Ljava/lang/String;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public static final synthetic fun spread (Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;Ldk/lldata/typescriptpoet/CodeBlock;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public static final synthetic fun spread (Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
+	public static final synthetic fun spread (Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;Ljava/lang/String;)Ldk/lldata/typescriptpoet/ObjectLiteral$Builder;
 	public static final synthetic fun typeArgument (Ldk/lldata/typescriptpoet/CallExpression$Builder;Ldk/lldata/typescriptpoet/TypeName;)Ldk/lldata/typescriptpoet/CallExpression$Builder;
 }
 
