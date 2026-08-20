@@ -24,6 +24,11 @@ on:
   # `push` rather than `pull_request: [closed]` because a merge to main is a push to main: it
   # fires once, in the base repository, with the credentials this needs. A `pull_request` event
   # from a fork would arrive with a read-only token and no secrets.
+  #
+  # A push cannot run the agent directly: `claude-code-action` rejects the event outright with
+  # "Unsupported event type: push". So the push only wakes the `dispatch` job below, and the run
+  # that does the work arrives as `workflow_dispatch` — the same path the schedule and the manual
+  # trigger already take.
   push:
     branches: [ main ]
 
@@ -55,7 +60,32 @@ concurrency:
 
 jobs:
 
+  # A merge wakes the sweep, but it has to come back through the front door. The agent step
+  # cannot run on a `push` event at all, so this job does the only thing a push is good for
+  # here: it asks for a `workflow_dispatch` run and stops.
+  #
+  # That re-entry works because `workflow_dispatch` is one of the two events GitHub still
+  # delivers when the actor is `GITHUB_TOKEN`. Everything else raised by that token is dropped
+  # on purpose, to stop workflows triggering themselves in a loop — which is also why the
+  # failure notice this workflow files does not wake another sweep.
+  dispatch:
+    if: github.event_name == 'push'
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: write
+
+    steps:
+
+    - env:
+        GH_TOKEN: ${{ github.token }}
+      run: gh workflow run agent-tend.yml --repo "$GITHUB_REPOSITORY"
+
   survey:
+    # The push-triggered run exists only to dispatch; the dispatched run does the work.
+    if: github.event_name != 'push'
+
     runs-on: ubuntu-latest
 
     outputs:
