@@ -51,6 +51,7 @@ object KitchenSink {
     "engine.ts" to "export class Engine { start(): void {} }\n",
     "logger.ts" to "export default class Logger { log(message: string): void {} }\n",
     "utils.ts" to "export function identity<T>(value: T): T { return value; }\n",
+    "api.ts" to "export function createApi() { return { get: () => undefined }; }\n",
     "options.ts" to "export interface Options { verbose: boolean }\n",
     "polyfill.ts" to "export {};\ndeclare global { var polyfillLoaded: boolean; }\n",
     // The module an augment import points at: it adds a member to a type declared elsewhere
@@ -933,6 +934,14 @@ object KitchenSink {
       PropertySpec.builder("VERSION", TypeName.STRING)
         .addModifiers(Modifier.CONST)
         .initializer("%S", "2.0.0")
+        .build(),
+    )
+
+    // No TypeName at all: the type is left to inference, which for an object literal is
+    // often better typing than anything a generator could name.
+    file.addProperty(
+      PropertySpec.builder("api", Modifier.CONST)
+        .initializer("%L", CodeBlock.call(TypeName.namedImport("createApi", "./api")).build())
         .build(),
     )
 

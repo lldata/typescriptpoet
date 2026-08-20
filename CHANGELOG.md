@@ -63,6 +63,11 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - `override` and `accessor` modifiers, `#private` members, class static initializer blocks,
   and class index signatures.
 - `const enum`, definite assignment (`!`), and destructuring parameters.
+- `PropertySpec.builder(name, modifiers…)`, a property or top-level variable with no
+  `TypeName`, emitting no annotation: `const api = createApi();` rather than a type invented
+  purely to have something to write. For an object literal, inference is often better typing
+  than anything a generator could name.
+  ([#48](https://github.com/lldata/typescriptpoet/issues/48))
 
 **Modules**
 - Default imports, with `=` as their sigil in the symbol mini-DSL.
@@ -200,6 +205,11 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Class index signatures were emitted with a body: `[key: string]: any { }`.
 - Rest parameters emitted `... args` with a stray space.
 - Block-shaped property initializers picked up the statement wrapper's hanging indent.
+- `TypeName.implicit("")` produced a type with an empty name rather than refusing it, so
+  `PropertySpec.builder("api", TypeName.implicit(""), false, Modifier.CONST)` emitted
+  `export const api:  = createApi();` — a dangling colon and a doubled space, silently, until
+  `tsc` saw it. `implicit()` now requires a non-blank name.
+  ([#48](https://github.com/lldata/typescriptpoet/issues/48))
 
 ### Changed
 

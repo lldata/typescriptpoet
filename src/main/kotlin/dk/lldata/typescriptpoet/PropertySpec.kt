@@ -48,13 +48,17 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     codeWriter.emitTSDoc(tsDoc)
     codeWriter.emitDecorators(decorators, false)
     codeWriter.emitModifiers(modifiers, implicitModifiers)
-    codeWriter.emitCode(
-      CodeBlock.of(
-        "%L${suffix(compactOptionalAllowed)}: %T${if (optional && !compactOptionalAllowed) " | undefined" else ""}",
-        name,
-        type,
-      ),
-    )
+    if (type != null) {
+      codeWriter.emitCode(
+        CodeBlock.of(
+          "%L${suffix(compactOptionalAllowed)}: %T${if (optional && !compactOptionalAllowed) " | undefined" else ""}",
+          name,
+          type,
+        ),
+      )
+    } else {
+      codeWriter.emitCode(CodeBlock.of("%L${suffix(compactOptionalAllowed)}", name))
+    }
     if (withInitializer && initializer != null) {
       codeWriter.emit(" = ")
       // The statement wrapper gives long expressions a hanging indent on continuation lines,
@@ -78,9 +82,14 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     }
   }
 
-  /** The `?` or `!` that follows the property name, if any. */
+  /**
+   * The `?` or `!` that follows the property name, if any.
+   *
+   * Without a type there is nothing to union with `undefined`, so an untyped optional property
+   * always takes the compact `?` form, regardless of [compactOptionalAllowed].
+   */
   private fun suffix(compactOptionalAllowed: Boolean) = when {
-    optional && compactOptionalAllowed -> "?"
+    optional && (compactOptionalAllowed || type == null) -> "?"
     definiteAssignment -> "!"
     else -> ""
   }
@@ -101,7 +110,7 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
 
   class Builder internal constructor(
     internal val name: String,
-    internal val type: TypeName,
+    internal val type: TypeName?,
     internal var optional: Boolean,
   ) : Taggable.Builder<Builder>() {
 
@@ -172,5 +181,12 @@ private constructor(builder: Builder) : Taggable(builder.tags.toImmutableMap()) 
     @JvmOverloads
     fun builder(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier): Builder =
       Builder(name, type, optional).addModifiers(*modifiers)
+
+    /**
+     * A property or top-level variable with no type annotation, leaving it to inference:
+     * `const name = createApi();`.
+     */
+    @JvmStatic
+    fun builder(name: String, vararg modifiers: Modifier): Builder = Builder(name, null, false).addModifiers(*modifiers)
   }
 }

@@ -705,6 +705,13 @@ final class KitchenSinkJava {
             .initializer("%S", "2.0.0")
             .build());
 
+    // No TypeName at all: the type is left to inference, which for an object literal is often
+    // better typing than anything a generator could name.
+    file.addProperty(
+        PropertySpec.builder("api", Modifier.CONST)
+            .initializer("%L", CodeBlock.call(TypeName.namedImport("createApi", "./api")).build())
+            .build());
+
     file.addClass(
         ClassSpec.builder("Catalogue")
             .addModifiers(Modifier.EXPORT, Modifier.DEFAULT)

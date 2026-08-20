@@ -49,6 +49,11 @@ inline fun ClassSpec.Builder.property(
   block: PropertyBlock = {},
 ) = addProperty(PropertySpec.builder(name, type).addModifiers(*modifiers).apply(block).build())
 
+/** `name = …;`, with the type left to inference. */
+@JvmSynthetic
+inline fun ClassSpec.Builder.property(name: String, vararg modifiers: Modifier, block: PropertyBlock = {}) =
+  addProperty(PropertySpec.builder(name).addModifiers(*modifiers).apply(block).build())
+
 /** `name(): T { … }` */
 @JvmSynthetic
 inline fun ClassSpec.Builder.function(name: String, vararg modifiers: Modifier, block: FunctionBlock) =

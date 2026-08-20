@@ -206,6 +206,30 @@ class DeclarationTests {
   }
 
   @Test
+  @DisplayName("Generates a property with no type annotation, left to inference")
+  fun testPropertyWithoutType() {
+    val testClass = ClassSpec.builder("Test")
+      .addProperty(
+        PropertySpec.builder("value").initializer("5").build(),
+      )
+      .build()
+
+    assertThat(emit(testClass), emits("class Test {\n\n  value = 5;\n\n}\n"))
+  }
+
+  @Test
+  @DisplayName("An optional property with no type annotation still emits `?`")
+  fun testOptionalPropertyWithoutType() {
+    val testClass = ClassSpec.builder("Test")
+      .addProperty(
+        PropertySpec.builder("value").optional(true).build(),
+      )
+      .build()
+
+    assertThat(emit(testClass), emits("class Test {\n\n  value?;\n\n}\n"))
+  }
+
+  @Test
   @DisplayName("Rejects a property that is both optional and definitely assigned")
   fun testOptionalAndDefiniteAreExclusive() {
     val error = runCatching {

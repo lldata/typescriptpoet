@@ -53,6 +53,20 @@ class ModuleExportTests {
   }
 
   @Test
+  @DisplayName("Generates a const with no type annotation, left to inference")
+  fun testConstWithoutType() {
+    val file = FileSpec.builder("Test")
+      .addProperty(
+        PropertySpec.builder("api", Modifier.CONST)
+          .initializer("createApi()")
+          .build(),
+      )
+      .build()
+
+    assertThat(emit(file), emits("const api = createApi();\n"))
+  }
+
+  @Test
   @DisplayName("Parses a default import from the symbol mini-DSL")
   fun testDefaultImportFromSpec() {
     val symbol = SymbolSpec.from("Engine=templates")
