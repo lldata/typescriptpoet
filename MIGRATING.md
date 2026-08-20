@@ -129,3 +129,14 @@ definite assignment (`!`), and destructuring parameters.
 Modules: default imports, `import type` and `export type`, re-exports (`export * from`,
 `export * as ns from`, `export { a, b as c } from`), standalone export lists,
 `export default`, and `export =`.
+
+Expressions: `CodeBlock.objectLiteral()`, and `CodeBlock.call()`/`newInstance()`, which keep an
+object's members and a call's arguments structured until the file is written so both can be
+measured against the print width and broken; `ObjectLiteral.Builder.addSpread()` for
+`{ ...value }`; and `FunctionSpec.Builder.expressionBody()` for a concise arrow body.
+
+Elsewhere in the API: `literal()` for literal types, `promiseType()` and `recordType()`,
+`anonymousMember()` for an inline object type member that can be `readonly` and carry a TSDoc
+comment of its own, `PropertySpec.builder()` without a `TypeName` so a `const`'s type can be
+left to inference, and a public `TypePredicate` that `lambda()` and `genericLambda()` accept in
+place of a return type.

@@ -239,6 +239,23 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   operators, conditional and mapped types, object literals and call expressions the same page
   advertises — while the Maven Central badge a screen above resolved the real latest version.
   ([#60](https://github.com/lldata/typescriptpoet/pull/60))
+- The README's install snippets name `2.0.0`. They had been set to `2.0.0-alpha11` on the
+  assumption that tag was about to be cut; it never was, so for the time in between the page
+  told anyone copying it to depend on a version that does not exist on Maven Central, which
+  fails at resolution rather than at compile time and looks like the repository's fault. The
+  latest published alpha was `alpha10`.
+- The README no longer says the agent does not merge. It has been able to merge its own pull
+  requests, under the conditions `AGENTS.md` sets out, since that delegation was written down;
+  the README still described the older arrangement where every merge waited for a person. The
+  paragraph now says what is actually delegated and what is not — publishing and tagging stay
+  human, as do breaking changes, changes to the rules or the release path, and contributions
+  from outside the project.
+- `MIGRATING.md` lists the expression-level additions in its "New in 2.0.0" summary —
+  `CodeBlock.objectLiteral`, `call` and `newInstance`, `addSpread`, `expressionBody` — along
+  with `literal`, `promiseType`, `recordType`, `anonymousMember`, the untyped `PropertySpec`
+  builder and the public `TypePredicate`. The summary covered types, declarations and modules
+  and stopped there, so a reader upgrading from 1.x met the whole structured-expression story
+  only if they went on to the changelog.
 - CI runs on current action majors: `checkout` v7, `setup-node` v7, `upload-artifact` v7,
   `download-artifact` v8 and `gradle/actions` v6. Nothing about the published artifact changes;
   the JDK stays at 17 to match the Gradle toolchain and Node stays at 22, both LTS. `checkout`
