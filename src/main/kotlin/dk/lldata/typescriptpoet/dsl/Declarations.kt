@@ -30,7 +30,6 @@ import dk.lldata.typescriptpoet.ModuleSpec
 import dk.lldata.typescriptpoet.ObjectLiteral
 import dk.lldata.typescriptpoet.ParameterSpec
 import dk.lldata.typescriptpoet.PropertySpec
-import dk.lldata.typescriptpoet.SymbolSpec
 import dk.lldata.typescriptpoet.TypeAliasSpec
 import dk.lldata.typescriptpoet.TypeName
 import dk.lldata.typescriptpoet.TypeScriptPoetDsl
