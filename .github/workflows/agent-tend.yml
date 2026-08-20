@@ -146,8 +146,11 @@ jobs:
         claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         # Scheduled runs are attributed to whoever last edited the cron line, and the agent's
         # own pull requests are authored by the app, so both need to be allowed through the
-        # bot check.
-        allowed_bots: "claude"
+        # bot check. `github-actions` is there for the merge wake: the `dispatch` job above asks
+        # for this run with GITHUB_TOKEN, so the run it produces is attributed to that bot and is
+        # otherwise refused before the agent starts. Named rather than `*`, so the only bots that
+        # can start a sweep are the two this repository actually uses.
+        allowed_bots: "claude,github-actions"
         prompt: "/tend"
         claude_args: |
           --max-turns 200
