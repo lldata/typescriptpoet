@@ -21,10 +21,17 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
 - Labelled, optional and rest tuple elements.
 - `CodeBlock.objectLiteral()`, building an object literal expression whose members stay
   structured until the file is written, so the layout is decided against the print width
-  rather than hand-formatted into a `CodeBlock`. Members are properties, shorthand, or
-  getters — `addGetter` is what a lazily-reached value needs, since a property is computed
+  rather than hand-formatted into a `CodeBlock`. Members are properties, shorthand, getters, or
+  spreads — `addGetter` is what a lazily-reached value needs, since a property is computed
   where the object is built rather than where it is read.
   ([#9](https://github.com/lldata/typescriptpoet/issues/9))
+- `ObjectLiteral.Builder.addSpread()`, spelling `{ ...value }` through the same structured
+  machinery as every other member. Before this, the only way to write a spread at all was to
+  smuggle it through `addShorthand`'s bare `String`, which renders whatever was passed through
+  `toString()` before the writer ever sees it — a `TypeName` given that way loses its import
+  the same way #10 described for other members, so a spread of an imported symbol emitted a
+  name nothing had imported.
+  ([#45](https://github.com/lldata/typescriptpoet/issues/45))
 - `CodeBlock.call()` and `CodeBlock.newInstance()`, building a call expression whose argument
   list stays structured until the file is written. A call spelled as a format string —
   `addStatement("return %T(%L, config, options)", …)` — has no argument boundaries in it, so

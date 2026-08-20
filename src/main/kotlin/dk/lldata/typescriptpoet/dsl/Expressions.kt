@@ -17,6 +17,7 @@
 package dk.lldata.typescriptpoet.dsl
 
 import dk.lldata.typescriptpoet.CallExpression
+import dk.lldata.typescriptpoet.CodeBlock
 import dk.lldata.typescriptpoet.FunctionSpec
 import dk.lldata.typescriptpoet.ObjectLiteral
 import dk.lldata.typescriptpoet.TypeName
@@ -47,6 +48,18 @@ fun ObjectLiteral.Builder.property(name: String, value: CallExpression) = addPro
 /** `name` */
 @JvmSynthetic
 fun ObjectLiteral.Builder.shorthand(name: String) = addShorthand(name)
+
+/** `...value` */
+@JvmSynthetic
+fun ObjectLiteral.Builder.spread(value: CodeBlock) = addSpread(value)
+
+/** `...name`, a binding named here rather than imported */
+@JvmSynthetic
+fun ObjectLiteral.Builder.spread(name: String) = addSpread(name)
+
+/** `...name`, an imported symbol */
+@JvmSynthetic
+fun ObjectLiteral.Builder.spread(name: TypeName) = addSpread(name)
 
 /** `get name() { … }` */
 @JvmSynthetic

@@ -486,6 +486,49 @@ class ObjectLiteralTests {
   }
 
   @Test
+  @DisplayName("Spreads a bare binding")
+  fun testSpreadShorthand() {
+    val obj = CodeBlock.objectLiteral()
+      .addSpread("defaults")
+      .addProperty("extra", "%S", "x")
+      .build()
+
+    assertThat(obj.toString(), equalTo("{ ...defaults, extra: \"x\" }"))
+  }
+
+  @Test
+  @DisplayName("Collects an import for a spread of an imported symbol")
+  fun testSpreadKeepsImports() {
+    // #45: addShorthand smuggled the spread through, but a TypeName interpolated into a
+    // String is just text by the time the writer sees it -- the import never made it in and
+    // the file did not compile. addSpread carries the TypeName through %T instead.
+    val defaults = TypeName.namedImport("defaults", "./defaults")
+    val obj = CodeBlock.objectLiteral()
+      .addSpread(defaults)
+      .addProperty("extra", "%S", "x")
+      .build()
+
+    val file = FileSpec.builder("test")
+      .addFunction(FunctionSpec.builder("make").addCode("return %L;\n", obj).build())
+      .build()
+
+    assertThat(
+      buildString { file.writeTo(this) },
+      emits(
+        """
+            import { defaults } from "./defaults";
+
+
+            function make() {
+              return { ...defaults, extra: "x" };
+            }
+
+        """.trimIndent(),
+      ),
+    )
+  }
+
+  @Test
   @DisplayName("Takes a spec as a member value without a %L to carry it")
   fun testSpecValuedMembers() {
     val getter = FunctionSpec.builder("get")
