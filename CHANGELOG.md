@@ -234,6 +234,11 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   `InterfaceSpec.addFunction` no longer run it. `EnumSpec.addConstant` dropped the check
   entirely, since an enum member is a member name too — `enum E { delete }` is legal.
   ([#47](https://github.com/lldata/typescriptpoet/issues/47))
+- The README's Maven and Gradle snippets name a current version. They had sat at
+  `2.0.0-alpha4` since that release, so anyone copying one got a build predating the type
+  operators, conditional and mapped types, object literals and call expressions the same page
+  advertises — while the Maven Central badge a screen above resolved the real latest version.
+  ([#60](https://github.com/lldata/typescriptpoet/pull/60))
 
 ### Changed
 
