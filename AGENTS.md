@@ -322,7 +322,25 @@ trivial rename it needs a human to agree first. Say so on the issue and wait.
 ## Changelog
 
 `CHANGELOG.md` follows Keep a Changelog headings — Added, Fixed, Changed, Removed — under
-`## [Unreleased]`, and every merged change gets an entry.
+`## [Unreleased]`, and every merged change gets an entry, with one exception: a change confined
+to the automation that maintains this repository needs none. That is `.github/`, `.claude/`,
+`AGENTS.md` and `CLAUDE.md`, and nothing else.
+
+The exception is about who the file is for. The changelog is read by someone deciding whether to
+upgrade, and a workflow trigger, a skill, or a rule in this file is not something they can
+observe, call, or be broken by. It existed in narrower form before, covering Dependabot's bumps,
+and was removed along with Dependabot itself; the bumps still happen, by hand now, and logging
+each one would fill a consumer's changelog with this repository's housekeeping.
+
+`build.gradle.kts` and `gradle.properties` are **not** in the list, though they look like
+housekeeping and sit beside these paths in `CODEOWNERS`. They decide what is published — the
+compatibility floors, the artifact configuration, the dependencies — so a change to either is
+one a consumer can be broken by, and it gets an entry like any other.
+
+Confined is meant strictly. A pull request touching one of these paths and anything else is not
+covered, and the test is the paths in the diff rather than how invisible the change feels —
+"nobody will notice" has already been used twice to skip an entry that was owed, on a README
+whose install snippet was six versions stale and on a source cleanup.
 
 The entries are prose, not one-liners. Look at what is already there: each says what changed and
 why it matters to someone using the library, often in several sentences, and links the issue or
