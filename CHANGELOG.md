@@ -257,6 +257,12 @@ The first release since 2021. See [MIGRATING.md](MIGRATING.md) for the upgrade p
   something identical to what is already on `gh-pages`. `gh-pages` itself is unaffected — it
   still gets the complete site, unabridged, on every release.
   ([#21](https://github.com/lldata/typescriptpoet/issues/21))
+- Qodana's inspections run clean, so the count means something again. Seven imports in the DSL
+  that nothing referenced are gone. The eleven "unused receiver parameter" reports were the
+  deliberate shape of the `null` hints in `NullHint.kt` — those overloads exist to be refused at
+  compile time, and the receiver is what picks the right builder for the message — so they are
+  suppressed next to the parameter warning already suppressed there for the same reason.
+  ([#55](https://github.com/lldata/typescriptpoet/pull/55))
 
 ### Removed
 
