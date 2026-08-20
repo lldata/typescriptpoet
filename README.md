@@ -254,14 +254,14 @@ Download [the latest .jar][dl] or depend via Maven:
 <dependency>
   <groupId>dk.lldata</groupId>
   <artifactId>typescriptpoet</artifactId>
-  <version>2.0.0-alpha4</version>
+  <version>2.0.0-alpha11</version>
 </dependency>
 ```
 
 or Gradle:
 
 ```kotlin
-implementation("dk.lldata:typescriptpoet:2.0.0-alpha4")
+implementation("dk.lldata:typescriptpoet:2.0.0-alpha11")
 ```
 
 The library has no runtime dependencies beyond the Kotlin standard library. It targets Java 8
