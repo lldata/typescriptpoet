@@ -10,15 +10,45 @@ name: Agent — tend
 
 on:
   schedule:
-    # Every three hours. Frequent enough that a stuck pull request is not stuck overnight,
-    # rare enough that the survey below is nearly always the whole cost.
+    # Every three hours. The backstop rather than the main path now: it catches what the event
+    # triggers below missed — a run that died, a merge that never came, a quiet repository with
+    # something stuck in it.
     - cron: "17 */3 * * *"
+
+  # A merge is the moment the previous piece of work actually landed, and so the first moment
+  # the next issue can be started from a `main` that contains it. Serial runs alone do not give
+  # that: a run ends when its pull request opens, minutes before auto-merge lands it, so every
+  # branch in a burst still gets cut from the same stale base and regenerates the golden file,
+  # the ABI dump and the changelog from it.
+  #
+  # `push` rather than `pull_request: [closed]` because a merge to main is a push to main: it
+  # fires once, in the base repository, with the credentials this needs. A `pull_request` event
+  # from a fork would arrive with a read-only token and no secrets.
+  push:
+    branches: [ main ]
+
+  # Work arriving should not wait up to three hours for the clock. This is safe to trigger from
+  # here in a way `agent-issue.yml` is not — see the concurrency note below.
+  issues:
+    types: [ opened ]
+
   workflow_dispatch:
 
 permissions: {}
 
 # Never two of these at once, and never one alongside a run started by an issue: they would
 # pick the same work and race each other's branches.
+#
+# What this group does when a third run arrives is worth stating, because it is not a queue and
+# reads like one. It holds one running run and one *pending* run; a third arrival takes the
+# pending slot and cancels whatever was in it. `cancel-in-progress: false` governs the running
+# slot only, and nothing governs the other one.
+#
+# That is precisely why automatic dispatch lives here rather than on the issue event. An evicted
+# sweep costs nothing: a sweep carries no instructions, it works out what to do by reading the
+# repository, so whichever sweep survives finds everything the cancelled ones would have. A run
+# pinned to one issue is the opposite — evict it and that issue's only scheduled attempt is gone,
+# with nothing anywhere recording that it was owed one.
 concurrency:
   group: agent-write
   cancel-in-progress: false
@@ -35,6 +65,8 @@ jobs:
       contents: read
       pull-requests: read
       issues: read
+      # The survey asks whether an issue run is already in flight before claiming issue work.
+      actions: read
 
     steps:
 
